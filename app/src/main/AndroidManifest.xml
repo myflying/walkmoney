@@ -1,0 +1,52 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ydys.moneywalk">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--计歩需要的权限-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-feature android:name="android.hardware.sensor.accelerometer" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
+        android:required="true" />
+    <!--计歩需要的权限-->
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.TestActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.PhoneLoginActivity" />
+        <activity android:name=".ui.activity.BodyDataActivity" />
+        <activity android:name=".ui.activity.BMIDataActivity" />
+        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.UserInfoActivity" />
+        <activity android:name=".ui.activity.AboutActivity" />
+        <activity android:name=".ui.activity.CashActivity" />
+        <activity android:name=".ui.activity.BindPhoneActivity"/>
+        <activity android:name=".ui.activity.CashRecordActivity"/>
+        <activity android:name=".ui.activity.CashDetailActivity"/>
+        <activity android:name=".ui.activity.MyWalletActivity"/>
+        <service
+            android:name=".ui.custom.step.BindService"
+            android:enabled="true"
+            android:exported="true" />
+    </application>
+</manifest>

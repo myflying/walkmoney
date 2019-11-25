@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="green">#00FF00</color>
+    <color name="blue">#EE9A00</color>
+    <color name="red">#EE0000</color>
+
+    <color name="black">#000000</color>
+    <color name="black1">#333333</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="bg_color">#f5f5f5</color>
+
+    <integer-array name="gradient_arc_color">
+        <item>@color/circle_start_color</item>
+        <item>@color/circle_end_color</item>
+        <item>@color/circle_middle_color</item>
+        <item>@color/circle_start_color</item>
+    </integer-array>
+
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#aaaaaa</color>
+    <color name="common_gray">#b1b1b1</color>
+    <color name="common_title_color">#888888</color>
+    <color name="gray_eee">#eeeeee</color>
+
+    <color name="test">#F5C2B4</color>
+
+    <color name="dline1_color">#B4E2F8</color>
+    <color name="dline2_color">#A9C3F7</color>
+    <color name="dline3_color">#759FF7</color>
+    <color name="dline4_color">#F0A578</color>
+    <color name="dline5_color">#F87B3C</color>
+
+    <color name="get_gold_color">#fff2e7</color>
+    <color name="get_gold_text_color">#ff7213</color>
+
+    <color name="tab_checked">#fa980c</color>
+    <color name="tab_unchecked">#aaaaaa</color>
+
+    <color name="line_color">#f2f2f2</color>
+    <color name="line1_color">#e5e5e5</color>
+
+    <color name="tab_tv_normal">#aaaaaa</color>
+    <color name="tab_tv_selected">#fa980c</color>
+
+    <color name="circle_bg_color">#ffe8d9</color>
+    <color name="circle_start_color">#fbb10d</color>
+    <color name="circle_middle_color">#fd8a10</color>
+    <color name="circle_end_color">#fe8412</color>
+
+    <color name="privacy_text_color">#ff7213</color>
+    <color name="act_rule_color">#fff2e7</color>
+
+    <color name="hongbao_color">#fbdeaf</color>
+
+    <color name="act_rule_bg_color">#d47712</color>
+    <color name="receive_bg_color">#474855</color>
+
+    <color name="gold_num_color">#fac10d</color>
+
+    <color name="gold_txt_color">#8a5100</color>
+
+    <color name="win_txt_color">#c98c44</color>
+
+    <color name="win_gold_num_color">#ed462f</color>
+
+    <color name="my_gold_txt_color">#fbdad0</color>
+
+    <color name="mk_gonglue_color">#cf5527</color>
+
+    <color name="task_get_now_color">#ff7213</color>
+
+    <color name="click_login_color">#fdd4b9</color>
+
+    <color name="my_receive_bg_color">#d38f0b</color>
+
+    <color name="wx_login_color">#09bb06</color>
+
+    <color name="bmi_data_color">#66c4f2</color>
+
+    <color name="cash_money_line">#cecbcc</color>
+</resources>
