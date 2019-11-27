@@ -15,7 +15,6 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="top|center"
-            android:layout_marginTop="20dp"
             android:src="@drawable/receive_gold_guang" />
 
         <FrameLayout
@@ -37,13 +36,37 @@
                     android:layout_height="36dp"
                     android:layout_gravity="top">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="12dp"
-                        android:src="@mipmap/close_gold" />
+                        android:layout_marginRight="12dp">
+
+                        <ImageView
+                            android:id="@+id/iv_close"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@mipmap/close_gold"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/layout_count_down"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:background="@drawable/round_count_down"
+                            android:gravity="center">
+
+                            <TextView
+                                android:id="@+id/tv_count_down"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textColor="@color/round_border_color"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </FrameLayout>
+
                 </RelativeLayout>
 
                 <LinearLayout
@@ -56,8 +79,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginTop="6dp"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
@@ -69,9 +92,10 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tv_gold_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="100金币"
+                            android:text="100"
                             android:textColor="@color/gold_num_color"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -80,8 +104,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginTop="20dp"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
@@ -97,14 +121,16 @@
                             android:src="@mipmap/my_gold" />
 
                         <TextView
+                            android:id="@+id/tv_total_gold_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="4,234"
                             android:layout_marginLeft="12dp"
+                            android:text="4,234"
                             android:textColor="@color/common_gray"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tv_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="≈0.42元"
@@ -127,7 +153,8 @@
             android:layout_width="313dp"
             android:layout_height="175dp"
             android:layout_gravity="center|bottom"
-            android:background="@color/tab_tv_selected">
+            android:background="@color/tab_tv_selected"
+            android:visibility="gone">
 
         </LinearLayout>
     </FrameLayout>

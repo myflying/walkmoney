@@ -42,4 +42,14 @@
     <string name="my_wallet_txt">我的钱包</string>
     <string name="exchange_txt">10000金币=1元</string>
     <string name="no_gold_list_txt">亲~没有啦\n系统只保留最近7日的收支明细</string>
+
+    <string name="permission_storage_never_ask_again">不再询问</string>
+    <string name="permission_read_phone_rationale">请开启获取手机识别码权限</string>
+    <string name="permission_storage_rationale">请开启读写手机存储卡权限</string>
+    <string name="permission_storage_denied">禁止了权限，开启权限才能正常使用</string>
+
+    <string name="button_allow">开启</string>
+    <string name="button_deny">拒绝</string>
+
+    <string name="permission_detail_txt">因读取步数信息和金币兑换、提现要求，需要你提供以下权限：设备信息，储存信息。</string>
 </resources>

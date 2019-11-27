@@ -15,7 +15,7 @@ public class Constants {
             "T8VRKsGS1Ky/VQB3htIL6Xr9C3XmW2Iej7wiQj3kDN0t4ufT4gp6zZ7LBwaOjhOS" +
             "FQIDAQAB";
 
-    public static final String BASE_URL = "http://192.168.80.155/zoulubao/public/api/";
+    public static final String BASE_URL = "http://zlb.zhanyu55.com/api/";
 
     public static final String BASE_IMAGE_URL = BASE_URL + "heads/";
 
@@ -33,11 +33,13 @@ public class Constants {
 
     public static final String GET_SYS_STEP = "get_sys_step";
 
+    //是否同意用户协议
+    public static final String IS_AGREE_PRIVACY = "is_agree_privacy";
+
     //当日已经兑换过的步数
     public static final String CURRENT_DAY_EXCHANGE_STEP = "current_day_exchange_step";
 
     //当日已经领取的阶段步数的--阶段，默认0
     public static final String IS_GET_STAGE = "is_get_state";
 
-    public static final String[] RECEIVE_TITLES = {"满1步领取10金币","满1500步领取80金币","满3000步领取100金币","满4500步领取120金币","满6000步领取130金币"};
 }

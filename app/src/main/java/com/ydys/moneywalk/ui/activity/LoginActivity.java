@@ -8,6 +8,8 @@ import com.jaeger.library.StatusBarUtil;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.presenter.Presenter;
 
+import butterknife.OnClick;
+
 public class LoginActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
@@ -33,5 +35,10 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initData(Bundle savedInstanceState) {
 
+    }
+
+    @OnClick(R.id.iv_back)
+    void back() {
+        finish();
     }
 }

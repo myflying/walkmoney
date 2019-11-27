@@ -83,4 +83,8 @@
     <color name="bmi_data_color">#66c4f2</color>
 
     <color name="cash_money_line">#cecbcc</color>
+
+    <color name="start_btn_color">#fefde4</color>
+
+    <color name="round_border_color">#8f9198</color>
 </resources>

@@ -19,6 +19,9 @@ import com.orhanobut.logger.Logger;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.common.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class StepNumProgressView extends View {
     /**
@@ -112,6 +115,8 @@ public class StepNumProgressView extends View {
 
     private int walkNum;
 
+    public List<String> RECEIVE_TITLES;
+
     public StepNumProgressView(Context context) {
         super(context);
         init();
@@ -124,6 +129,14 @@ public class StepNumProgressView extends View {
 
     public StepNumProgressView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        RECEIVE_TITLES = new ArrayList<>();
+        RECEIVE_TITLES.add("满1步领取10金币");
+        RECEIVE_TITLES.add("满1500步领取80金币");
+        RECEIVE_TITLES.add("满3000步领取100金币");
+        RECEIVE_TITLES.add("满4500步领取120金币");
+        RECEIVE_TITLES.add("满6000步领取130金币");
+
         init();
     }
 
@@ -134,14 +147,14 @@ public class StepNumProgressView extends View {
         mDialPaint.setColor(Color.parseColor(mDialBackGroundColor));
         mDialPaint.setStrokeWidth(dp2px(3));
         mDialPaint.setStrokeCap(Paint.Cap.ROUND);
-        mDialPaint.setStyle(Paint.Style.STROKE);
+        mDialPaint.setStyle(Paint.Style.FILL);
 
         //文字描述
         mTitlePaint = new Paint();
         mTitlePaint.setAntiAlias(true);
         mTitlePaint.setTextSize(sp2px(15));
         mTitlePaint.setColor(Color.parseColor(mTextColor));
-        mTitlePaint.setStyle(Paint.Style.STROKE);
+        mTitlePaint.setStyle(Paint.Style.FILL);
 
         mStepNumPaint = new Paint();
         Typeface font = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD);
@@ -149,7 +162,7 @@ public class StepNumProgressView extends View {
         mStepNumPaint.setAntiAlias(true);
         mStepNumPaint.setTextSize(sp2px(36));
         mStepNumPaint.setColor(Color.parseColor("#000000"));
-        mStepNumPaint.setStyle(Paint.Style.STROKE);
+        mStepNumPaint.setStyle(Paint.Style.FILL);
 
         mWalkPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mWalkPaint.setFilterBitmap(true);
@@ -159,7 +172,7 @@ public class StepNumProgressView extends View {
         mExchangePaint.setAntiAlias(true);
         mExchangePaint.setTextSize(sp2px(12));
         mExchangePaint.setColor(Color.parseColor(mExchangeColor));
-        mExchangePaint.setStyle(Paint.Style.STROKE);
+        mExchangePaint.setStyle(Paint.Style.FILL);
 
     }
 
@@ -221,7 +234,7 @@ public class StepNumProgressView extends View {
 //                mTitlePaint.setAntiAlias(true);
 //                mTitlePaint.setTextSize(sp2px(16));
 //                mTitlePaint.setColor(Color.parseColor(mTextColor));
-//                mTitlePaint.setStyle(Paint.Style.STROKE);
+//                mTitlePaint.setStyle(Paint.Style.FILL);
 //                float tempWidth = mDialPaint.measureText((i * 100) + "");
 //
 //                //对起始刻度处理
@@ -242,17 +255,36 @@ public class StepNumProgressView extends View {
         for (int i = mMinStep; i <= mMaxStep; i++) {
             if (i % mSpace == 0) {
 
+                Logger.i("i---->" + i);
+
                 Typeface font = Typeface.create(Typeface.DEFAULT, Typeface.BOLD);
                 mTitlePaint.setTypeface(font);
                 mTitlePaint.setAntiAlias(true);
-                mTitlePaint.setTextSize(sp2px(16));
+                mTitlePaint.setTextSize(sp2px(12));
                 mTitlePaint.setColor(Color.parseColor(mTextColor));
-                mTitlePaint.setStyle(Paint.Style.STROKE);
+                //mTitlePaint.setStyle(Paint.Style.FILL);
+                mTitlePaint.setStyle(Paint.Style.FILL);
                 float tempWidth = mDialPaint.measureText((i * 100) + "");
 
                 //对起始刻度处理
                 String tempText = i == 0 ? "1" : (i * 100) + "";
-                canvas.drawText(tempText, 0 - mTemDialRadius + tempWidth / 2 , mTemDialRadius - (SizeUtils.dp2px(20) + (i / mSpace) * mTemDialRadius / 2), mTitlePaint);
+
+                if (i / mSpace == 0) {
+                    canvas.drawText(tempText, 0 - mTemDialRadius + mScaleHeight1 + SizeUtils.dp2px(12), mTemDialRadius - mTemDialRadius / 2 + SizeUtils.dp2px(16), mTitlePaint);
+                }
+
+                if (i / mSpace == 1) {
+                    canvas.drawText(tempText, 0 - mTemDialRadius + tempWidth + SizeUtils.dp2px(4), 0 - mTemDialRadius / 2 + SizeUtils.dp2px(16), mTitlePaint);
+                }
+                if (i / mSpace == 2) {
+                    canvas.drawText(tempText, 0 - SizeUtils.dp2px(12), 0 - mTemDialRadius + SizeUtils.dp2px(16), mTitlePaint);
+                }
+                if (i / mSpace == 3) {
+                    canvas.drawText(tempText, mTemDialRadius - tempWidth - mScaleHeight1 - SizeUtils.dp2px(16), 0 - mTemDialRadius / 2 + SizeUtils.dp2px(16), mTitlePaint);
+                }
+                if (i / mSpace == 4) {
+                    canvas.drawText(tempText, mTemDialRadius - mTemDialRadius / 2 - SizeUtils.dp2px(16), mTemDialRadius - mTemDialRadius / 2 + SizeUtils.dp2px(16), mTitlePaint);
+                }
             }
         }
         canvas.restore();
@@ -282,7 +314,7 @@ public class StepNumProgressView extends View {
         mTitlePaint.setAntiAlias(true);
         mTitlePaint.setTextSize(sp2px(14));
         mTitlePaint.setColor(Color.parseColor(mStepNumColor));
-        mTitlePaint.setStyle(Paint.Style.STROKE);
+        mTitlePaint.setStyle(Paint.Style.FILL);
 
         canvas.translate(getWidth() / 2, getHeight() / 2);
         float stepWidth = mStepNumPaint.measureText(walkNum + "");
@@ -323,9 +355,14 @@ public class StepNumProgressView extends View {
         invalidate();
     }
 
-    public void updateStateTitle(int index) {
-        this.mExChangeTitle = Constants.RECEIVE_TITLES[index];
-        invalidate();
+    public void updateStateTitle(List<String> titles, int index) {
+        if (titles != null && titles.size() > 0) {
+            RECEIVE_TITLES = titles;
+        }
+        if(RECEIVE_TITLES != null && RECEIVE_TITLES.size() > 0 && index < RECEIVE_TITLES.size()) {
+            this.mExChangeTitle = RECEIVE_TITLES.get(index);
+            invalidate();
+        }
     }
 
     /**

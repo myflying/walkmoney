@@ -15,4 +15,8 @@ public interface UserInfoService {
 
     @POST("v1.user/login")
     Observable<UserInfoRet> login(@Body RequestBody requestBody);
+
+
+    @POST("v1.user/imeiLogin")
+    Observable<UserInfoRet> imeiLogin(@Body RequestBody requestBody);
 }

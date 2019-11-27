@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="313dp"
+        android:layout_height="338dp"
+        android:layout_gravity="center"
+        android:background="@drawable/common_input_bg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:src="@mipmap/per_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="授权设置"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="18dp"
+            android:text="@string/permission_detail_txt"
+            android:textColor="@color/common_title_color"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/layout_grant"
+            android:layout_width="266dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/permission_bg"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="去授权"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

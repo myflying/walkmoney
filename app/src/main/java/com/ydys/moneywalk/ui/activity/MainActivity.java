@@ -1,21 +1,44 @@
 package com.ydys.moneywalk.ui.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.PhoneUtils;
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
+import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
+import com.ydys.moneywalk.base.IBaseView;
+import com.ydys.moneywalk.bean.InitInfoRet;
+import com.ydys.moneywalk.bean.MessageEvent;
+import com.ydys.moneywalk.bean.UserInfoRet;
+import com.ydys.moneywalk.common.Constants;
+import com.ydys.moneywalk.presenter.InitInfoPresenterImp;
 import com.ydys.moneywalk.presenter.Presenter;
+import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
 import com.ydys.moneywalk.ui.adapter.MyFragmentAdapter;
 import com.ydys.moneywalk.ui.custom.HongBaoDialog;
+import com.ydys.moneywalk.ui.custom.PermissionDialog;
 import com.ydys.moneywalk.ui.custom.PrivacyDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveDoubleGoldDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveGoldDialog;
@@ -23,13 +46,23 @@ import com.ydys.moneywalk.ui.fragment.HomeFragment;
 import com.ydys.moneywalk.ui.fragment.MakeMoneyFragment;
 import com.ydys.moneywalk.ui.fragment.MyFragment;
 import com.ydys.moneywalk.ui.fragment.TestFragment;
+import com.ydys.moneywalk.view.UserInfoView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnNeverAskAgain;
+import permissions.dispatcher.OnPermissionDenied;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
-public class MainActivity extends BaseActivity {
+@RuntimePermissions
+public class MainActivity extends BaseActivity implements IBaseView, PrivacyDialog.PrivacyListener, PermissionDialog.PermissionConfigListener {
 
     @BindView(R.id.tablayout)
     TabLayout tabLayout;
@@ -55,6 +88,14 @@ public class MainActivity extends BaseActivity {
 
     ReceiveGoldDialog receiveGoldDialog;
 
+    UserInfoPresenterImp userInfoPresenterImp;
+
+    InitInfoPresenterImp initInfoPresenterImp;
+
+    PermissionDialog permissionDialog;
+
+    private Handler mHandler = new Handler();
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -71,14 +112,47 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @NeedsPermission(Manifest.permission.READ_PHONE_STATE)
+    void showReadPhone() {
+        readPhoneTask();
+    }
+
+    @OnPermissionDenied(Manifest.permission.READ_PHONE_STATE)
+    void onReadPhoneDenied() {
+        //Toast.makeText(this, R.string.permission_storage_denied, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        }
+    }
+
+    @OnShowRationale(Manifest.permission.READ_PHONE_STATE)
+    void showRationaleForReadPhone(PermissionRequest request) {
+        //Toast.makeText(this, R.string.permission_read_phone_rationale, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        } else {
+            request.proceed();
+        }
+    }
+
+    @OnNeverAskAgain(Manifest.permission.READ_PHONE_STATE)
+    void onReadPhoneNeverAskAgain() {
+        //Toast.makeText(this, R.string.permission_storage_never_ask_again, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        }
+    }
+
+    @Override
     protected void initViews() {
         mFragmentList.add(new HomeFragment());
         mFragmentList.add(new MakeMoneyFragment());
         mFragmentList.add(new MyFragment());
-
-//        for (int i = 1; i < TITLES.length; i++) {
-//            mFragmentList.add(TestFragment.newInstance(getResources().getString(TITLES[i])));
-//        }
 
         setTabs(tabLayout, this.getLayoutInflater(), TITLES, IMAGES);
         adapter = new MyFragmentAdapter(getSupportFragmentManager(), mFragmentList);
@@ -99,10 +173,10 @@ public class MainActivity extends BaseActivity {
                 if (pos == 1) {
 
                 }
-                if (pos == 3) {
-//                    if (mFragmentList.get(pos) instanceof MyFragment) {
-//                        ((MyFragment) mFragmentList.get(pos)).setUserInfo();
-//                    }
+                if (pos == 2) {
+                    if (mFragmentList.get(pos) instanceof MyFragment) {
+                        ((MyFragment) mFragmentList.get(pos)).loadUserInfo();
+                    }
                 }
             }
 
@@ -120,11 +194,22 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        privacyDialog = new PrivacyDialog(this, R.style.common_dialog);
-        //privacyDialog.show();
+        userInfoPresenterImp = new UserInfoPresenterImp(this, this);
+        initInfoPresenterImp = new InitInfoPresenterImp(this, this);
 
         hongBaoDialog = new HongBaoDialog(this, R.style.common_dialog);
-        //hongBaoDialog.show();
+
+        privacyDialog = new PrivacyDialog(this, R.style.common_dialog);
+        privacyDialog.setPrivacyListener(this);
+
+        permissionDialog = new PermissionDialog(this, R.style.common_dialog);
+        permissionDialog.setPermissionConfigListener(this);
+
+        if (!SPUtils.getInstance().getBoolean(Constants.IS_AGREE_PRIVACY, false)) {
+            privacyDialog.show();
+        } else {
+            MainActivityPermissionsDispatcher.showReadPhoneWithPermissionCheck(this);
+        }
 
         receiveDoubleGoldDialog = new ReceiveDoubleGoldDialog(this, R.style.common_dialog);
 //        receiveDoubleGoldDialog.show();
@@ -151,6 +236,30 @@ public class MainActivity extends BaseActivity {
         StatusBarUtil.setTranslucentForImageView(this, 0, null);
     }
 
+    public void readPhoneTask() {
+        Logger.i("readPhoneTask--->" + PhoneUtils.getIMEI());
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), "10000", "yangcheng");
+    }
+
+    private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
+        new AlertDialog.Builder(this)
+                .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton(R.string.button_deny, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(@NonNull DialogInterface dialog, int which) {
+                        request.cancel();
+                    }
+                })
+                .setCancelable(false)
+                .setMessage(messageResId)
+                .show();
+    }
+
     @Override
     public void onBackPressed() {
         exit();
@@ -163,5 +272,75 @@ public class MainActivity extends BaseActivity {
         } else {
             System.exit(0);
         }
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void dismissProgress() {
+
+    }
+
+    @Override
+    public void loadDataSuccess(Object tData) {
+
+
+        if (tData != null) {
+            if (tData instanceof UserInfoRet && ((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
+                Logger.i("user info --->" + JSON.toJSONString(tData));
+                if (((UserInfoRet) tData).getData() != null) {
+                    App.mUserInfo = ((UserInfoRet) tData).getData();
+                    initInfoPresenterImp.initInfo(((UserInfoRet) tData).getData().getId());
+                }
+
+                MessageEvent messageEvent = new MessageEvent("init_success");
+                EventBus.getDefault().post(messageEvent);
+            }
+
+            if (tData instanceof InitInfoRet && ((InitInfoRet) tData).getCode() == Constants.SUCCESS) {
+                Logger.i("init info--->" + JSON.toJSONString(tData));
+                if (((InitInfoRet) tData).getData() != null) {
+                    App.userTodayStep = ((InitInfoRet) tData).getData().getUserStepData().getStepNum();
+                    Logger.i("user today step--->" + App.userTodayStep);
+                }
+                if (hongBaoDialog != null && !hongBaoDialog.isShowing()) {
+                    if (((InitInfoRet) tData).getData().getNewTaskConfig().getIsDel() == 0) {
+                        hongBaoDialog.show();
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                hongBaoDialog.autoOpenHongBao(((InitInfoRet) tData).getData().getNewTaskConfig().getGold());
+                            }
+                        }, 2000);
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    @Override
+    public void loadDataError(Throwable throwable) {
+
+    }
+
+    @Override
+    public void agree() {
+        SPUtils.getInstance().put(Constants.IS_AGREE_PRIVACY, true);
+        MainActivityPermissionsDispatcher.showReadPhoneWithPermissionCheck(this);
+    }
+
+    @Override
+    public void notAgree() {
+        Toasty.normal(this, "请你同意授权，否则将无法使用" + AppUtils.getAppName() + "APP功能").show();
+    }
+
+    @Override
+    public void grantPermission() {
+        MainActivityPermissionsDispatcher.showReadPhoneWithPermissionCheck(this);
     }
 }

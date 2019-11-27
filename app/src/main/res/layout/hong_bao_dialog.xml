@@ -35,7 +35,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:layout_gravity="top">
+                android:layout_gravity="top"
+                android:visibility="invisible">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -57,7 +58,7 @@
                 <ImageView
                     android:layout_width="42dp"
                     android:layout_height="42dp"
-                    android:src="@mipmap/test_logo" />
+                    android:src="@drawable/logo" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -109,21 +110,35 @@
                 android:gravity="center|bottom">
 
                 <TextView
+                    android:id="@+id/tv_new_gold_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3000"
+                    android:text="0"
                     android:textColor="@color/win_gold_num_color"
                     android:textSize="48sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="金币"
                     android:layout_marginLeft="4dp"
                     android:layout_marginBottom="4dp"
+                    android:text="金币"
                     android:textColor="@color/win_gold_num_color"
                     android:textSize="18sp" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_start_step"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/start_btn"
+                android:text="开启走步宝之旅"
+                android:paddingBottom="4dp"
+                android:layout_marginTop="66dp"
+                android:textColor="@color/start_btn_color"
+                android:textSize="16sp" />
+
         </LinearLayout>
     </FrameLayout>
 </FrameLayout>

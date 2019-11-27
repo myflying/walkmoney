@@ -27,7 +27,6 @@
                 android:background="@color/transparent" />
 
             <RelativeLayout
-                android:id="@+id/layout_user_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -43,6 +42,7 @@
                     android:src="@mipmap/def_head" />
 
                 <LinearLayout
+                    android:id="@+id/layout_user_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -51,13 +51,15 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_user_nick_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="游客2342124"
+                        android:text="游客"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
                     <TextView
+                        android:id="@+id/tv_user_desc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="点击登录"
@@ -93,6 +95,7 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/layout_user_account"
                 android:layout_width="match_parent"
                 android:layout_height="133dp"
                 android:layout_marginLeft="12dp"
@@ -117,9 +120,10 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tv_user_gold_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5070"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -139,6 +143,7 @@
                         android:background="@color/line1_color" />
 
                     <LinearLayout
+                        android:id="@+id/layout_cash_money"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -154,7 +159,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="0.51"
+                                android:text="0.00"
                                 android:textColor="@color/black"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
@@ -448,8 +453,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/get_gold_text_color"
                 android:layout_marginTop="10dp"
+                android:background="@color/get_gold_text_color"
                 android:gravity="center">
 
                 <TextView

@@ -36,6 +36,8 @@ public class App extends Application {
 
     private int appCount = 0;
 
+    public static int userTodayStep;//开启APP后接口获取到的用户当天的步数
+
     public static App getApp() {
         if (mInstance != null && mInstance instanceof App) {
             return (App) mInstance;

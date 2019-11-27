@@ -81,7 +81,7 @@ dependencies {
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
-    implementation "org.permissionsdispatcher:permissionsdispatcher:4.5.0"
-    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.5.0"
+    implementation "org.permissionsdispatcher:permissionsdispatcher:4.6.0"
+    annotationProcessor "org.permissionsdispatcher:permissionsdispatcher-processor:4.6.0"
 
 }
