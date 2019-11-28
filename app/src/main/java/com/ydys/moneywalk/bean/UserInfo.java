@@ -7,18 +7,16 @@ import com.google.gson.annotations.SerializedName;
  */
 public class UserInfo {
     private String id;
-
-    @SerializedName("id_num")
-    private String userId;
-
+    private String mobile;
     private String nickname;//用户昵称
     private String face;//用户头像
     private int gold;//用户金币
     private double amount;//用户金币对应金额
-    @SerializedName("has_reg")
-    private int hasReg;//用户是否之前已经注册 1是 0否
-
-    private String openid;
+    private int status;//账号状态(1正常，2封号)
+    @SerializedName("cash_out_status")
+    private int cashOutStatus;//提现封禁状态 1可以提现 2禁止提现
+    @SerializedName("is_bind")
+    private String isBind; //该设备是否绑定微信或者手机号 1是 0否
 
     public String getId() {
         return id;
@@ -26,14 +24,6 @@ public class UserInfo {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getNickname() {
@@ -68,19 +58,36 @@ public class UserInfo {
         this.amount = amount;
     }
 
-    public int getHasReg() {
-        return hasReg;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setHasReg(int hasReg) {
-        this.hasReg = hasReg;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public String getOpenid() {
-        return openid;
+    public int getStatus() {
+        return status;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getCashOutStatus() {
+        return cashOutStatus;
+    }
+
+    public void setCashOutStatus(int cashOutStatus) {
+        this.cashOutStatus = cashOutStatus;
+    }
+
+    public String getIsBind() {
+        return isBind;
+    }
+
+    public void setIsBind(String isBind) {
+        this.isBind = isBind;
     }
 }
+

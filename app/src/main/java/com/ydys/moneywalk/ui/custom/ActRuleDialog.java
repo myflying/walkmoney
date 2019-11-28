@@ -3,10 +3,13 @@ package com.ydys.moneywalk.ui.custom;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 
 
@@ -15,6 +18,8 @@ public class ActRuleDialog extends Dialog implements View.OnClickListener {
     private Context mContext;
 
     private ImageView mCloseIv;
+
+    TextView mRuleTv;
 
     public ActRuleDialog(Context context) {
         super(context);
@@ -36,8 +41,10 @@ public class ActRuleDialog extends Dialog implements View.OnClickListener {
 
     private void initView() {
         mCloseIv = findViewById(R.id.iv_close);
+        mRuleTv = findViewById(R.id.tv_rule_content);
         mCloseIv.setOnClickListener(this);
         setCanceledOnTouchOutside(false);
+        mRuleTv.setText(Html.fromHtml(App.initInfo != null ? App.initInfo.getAppConfig().getInviteRule() : ""));
     }
 
     @Override

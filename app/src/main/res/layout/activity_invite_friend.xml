@@ -96,6 +96,7 @@
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/tv_invite_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
@@ -111,6 +112,7 @@
                         android:src="@mipmap/vertical_line" />
 
                     <TextView
+                        android:id="@+id/tv_copy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
@@ -166,15 +168,13 @@
                         android:textSize="16sp" />
                 </LinearLayout>
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="34dp"
-                    android:background="@mipmap/weixin_invite_btn"
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/wx_invite"
+                    android:layout_width="300dp"
+                    android:layout_height="66dp"
+                    android:layout_marginTop="24dp"
                     android:paddingBottom="6dp"
-                    android:text="微信邀请"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:src="@drawable/wx_invite" />
 
                 <TextView
                     android:layout_width="wrap_content"

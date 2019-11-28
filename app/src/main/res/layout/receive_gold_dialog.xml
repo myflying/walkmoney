@@ -37,34 +37,33 @@
                     android:layout_gravity="top">
 
                     <FrameLayout
+                        android:id="@+id/layout_count_down"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:background="@drawable/round_count_down"
                         android:layout_marginRight="12dp">
 
                         <ImageView
                             android:id="@+id/iv_close"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@mipmap/close_gold"
+                            android:layout_width="9dp"
+                            android:layout_height="9dp"
+                            android:layout_gravity="center"
+                            android:clickable="false"
+                            android:src="@mipmap/close_dialog_gold"
                             android:visibility="gone" />
 
-                        <LinearLayout
-                            android:id="@+id/layout_count_down"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:background="@drawable/round_count_down"
-                            android:gravity="center">
-
-                            <TextView
-                                android:id="@+id/tv_count_down"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="1"
-                                android:textColor="@color/round_border_color"
-                                android:textSize="12sp" />
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tv_count_down"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:gravity="center"
+                            android:clickable="false"
+                            android:layout_gravity="center"
+                            android:textColor="@color/round_border_color"
+                            android:textSize="12sp" />
                     </FrameLayout>
 
                 </RelativeLayout>

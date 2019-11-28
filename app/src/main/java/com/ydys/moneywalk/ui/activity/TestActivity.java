@@ -141,7 +141,7 @@ public class TestActivity extends BaseActivity implements UserInfoView {
 
     @OnClick(R.id.btn_test)
     void test() {
-        userInfoPresenterImp.login("zz123123", "测试用户");
+        //userInfoPresenterImp.login("zz123123", "测试用户");
 //        mHandler.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {

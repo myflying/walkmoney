@@ -17,7 +17,7 @@ public class Constants {
 
     public static final String BASE_URL = "http://zlb.zhanyu55.com/api/";
 
-    public static final String BASE_IMAGE_URL = BASE_URL + "heads/";
+    public static final String BASE_IMAGE_URL = "http://zlb.zhanyu55.com/";
 
     public static final String LOCAL_GIF_URL = BASE_URL + "gifs/";
 

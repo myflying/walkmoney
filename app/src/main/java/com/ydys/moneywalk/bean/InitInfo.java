@@ -38,6 +38,8 @@ public class InitInfo {
     }
 
     public class AppConfig {
+        @SerializedName("invite_rule")
+        private String inviteRule;
         @SerializedName("share_pic")
         private String sharePic;//分享底图
         private String privacy;////隐私政策（链接）
@@ -48,6 +50,14 @@ public class InitInfo {
         private String appLogo;//应用logo
         @SerializedName("app_name")
         private String appName;//应用名称
+
+        public String getInviteRule() {
+            return inviteRule;
+        }
+
+        public void setInviteRule(String inviteRule) {
+            this.inviteRule = inviteRule;
+        }
 
         public String getSharePic() {
             return sharePic;

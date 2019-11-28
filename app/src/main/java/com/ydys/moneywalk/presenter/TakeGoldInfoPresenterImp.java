@@ -37,4 +37,9 @@ public class TakeGoldInfoPresenterImp extends BasePresenterImp<IBaseView, TakeGo
     public void takeStageGold(TakeGoldInfo takeGoldInfo) {
         takeGoldInfoModelImp.takeStageGold(takeGoldInfo, this);
     }
+
+    @Override
+    public void takeTaskGold(TakeGoldInfo takeGoldInfo) {
+        takeGoldInfoModelImp.takeTaskGold(takeGoldInfo, this);
+    }
 }

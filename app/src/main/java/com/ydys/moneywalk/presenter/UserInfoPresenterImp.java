@@ -24,8 +24,8 @@ public class UserInfoPresenterImp extends BasePresenterImp<IBaseView, UserInfoRe
     }
 
     @Override
-    public void login(String userId, String userName) {
-        userInfoModelImp.login(userId, userName, this);
+    public void login(String imei, String type, String value, String code, String nickname, String face) {
+        userInfoModelImp.login(imei, type, value, code, nickname, face, this);
     }
 
     @Override

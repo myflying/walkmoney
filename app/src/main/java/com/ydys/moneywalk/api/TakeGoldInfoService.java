@@ -22,4 +22,7 @@ public interface TakeGoldInfoService {
 
     @POST("v1.Home/collectGoldStage")
     Observable<TakeGoldInfoRet> takeStageGold(@Body RequestBody requestBody);
+
+    @POST("v1.Task/receiveTaskGold")
+    Observable<TakeGoldInfoRet> takeTaskGold(@Body RequestBody requestBody);
 }

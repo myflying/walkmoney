@@ -14,4 +14,6 @@ public interface TakeGoldInfoModel<T> {
     void takeStepGold(TakeGoldInfo takeGoldInfo, IBaseRequestCallBack<T> iBaseRequestCallBack);
 
     void takeStageGold(TakeGoldInfo takeGoldInfo, IBaseRequestCallBack<T> iBaseRequestCallBack);
+
+    void takeTaskGold(TakeGoldInfo takeGoldInfo, IBaseRequestCallBack<T> iBaseRequestCallBack);
 }

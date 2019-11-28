@@ -303,16 +303,17 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
             if (tData instanceof InitInfoRet && ((InitInfoRet) tData).getCode() == Constants.SUCCESS) {
                 Logger.i("init info--->" + JSON.toJSONString(tData));
                 if (((InitInfoRet) tData).getData() != null) {
-                    App.userTodayStep = ((InitInfoRet) tData).getData().getUserStepData().getStepNum();
+                    App.initInfo = ((InitInfoRet) tData).getData();
+                    App.userTodayStep = App.initInfo.getUserStepData().getStepNum();
                     Logger.i("user today step--->" + App.userTodayStep);
                 }
                 if (hongBaoDialog != null && !hongBaoDialog.isShowing()) {
-                    if (((InitInfoRet) tData).getData().getNewTaskConfig().getIsDel() == 0) {
+                    if (App.initInfo.getNewTaskConfig().getIsDel() == 0) {
                         hongBaoDialog.show();
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                hongBaoDialog.autoOpenHongBao(((InitInfoRet) tData).getData().getNewTaskConfig().getGold());
+                                hongBaoDialog.autoOpenHongBao(App.initInfo.getNewTaskConfig().getGold());
                             }
                         }, 2000);
                     }

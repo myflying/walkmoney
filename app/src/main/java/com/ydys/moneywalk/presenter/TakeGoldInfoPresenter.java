@@ -12,4 +12,6 @@ public interface TakeGoldInfoPresenter {
     void takeStepGold(TakeGoldInfo takeGoldInfo);
 
     void takeStageGold(TakeGoldInfo takeGoldInfo);
+
+    void takeTaskGold(TakeGoldInfo takeGoldInfo);
 }

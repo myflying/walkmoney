@@ -49,6 +49,7 @@ import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.HomeDataInfoPresenterImp;
 import com.ydys.moneywalk.presenter.TakeGoldInfoPresenterImp;
 import com.ydys.moneywalk.presenter.UserStepInfoPresenterImp;
+import com.ydys.moneywalk.ui.activity.MakeMoneyActivity;
 import com.ydys.moneywalk.ui.custom.Constant;
 import com.ydys.moneywalk.ui.custom.GlideImageLoader;
 import com.ydys.moneywalk.ui.custom.ReceiveGoldDialog;
@@ -390,6 +391,12 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         }, 1);
     }
 
+    @OnClick(R.id.layout_get_gold)
+    void makeGoldMethod() {
+        Intent intent = new Intent(getActivity(), MakeMoneyActivity.class);
+        startActivity(intent);
+    }
+
     /**
      * 领取金币
      */
@@ -479,7 +486,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
             Logger.i("onServiceConnected--->" + currentStepNum);
 
-            isExchangeStepNum = SPUtils.getInstance().getInt(Constants.CURRENT_DAY_EXCHANGE_STEP, 0);
+            isExchangeStepNum = SPUtils.getInstance().getInt(todayDate + Constants.CURRENT_DAY_EXCHANGE_STEP, 0);
             setStepAndProgress();
 
             BindService.LcBinder lcBinder = (BindService.LcBinder) service;
@@ -488,7 +495,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 @Override
                 public void updateUi(int stepCount) {
                     currentStepNum = todayStartStep + stepCount;
-                    isExchangeStepNum = SPUtils.getInstance().getInt(Constants.CURRENT_DAY_EXCHANGE_STEP, 0);
+                    isExchangeStepNum = SPUtils.getInstance().getInt(todayDate + Constants.CURRENT_DAY_EXCHANGE_STEP, 0);
                     //当前接收到stepCount数据，就是最新的步数
                     Message message = Message.obtain();
                     message.what = 1;
@@ -526,7 +533,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         isExchangeStepNum = currentStepNum - currentStepNum % EXCHANGE_SCALE;
         mFourGoldLayout.setVisibility(View.GONE);
 
-        SPUtils.getInstance().put(Constants.CURRENT_DAY_EXCHANGE_STEP, isExchangeStepNum);
+        SPUtils.getInstance().put(todayDate + Constants.CURRENT_DAY_EXCHANGE_STEP, isExchangeStepNum);
 
         takeGoldNum(2, mStepGoldNumTv.getText().toString(), 0);
     }

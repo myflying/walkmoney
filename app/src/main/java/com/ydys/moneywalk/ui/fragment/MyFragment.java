@@ -89,10 +89,10 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     @OnClick(R.id.layout_user_info)
     void login() {
         if (mUserInfo != null) {
-            if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            }
+            //if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            // }
         } else {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
@@ -114,13 +114,13 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     @OnClick(R.id.layout_my_wallet)
     void myWallet() {
         if (mUserInfo != null) {
-            if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(getActivity(), MyWalletActivity.class);
-                startActivity(intent);
-            }
+//            if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                startActivity(intent);
+//            } else {
+//                Intent intent = new Intent(getActivity(), MyWalletActivity.class);
+//                startActivity(intent);
+//            }
         } else {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
@@ -130,13 +130,13 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     @OnClick({R.id.layout_cash_money, R.id.btn_cash_now})
     void myCashMoney() {
         if (mUserInfo != null) {
-            if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(getActivity(), CashActivity.class);
-                startActivity(intent);
-            }
+//            if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
+//                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                startActivity(intent);
+//            } else {
+//                Intent intent = new Intent(getActivity(), CashActivity.class);
+//                startActivity(intent);
+//            }
         } else {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
@@ -163,7 +163,7 @@ public class MyFragment extends BaseFragment implements UserInfoView {
                 options.placeholder(R.mipmap.def_head);
                 Glide.with(getActivity()).load(mUserInfo.getFace()).apply(options).into(mUserHeadIv);
 
-                mUserNickNameTv.setText("游客" + mUserInfo.getUserId());
+                mUserNickNameTv.setText("游客" + mUserInfo.getId());
                 mUserDescTv.setText("点击登录");
                 mUserGoldNumTv.setText(mUserInfo.getGold() + "");
                 mCashMoneyTv.setText(mUserInfo.getAmount() + "");

@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface UserInfoService {
 
-    @POST("v1.user/login")
+    @POST("v1.User/bindOrLogin")
     Observable<UserInfoRet> login(@Body RequestBody requestBody);
 
 

@@ -34,12 +34,15 @@ public class UserInfoModelImp extends BaseModel implements UserInfoModel<UserInf
     }
 
     @Override
-    public void login(String userId,String userName, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
+    public void login(String imei, String type, String value, String code,String nickname,String face, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
-            params.put("user_id", userId);
-            params.put("user_name",userName);
-
+            params.put("imei", imei);
+            params.put("type",type);
+            params.put("value",value);
+            params.put("code",code);
+            params.put("nickname",nickname);
+            params.put("face",face);
         } catch (JSONException e) {
             e.printStackTrace();
         }

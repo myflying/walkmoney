@@ -5,6 +5,7 @@ package com.ydys.moneywalk.presenter;
  */
 
 public interface UserInfoPresenter {
-    void login(String userId, String userName);
+    void login(String imei, String type, String value, String code,String nickname,String face);
+
     void imeiLogin(String imei, String agentId, String siteId);
 }

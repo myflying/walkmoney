@@ -10,6 +10,10 @@ import com.alibaba.fastjson.TypeReference;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
+import com.ydys.moneywalk.bean.InitInfo;
 import com.ydys.moneywalk.bean.UserInfo;
 
 /**
@@ -38,6 +42,10 @@ public class App extends Application {
 
     public static int userTodayStep;//开启APP后接口获取到的用户当天的步数
 
+    public static String agentId = "walkmoney";
+
+    public static InitInfo initInfo;
+
     public static App getApp() {
         if (mInstance != null && mInstance instanceof App) {
             return (App) mInstance;
@@ -52,6 +60,13 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         applicationContext = this;
+
+        UMConfigure.init(this,"5ddf398e0cafb2d41b00066a",App.agentId,UMConfigure.DEVICE_TYPE_PHONE, "");
+        // 选用LEGACY_AUTO页面采集模式
+        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
+
+        PlatformConfig.setWeixin("wx6b748df21345e04d", "57b47c686a85e63401b3ecb9ae80f5eb");
+
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {

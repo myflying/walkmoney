@@ -9,6 +9,7 @@ import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.presenter.Presenter;
 
 public class FillInCodeActivity extends BaseActivity {
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_fill_in_code;
