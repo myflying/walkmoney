@@ -16,7 +16,7 @@ public class UserInfo {
     @SerializedName("cash_out_status")
     private int cashOutStatus;//提现封禁状态 1可以提现 2禁止提现
     @SerializedName("is_bind")
-    private String isBind; //该设备是否绑定微信或者手机号 1是 0否
+    private int isBind; //该设备是否绑定微信或者手机号 1是 0否
 
     public String getId() {
         return id;
@@ -82,11 +82,11 @@ public class UserInfo {
         this.cashOutStatus = cashOutStatus;
     }
 
-    public String getIsBind() {
+    public int getIsBind() {
         return isBind;
     }
 
-    public void setIsBind(String isBind) {
+    public void setIsBind(int isBind) {
         this.isBind = isBind;
     }
 }

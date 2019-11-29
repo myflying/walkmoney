@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
 
     @NeedsPermission(Manifest.permission.READ_PHONE_STATE)
     void showReadPhone() {
-        readPhoneTask();
+        MainActivityPermissionsDispatcher.showReadStorageWithPermissionCheck(this);
     }
 
     @OnPermissionDenied(Manifest.permission.READ_PHONE_STATE)
@@ -142,6 +142,40 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
 
     @OnNeverAskAgain(Manifest.permission.READ_PHONE_STATE)
     void onReadPhoneNeverAskAgain() {
+        //Toast.makeText(this, R.string.permission_storage_never_ask_again, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        }
+    }
+
+
+    //
+
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void showReadStorage() {
+        readPhoneTask();
+    }
+
+    @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void onReadStorageDenied() {
+        //Toast.makeText(this, R.string.permission_storage_denied, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        }
+    }
+
+    @OnShowRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void showRationaleForReadStorage(PermissionRequest request) {
+        //Toast.makeText(this, R.string.permission_read_phone_rationale, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        } else {
+            request.proceed();
+        }
+    }
+
+    @OnNeverAskAgain(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    void onReadStorageNeverAskAgain() {
         //Toast.makeText(this, R.string.permission_storage_never_ask_again, Toast.LENGTH_SHORT).show();
         if (permissionDialog != null && !permissionDialog.isShowing()) {
             permissionDialog.show();
@@ -171,7 +205,9 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
 //                    }
                 }
                 if (pos == 1) {
-
+                    if (mFragmentList.get(pos) instanceof MakeMoneyFragment) {
+                        ((MakeMoneyFragment) mFragmentList.get(pos)).loadUserInfo();
+                    }
                 }
                 if (pos == 2) {
                     if (mFragmentList.get(pos) instanceof MyFragment) {

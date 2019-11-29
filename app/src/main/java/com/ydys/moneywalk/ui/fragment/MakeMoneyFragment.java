@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,12 +26,14 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.base.IBaseView;
+import com.ydys.moneywalk.bean.SignInfoRet;
 import com.ydys.moneywalk.bean.TakeGoldInfo;
 import com.ydys.moneywalk.bean.TakeGoldInfoRet;
 import com.ydys.moneywalk.bean.TaskInfo;
 import com.ydys.moneywalk.bean.TaskInfoWrapperRet;
 import com.ydys.moneywalk.bean.UserInfoRet;
 import com.ydys.moneywalk.common.Constants;
+import com.ydys.moneywalk.presenter.SignInfoPresenterImp;
 import com.ydys.moneywalk.presenter.TakeGoldInfoPresenterImp;
 import com.ydys.moneywalk.presenter.TaskInfoPresenterImp;
 import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
@@ -60,6 +63,12 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
     @BindView(R.id.task_list_view)
     RecyclerView mTaskInfoListView;
 
+    @BindView(R.id.tv_total_gold_num)
+    TextView mTotalGoldNumTv;
+
+    @BindView(R.id.tv_money)
+    TextView mMoneyTv;
+
     SignDayAdapter signDayAdapter;
 
     TaskInfoAdapter taskInfoAdapter;
@@ -79,6 +88,8 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
     UserInfoPresenterImp userInfoPresenterImp;
 
     TakeGoldInfoPresenterImp takeGoldInfoPresenterImp;
+
+    SignInfoPresenterImp signInfoPresenterImp;
 
     @Override
     protected int getContentView() {
@@ -100,20 +111,31 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
         receiveGoldDialog.setGoldDialogListener(this);
     }
 
+    public void loadUserInfo() {
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), "10000", "yangcheng");
+    }
+
     @Override
     public void loadData() {
         taskInfoPresenterImp = new TaskInfoPresenterImp(this, getActivity());
         taskInfoPresenterImp.taskList(App.mUserInfo != null ? App.mUserInfo.getId() : "");
         userInfoPresenterImp = new UserInfoPresenterImp(this, getActivity());
         takeGoldInfoPresenterImp = new TakeGoldInfoPresenterImp(this, getActivity());
+        signInfoPresenterImp = new SignInfoPresenterImp(this, getActivity());
 
         List<String> list = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             list.add(i + "");
         }
-        signDayAdapter = new SignDayAdapter(getActivity(), list);
+        signDayAdapter = new SignDayAdapter(getActivity(), null);
         mSignDayListView.setLayoutManager(new GridLayoutManager(getActivity(), 7));
         mSignDayListView.setAdapter(signDayAdapter);
+        signDayAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+            }
+        });
 
         taskInfoAdapter = new TaskInfoAdapter(getActivity(), null);
         mTaskInfoListView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -153,10 +175,16 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
                     if (taskInfo.getTaskType().equals("bind_wx")) {
                         mShareAPI.getPlatformInfo(getActivity(), SHARE_MEDIA.WEIXIN, authListener);
                     }
-
                 }
             }
         });
+
+//        mHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                signInfoPresenterImp.signDay(App.mUserInfo != null ? App.mUserInfo.getId() : "", 0, 1);
+//            }
+//        }, 5000);
     }
 
     @Override
@@ -174,18 +202,25 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+
         Logger.i(JSON.toJSONString(tData));
 
         if (tData != null) {
             if (tData instanceof TaskInfoWrapperRet && ((TaskInfoWrapperRet) tData).getCode() == Constants.SUCCESS) {
                 if (((TaskInfoWrapperRet) tData).getData() != null) {
                     taskInfoAdapter.setNewData(((TaskInfoWrapperRet) tData).getData().getTaskList());
+                    signDayAdapter.setSignDay(((TaskInfoWrapperRet) tData).getData().getSignTaskInfo().getContinueNum());
+                    signDayAdapter.setNewData(((TaskInfoWrapperRet) tData).getData().getSignTaskInfo().getList());
                 }
             }
 
             if (tData instanceof UserInfoRet) {
                 if (((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
-                    Toasty.normal(getActivity(), "绑定成功").show();
+                    //Toasty.normal(getActivity(), "绑定成功").show();
+                    SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
+                    App.mUserInfo = ((UserInfoRet) tData).getData();
+                    mTotalGoldNumTv.setText(App.mUserInfo.getGold() + "");
+                    mMoneyTv.setText("≈" + App.mUserInfo.getAmount() + "元");
                 } else {
                     Toasty.normal(getActivity(), ((UserInfoRet) tData).getMsg()).show();
                 }
@@ -207,6 +242,16 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
                     }, 2000);
                 } else {
                     Toasty.normal(getActivity(), ((TakeGoldInfoRet) tData).getMsg()).show();
+                }
+            }
+
+            if (tData instanceof SignInfoRet) {
+                if (((SignInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    if (receiveGoldDialog == null) {
+                        receiveGoldDialog = new ReceiveGoldDialog(getActivity(), R.style.common_dialog);
+                        receiveGoldDialog.setGoldDialogListener(MakeMoneyFragment.this);
+                    }
+                    receiveGoldDialog.show();
                 }
             }
         }

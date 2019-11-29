@@ -95,6 +95,7 @@ public class LoginActivity extends BaseActivity implements UserInfoView {
     @OnClick(R.id.iv_agree)
     void chooseXieYi() {
         boolean temp = !SPUtils.getInstance().getBoolean("agree_xieyi");
+        mAgreeIv.setImageResource(temp ? R.mipmap.agree_selected : R.mipmap.agree_normal);
         SPUtils.getInstance().put("agree_xieyi", temp);
     }
 
@@ -197,6 +198,7 @@ public class LoginActivity extends BaseActivity implements UserInfoView {
                 Toasty.normal(LoginActivity.this, "登录成功").show();
                 //存储用户信息
                 SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(tData.getData()));
+                SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
                 App.mUserInfo = tData.getData();
                 App.isLogin = true;
                 finish();

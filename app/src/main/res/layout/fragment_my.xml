@@ -34,11 +34,11 @@
 
                 <ImageView
                     android:id="@+id/iv_user_head"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="18dp"
                     android:src="@mipmap/def_head" />
 
                 <LinearLayout
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/iv_user_head"
                     android:orientation="vertical">
 
@@ -54,21 +54,43 @@
                         android:id="@+id/tv_user_nick_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:maxWidth="240dp"
                         android:text="游客"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/tv_user_desc"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="点击登录"
-                        android:textColor="@color/click_login_color"
-                        android:textSize="18sp" />
+                        android:gravity="left|center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_user_desc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:text="点击登录"
+                            android:textColor="@color/click_login_color"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tv_copy_code"
+                            android:layout_width="44dp"
+                            android:layout_height="20dp"
+                            android:layout_marginLeft="12dp"
+                            android:background="@drawable/copy_code_bg"
+                            android:gravity="center"
+                            android:text="复制"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/layout_act_rule"
+                    android:id="@+id/layout_fill_in"
                     android:layout_width="90dp"
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"
@@ -313,6 +335,7 @@
                     android:layout_height="54dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginRight="22dp"
+                    android:visibility="gone"
                     android:gravity="center">
 
                     <ImageView

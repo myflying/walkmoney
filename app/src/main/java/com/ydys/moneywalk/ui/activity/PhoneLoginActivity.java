@@ -226,6 +226,7 @@ public class PhoneLoginActivity extends BaseActivity implements IBaseView {
                 Toasty.normal(PhoneLoginActivity.this, "登录成功").show();
                 //存储用户信息
                 SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
+                SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
                 App.mUserInfo = ((UserInfoRet) tData).getData();
                 App.isLogin = true;
                 finish();

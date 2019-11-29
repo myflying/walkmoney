@@ -61,6 +61,7 @@
         <activity android:name=".ui.activity.MyWalletActivity" />
         <activity android:name=".ui.activity.InviteFriendActivity"/>
         <activity android:name=".ui.activity.MakeMoneyActivity"/>
+        <activity android:name=".ui.activity.FillInCodeActivity"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

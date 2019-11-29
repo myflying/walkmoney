@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,12 +29,17 @@ import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.constant.TimeConstants;
+import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.base.IBaseView;
@@ -43,22 +49,30 @@ import com.ydys.moneywalk.bean.MessageEvent;
 import com.ydys.moneywalk.bean.ResultInfo;
 import com.ydys.moneywalk.bean.TakeGoldInfo;
 import com.ydys.moneywalk.bean.TakeGoldInfoRet;
+import com.ydys.moneywalk.bean.UserInfoRet;
 import com.ydys.moneywalk.bean.UserStepInfo;
 import com.ydys.moneywalk.bean.UserStepInfoRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.HomeDataInfoPresenterImp;
 import com.ydys.moneywalk.presenter.TakeGoldInfoPresenterImp;
+import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
 import com.ydys.moneywalk.presenter.UserStepInfoPresenterImp;
+import com.ydys.moneywalk.ui.activity.BindPhoneActivity;
+import com.ydys.moneywalk.ui.activity.InviteFriendActivity;
+import com.ydys.moneywalk.ui.activity.LoginActivity;
 import com.ydys.moneywalk.ui.activity.MakeMoneyActivity;
 import com.ydys.moneywalk.ui.custom.Constant;
 import com.ydys.moneywalk.ui.custom.GlideImageLoader;
+import com.ydys.moneywalk.ui.custom.LoginDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveGoldDialog;
 import com.ydys.moneywalk.ui.custom.StepNumProgressView;
 import com.ydys.moneywalk.ui.custom.step.BindService;
 import com.ydys.moneywalk.ui.custom.step.UpdateUiCallBack;
 import com.ydys.moneywalk.util.RandomUtils;
 import com.ydys.moneywalk.view.HomeDataInfoView;
+import com.ydys.moneywalk.view.UserInfoView;
 import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -70,9 +84,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -80,7 +96,7 @@ import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
-public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, IBaseView {
+public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefreshLayout.OnRefreshListener, LoginDialog.LoginListener {
 
     public static int EXCHANGE_SCALE = 10;
 
@@ -184,7 +200,15 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     ReceiveGoldDialog receiveGoldDialog;
 
+    LoginDialog loginDialog;
+
     private String currentTakeGold;
+
+    private UMShareAPI mShareAPI = null;
+
+    private ProgressDialog progressDialog = null;
+
+    UserInfoPresenterImp userInfoPresenterImp;
 
     public Handler mHandler = new Handler() {
         @Override
@@ -213,10 +237,18 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void initViews() {
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("正在登录");
+
+        mShareAPI = UMShareAPI.get(getActivity());
+
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setProgressViewOffset(true, -0, 200);
         swipeRefreshLayout.setProgressViewEndTarget(true, 180);
         swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(), R.color.colorPrimary), Color.RED, Color.YELLOW, Color.BLUE);
+
+        loginDialog = new LoginDialog(getActivity(), R.style.common_dialog);
+        loginDialog.setLoginListener(this);
 
         receiveGoldDialog = new ReceiveGoldDialog(getActivity(), R.style.common_dialog);
     }
@@ -226,6 +258,7 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         homeDataInfoPresenterImp = new HomeDataInfoPresenterImp(this, getActivity());
         userStepInfoPresenterImp = new UserStepInfoPresenterImp(this, getActivity());
         takeGoldInfoPresenterImp = new TakeGoldInfoPresenterImp(this, getActivity());
+        userInfoPresenterImp = new UserInfoPresenterImp(this, getActivity());
 
         todayDate = TimeUtils.getNowString(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()));
 
@@ -268,14 +301,23 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
 
         List<Integer> bannerList = new ArrayList<>();
-        bannerList.add(R.mipmap.a);
-        bannerList.add(R.mipmap.b);
+        bannerList.add(R.mipmap.home_banner);
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
         //设置图片集合
         mBanner.setImages(bannerList);
         //banner设置方法全部调用完毕时最后调用
         mBanner.start();
+
+        mBanner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                if (position == 0) {
+                    Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         //处理3个金币的显示
         oneStart();
@@ -337,11 +379,17 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
             mGetGoldBtn.setBackgroundResource(R.mipmap.get_gold_btn_bg);
         }
 
+        if (App.mUserInfo != null && App.mUserInfo.getIsBind() == 1 && !SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
+            mGetGoldBtn.setText("去登录");
+            mGetGoldBtn.setBackgroundResource(R.mipmap.get_gold_btn_bg);
+        }
+
         mStepNumProgress.updateStateTitle(receiveTitles, receiveGoldTitleIndex);
 
         //设置步数金币的显示/隐藏，数值
         int getGoldNum = (currentStepNum - isExchangeStepNum) / 10;
-        if (getGoldNum > 0) {
+        //总步数 < 20000，且未领取的的步数 > 10
+        if (currentStepNum < 20000 && getGoldNum > 0) {
             mFourGoldLayout.setVisibility(View.VISIBLE);
             mStepGoldNumTv.setText(getGoldNum + "");
         } else {
@@ -742,8 +790,11 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void loadDataSuccess(Object tData) {
-        if (tData != null) {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
 
+        if (tData != null) {
             if (tData instanceof HomeDateInfoRet && ((HomeDateInfoRet) tData).getCode() == Constants.SUCCESS) {
                 Logger.i("home data--->" + JSON.toJSONString(tData));
                 if (((HomeDateInfoRet) tData).getData() != null) {
@@ -779,6 +830,19 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     receiveGoldDialog.updateGoldInfo(currentTakeGold, "1000", "≈1.0元");
                 }
             }
+
+            if (tData instanceof UserInfoRet) {
+                if (((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    Toasty.normal(getActivity(), "登录成功").show();
+                    //存储用户信息
+                    SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
+                    SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
+                    App.mUserInfo = ((UserInfoRet) tData).getData();
+                    App.isLogin = true;
+                } else {
+                    Toasty.normal(getActivity(), ((UserInfoRet) tData).getMsg()).show();
+                }
+            }
         }
 
         randomBubbleGoldNum();
@@ -786,7 +850,97 @@ public class HomeFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void loadDataError(Throwable throwable) {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+
         Logger.e("error--->" + throwable.getMessage());
         randomBubbleGoldNum();
+    }
+
+    @OnClick(R.id.layout_invite)
+    void inviteFriend() {
+        if (App.mUserInfo != null && App.mUserInfo.getIsBind() == 1) {
+            Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+            startActivity(intent);
+        } else {
+            if (loginDialog != null && !loginDialog.isShowing()) {
+                loginDialog.show();
+            }
+        }
+    }
+
+    UMAuthListener authListener = new UMAuthListener() {
+        /**
+         * @desc 授权开始的回调
+         * @param platform 平台名称
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        /**
+         * @desc 授权成功的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         * @param data 用户资料返回
+         */
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            Logger.i("auth data --->" + JSONObject.toJSONString(data));
+            //Toast.makeText(mContext, "授权成功了", Toast.LENGTH_LONG).show();
+            try {
+                App.isLogin = true;
+                if (data != null) {
+                    userInfoPresenterImp.login(PhoneUtils.getIMEI(), "wechat", data.get("uid"), "", data.get("name"), data.get("iconurl"));
+
+                    Logger.i("wx login info--->" + data.toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        /**
+         * @desc 授权失败的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+            //Toast.makeText(mContext, "授权失败：" + t.getMessage(), Toast.LENGTH_LONG).show();
+            Toasty.normal(getActivity(), "授权失败").show();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+
+        /**
+         * @desc 授权取消的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            Toasty.normal(getActivity(), "授权取消").show();
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
+    };
+
+    @Override
+    public void wxLogin() {
+        if (progressDialog != null && !progressDialog.isShowing()) {
+            progressDialog.show();
+        }
+        mShareAPI.getPlatformInfo(getActivity(), SHARE_MEDIA.WEIXIN, authListener);
+    }
+
+    @Override
+    public void phoneLogin() {
+
     }
 }

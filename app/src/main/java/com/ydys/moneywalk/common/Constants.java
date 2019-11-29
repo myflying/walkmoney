@@ -42,4 +42,6 @@ public class Constants {
     //当日已经领取的阶段步数的--阶段，默认0
     public static final String IS_GET_STAGE = "is_get_state";
 
+    //标记APP本地是否登录过账号(主要是考虑app卸载后，与后台综合判断，再次安装app时，此设备是否登录过系统)
+    public static final String LOCAL_LOGIN = "local_login";
 }

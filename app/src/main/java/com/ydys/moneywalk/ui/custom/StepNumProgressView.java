@@ -206,7 +206,7 @@ public class StepNumProgressView extends View {
         //绘制兑换说明
         drawExChangeText(canvas);
         //绘制walk_logo
-        drawWalkImage(canvas);
+        //drawWalkImage(canvas);
     }
 
     /**

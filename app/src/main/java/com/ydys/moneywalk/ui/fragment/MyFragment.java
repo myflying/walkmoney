@@ -1,12 +1,22 @@
 package com.ydys.moneywalk.ui.fragment;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.blankj.utilcode.util.PhoneUtils;
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.orhanobut.logger.Logger;
@@ -21,15 +31,20 @@ import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
 import com.ydys.moneywalk.ui.activity.AboutActivity;
 import com.ydys.moneywalk.ui.activity.BodyDataActivity;
 import com.ydys.moneywalk.ui.activity.CashActivity;
+import com.ydys.moneywalk.ui.activity.FillInCodeActivity;
+import com.ydys.moneywalk.ui.activity.InviteFriendActivity;
 import com.ydys.moneywalk.ui.activity.LoginActivity;
+import com.ydys.moneywalk.ui.activity.MakeMoneyActivity;
 import com.ydys.moneywalk.ui.activity.MyWalletActivity;
 import com.ydys.moneywalk.ui.activity.PhoneLoginActivity;
 import com.ydys.moneywalk.ui.activity.SettingActivity;
+import com.ydys.moneywalk.ui.custom.GlideCircleTransformWithBorder;
 import com.ydys.moneywalk.view.InitInfoView;
 import com.ydys.moneywalk.view.UserInfoView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class MyFragment extends BaseFragment implements UserInfoView {
 
@@ -51,9 +66,17 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     @BindView(R.id.layout_user_account)
     LinearLayout mUserAccountLayout;
 
+    @BindView(R.id.btn_cash_now)
+    Button mCashMoneyBtn;
+
+    @BindView(R.id.tv_copy_code)
+    TextView mCopyCodeTv;
+
     private UserInfoPresenterImp userInfoPresenterImp;
 
     private UserInfo mUserInfo;
+
+    private boolean isRequestInfo;
 
     @Override
     protected int getContentView() {
@@ -78,12 +101,18 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     @Override
     public void onResume() {
         super.onResume();
-        Logger.i("myfragment onresume--->");
+        isRequestInfo = true;
+        if (isRequestInfo) {
+            Logger.i("myfragment onresume--->");
+            userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), "10000", "yangcheng");
+        }
     }
 
     public void loadUserInfo() {
-        Logger.i("load user info--->");
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), "10000", "yangcheng");
+        if (!isRequestInfo) {
+            Logger.i("myfragment load user info--->");
+            userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), "10000", "yangcheng");
+        }
     }
 
     @OnClick(R.id.layout_user_info)
@@ -155,25 +184,85 @@ public class MyFragment extends BaseFragment implements UserInfoView {
 
     @Override
     public void loadDataSuccess(UserInfoRet tData) {
+        isRequestInfo = false;
         if (tData != null && tData.getCode() == Constants.SUCCESS) {
             if (tData.getData() != null) {
                 mUserInfo = tData.getData();
-                RequestOptions options = new RequestOptions();
-                options.error(R.mipmap.def_head);
-                options.placeholder(R.mipmap.def_head);
-                Glide.with(getActivity()).load(mUserInfo.getFace()).apply(options).into(mUserHeadIv);
 
-                mUserNickNameTv.setText("游客" + mUserInfo.getId());
-                mUserDescTv.setText("点击登录");
                 mUserGoldNumTv.setText(mUserInfo.getGold() + "");
                 mCashMoneyTv.setText(mUserInfo.getAmount() + "");
 
+                //头像
+                RequestOptions options = new RequestOptions();
+                options.override(SizeUtils.dp2px(50), SizeUtils.dp2px(50));
+                options.error(R.mipmap.def_head);
+                options.placeholder(R.mipmap.def_head);
+                options.transform(new GlideCircleTransformWithBorder(getActivity(), 1, ContextCompat.getColor(getActivity(), R.color.white)));
+
+                String nickName = "游客" + mUserInfo.getId();
+                String inviteCode = "点击登录";
+
+                if (mUserInfo.getIsBind() == 1) {
+                    if (SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
+                        nickName = StringUtils.isEmpty(mUserInfo.getNickname()) ? "走路宝" + mUserInfo.getId() : mUserInfo.getNickname();
+                        inviteCode = "邀请码：" + mUserInfo.getId();
+                        Glide.with(getActivity()).load(mUserInfo.getFace()).apply(options).into(mUserHeadIv);
+                    } else {
+                        nickName = "点击登录";
+                        inviteCode = "让走路更有趣";
+                        Glide.with(getActivity()).load(R.mipmap.def_head).apply(options).into(mUserHeadIv);
+
+                        mUserGoldNumTv.setText("--");
+                        mCashMoneyTv.setText("--");
+                        mCashMoneyBtn.setBackgroundResource(R.drawable.cash_btn_normal_bg);
+                        mCopyCodeTv.setVisibility(View.GONE);
+                    }
+                } else {
+                    mCopyCodeTv.setVisibility(View.GONE);
+                    Glide.with(getActivity()).load(mUserInfo.getFace()).apply(options).into(mUserHeadIv);
+                }
+
+                mUserNickNameTv.setText(nickName);
+                mUserDescTv.setText(inviteCode);
             }
         }
     }
 
     @Override
     public void loadDataError(Throwable throwable) {
+        isRequestInfo = false;
+    }
 
+    @OnClick(R.id.tv_copy_code)
+    void copyCode() {
+        copyTextToSystem(getActivity(), App.mUserInfo != null ? App.mUserInfo.getId() : "");
+        ToastUtils.showLong("已复制");
+    }
+
+    /**
+     * 复制文本到系统剪切板
+     */
+    public static void copyTextToSystem(Context context, String text) {
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData mClipData = ClipData.newPlainText("Label", text);
+        cm.setPrimaryClip(mClipData);
+    }
+
+    @OnClick(R.id.layout_fill_in)
+    void fillInCode() {
+        Intent intent = new Intent(getActivity(), FillInCodeActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.layout_invite_friend)
+    void inviteFriend() {
+        Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.layout_mk_money)
+    void makeMoney() {
+        Intent intent = new Intent(getActivity(), MakeMoneyActivity.class);
+        startActivity(intent);
     }
 }

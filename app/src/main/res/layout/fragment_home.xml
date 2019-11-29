@@ -127,8 +127,8 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="步数兑换"
                                 android:layout_marginTop="6dp"
+                                android:text="步数兑换"
                                 android:textColor="@color/common_gray"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -138,6 +138,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true">
+
+                            <pl.droidsonroids.gif.GifImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="top|center"
+                                android:layout_marginTop="55dp"
+                                android:src="@drawable/walk_gif" />
 
                             <com.ydys.moneywalk.ui.custom.StepNumProgressView
                                 android:id="@+id/temp_view"
@@ -159,6 +166,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/layout_invite"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_margin="9dp"
@@ -214,6 +222,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="12dp"
+                            android:layout_marginTop="1dp"
                             android:src="@mipmap/hot_icon" />
 
                         <TextView
@@ -226,10 +235,16 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <com.youth.banner.Banner
-                        android:id="@+id/banner"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="116dp" />
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
+
+                        <com.youth.banner.Banner
+                            android:id="@+id/banner"
+                            android:layout_width="330dp"
+                            android:layout_height="116dp" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

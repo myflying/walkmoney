@@ -6,9 +6,13 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.alibaba.fastjson.JSONObject;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
+import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
+import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.ui.custom.LoginOutDialog;
 
@@ -78,7 +82,12 @@ public class SettingActivity extends BaseActivity implements LoginOutDialog.Logi
 
     @Override
     public void configLoginOut() {
-        ToastUtils.showLong("已退出");
+        App.mUserInfo = null;
+        App.isLogin = false;
+        SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(""));
+        SPUtils.getInstance().remove(Constants.USER_INFO);
+        SPUtils.getInstance().put(Constants.LOCAL_LOGIN, false);
+        finish();
     }
 
     @Override

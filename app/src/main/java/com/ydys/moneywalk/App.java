@@ -3,7 +3,10 @@ package com.ydys.moneywalk;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.os.StrictMode.VmPolicy.Builder;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -60,6 +63,11 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         applicationContext = this;
+
+//        if(Build.VERSION.SDK_INT >= 24) {
+//            Builder builder = new Builder();
+//            StrictMode.setVmPolicy(builder.build());
+//        }
 
         UMConfigure.init(this,"5ddf398e0cafb2d41b00066a",App.agentId,UMConfigure.DEVICE_TYPE_PHONE, "");
         // 选用LEGACY_AUTO页面采集模式

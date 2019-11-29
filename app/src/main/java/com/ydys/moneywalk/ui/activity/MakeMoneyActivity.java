@@ -78,4 +78,9 @@ public class MakeMoneyActivity extends BaseActivity {
 
         }
     }
+
+    @OnClick(R.id.iv_back)
+    void back() {
+        finish();
+    }
 }

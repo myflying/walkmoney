@@ -87,4 +87,6 @@
     <color name="start_btn_color">#fefde4</color>
 
     <color name="round_border_color">#8f9198</color>
+
+    <color name="copy_code_color">#fcb755</color>
 </resources>

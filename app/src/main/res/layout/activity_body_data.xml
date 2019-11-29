@@ -61,6 +61,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_sex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -122,6 +123,7 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -182,12 +184,13 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_height"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="8dp"
                         android:layout_toLeftOf="@+id/iv_sg_right"
-                        android:text="23" />
+                        android:text="168cm" />
 
                     <ImageView
                         android:id="@+id/iv_sg_right"
@@ -242,12 +245,13 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="8dp"
                         android:layout_toLeftOf="@+id/iv_tz_right"
-                        android:text="23" />
+                        android:text="60kg" />
 
                     <ImageView
                         android:id="@+id/iv_tz_right"
@@ -302,12 +306,13 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_step_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="8dp"
                         android:layout_toLeftOf="@+id/iv_step_num_right"
-                        android:text="23" />
+                        android:text="5000" />
 
                     <ImageView
                         android:id="@+id/iv_step_num_right"

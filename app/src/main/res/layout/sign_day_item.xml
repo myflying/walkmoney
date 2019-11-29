@@ -6,12 +6,15 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/layout_top_bubble"
         android:layout_width="40dp"
         android:layout_height="20dp"
         android:background="@mipmap/add_gold_bubble"
+        android:visibility="gone"
         android:gravity="top|center">
 
         <TextView
+            android:id="@+id/tv_top_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
@@ -26,6 +29,7 @@
         android:layout_marginTop="4dp">
 
         <TextView
+            android:id="@+id/tv_day_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@mipmap/sign_day_gold_bg"
@@ -33,13 +37,13 @@
             android:text="23"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_double_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:src="@mipmap/double_item_icon" />
     </FrameLayout>
 

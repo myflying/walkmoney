@@ -1,5 +1,6 @@
 package com.ydys.moneywalk.api;
 
+import com.ydys.moneywalk.bean.FillInCodeInfoRet;
 import com.ydys.moneywalk.bean.UserInfoRet;
 
 import okhttp3.RequestBody;
@@ -19,4 +20,8 @@ public interface UserInfoService {
 
     @POST("v1.user/imeiLogin")
     Observable<UserInfoRet> imeiLogin(@Body RequestBody requestBody);
+
+
+    @POST("v1.User/fillInCode")
+    Observable<FillInCodeInfoRet> fillInCode(@Body RequestBody requestBody);
 }
