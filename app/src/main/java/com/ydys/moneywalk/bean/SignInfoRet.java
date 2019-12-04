@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class SignInfoRet extends ResultInfo {
 
-    private List<SignInfo> data;
+    private SignInfo data;
 
-    public List<SignInfo> getData() {
+    public SignInfo getData() {
         return data;
     }
 
-    public void setData(List<SignInfo> data) {
+    public void setData(SignInfo data) {
         this.data = data;
     }
 }

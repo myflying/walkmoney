@@ -18,6 +18,15 @@ public class UserInfo {
     @SerializedName("is_bind")
     private int isBind; //该设备是否绑定微信或者手机号 1是 0否
 
+    @SerializedName("bind_wechat")
+    private int bindWechat;//是否绑定微信 1是 0否
+
+    @SerializedName("bind_mobile")
+    private int bindMobile;//是否绑定手机号 1是 0否
+
+    @SerializedName("show_new")
+    private int showNew;//新人金币弹框 1弹 0不弹
+
     public String getId() {
         return id;
     }
@@ -88,6 +97,30 @@ public class UserInfo {
 
     public void setIsBind(int isBind) {
         this.isBind = isBind;
+    }
+
+    public int getBindWechat() {
+        return bindWechat;
+    }
+
+    public void setBindWechat(int bindWechat) {
+        this.bindWechat = bindWechat;
+    }
+
+    public int getBindMobile() {
+        return bindMobile;
+    }
+
+    public void setBindMobile(int bindMobile) {
+        this.bindMobile = bindMobile;
+    }
+
+    public int getShowNew() {
+        return showNew;
+    }
+
+    public void setShowNew(int showNew) {
+        this.showNew = showNew;
     }
 }
 

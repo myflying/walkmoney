@@ -25,6 +25,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_bmi_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/layout_data_sign"
@@ -102,6 +103,7 @@
                     android:src="@mipmap/data_base_bg" />
 
                 <ImageView
+                    android:id="@+id/iv_sign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"

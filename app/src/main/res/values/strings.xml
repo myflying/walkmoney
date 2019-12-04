@@ -13,7 +13,7 @@
     <string name="clause_txt">如果未经您的授权，我们不会使用您的个人信息用于您未授权的其他途径或目的。</string>
     <string name="privacy_hint_txt">您点击“同意”，即表示您已阅读并同意《服务协议》及《隐私政策》</string>
     <string name="complete_privacy_txt">查看完整版</string>
-    <string name="user_xieyi_txt">《用户协议》</string>
+    <string name="user_xieyi_txt">《服务协议》</string>
     <string name="and_txt">及</string>
     <string name="privacy_clause_txt">《隐私政策》</string>
 
@@ -35,10 +35,9 @@
 
     <string name="bmi_str">BMI=体重(kg)/身高(m)²\r\r\nBMI又称身体质量指数，在一定程度上可反映人的肥瘦情况，适宜的BMI是保持健康和好身材的前提。</string>
 
-    <string name="cash_step1">1.提现到账说明：\n通常情况下提交提现后24小时到账，请趣友们耐心等待哦！</string>
-    <string name="cash_step2">2.活动提现：\n活动提现主要为小额提现，但需要满足一定条件才可以提现，且每天最多一次。</string>
+    <string name="cash_step">1.提现到账说明：\n通常情况下提交提现后24小时到账，请趣友们耐心等待哦！\n2.活动提现：\n活动提现主要为小额提现，但需要满足一定条件才可以提现，且每天最多一次。</string>
 
-    <string name="contact_qq_str">如有问题，请及时联系客服\nQQ群：423412324234</string>
+    <string name="contact_qq_str">如有问题，请及时联系客服</string>
 
     <string name="my_wallet_txt">我的钱包</string>
     <string name="exchange_txt">10000金币=1元</string>
@@ -53,4 +52,8 @@
     <string name="button_deny">拒绝</string>
 
     <string name="permission_detail_txt">因读取步数信息和金币兑换、提现要求，需要你提供以下权限：设备信息，储存信息。</string>
+
+    <string name="version_txt">1.修复已知的bug。\n2.优化部分功能体验。</string>
+    <string name="version_hint_txt">版本正在更新，请稍后...</string>
+
 </resources>

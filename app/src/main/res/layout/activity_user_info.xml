@@ -89,12 +89,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_user_nick_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
-                    android:text="超级忍者"
+                    android:text="游客"
                     android:textColor="@color/common_gray"
                     android:textSize="14sp" />
             </RelativeLayout>
@@ -130,12 +131,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_user_invite_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
-                    android:text="216863"
+                    android:text="0"
                     android:textColor="@color/common_gray"
                     android:textSize="14sp" />
             </RelativeLayout>
@@ -143,8 +145,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:visibility="gone"
-                android:background="@color/line1_color" />
+                android:background="@color/line1_color"
+                android:visibility="gone" />
         </LinearLayout>
 
         <View
@@ -177,12 +179,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
                     android:layout_toLeftOf="@+id/iv_contact_right"
-                    android:text="15812324214" />
+                    android:text="去绑定" />
 
                 <ImageView
                     android:id="@+id/iv_contact_right"
@@ -224,12 +227,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tv_wx_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
                     android:layout_toLeftOf="@+id/iv_clear_right"
-                    android:text="ilove2019" />
+                    android:text="去绑定" />
 
                 <ImageView
                     android:id="@+id/iv_clear_right"

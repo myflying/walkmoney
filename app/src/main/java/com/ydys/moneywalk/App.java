@@ -33,6 +33,8 @@ public class App extends Application {
 
     public static boolean isLogin;
 
+    public static int newStepNum;//最新的步数
+
     public static Context getContext() {
         return applicationContext;
     }
@@ -45,7 +47,7 @@ public class App extends Application {
 
     public static int userTodayStep;//开启APP后接口获取到的用户当天的步数
 
-    public static String agentId = "walkmoney";
+    public static String agentId = "1";
 
     public static InitInfo initInfo;
 

@@ -1,40 +1,35 @@
 package com.ydys.moneywalk.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CashMoneyInfo {
-    private String id;
-    private double cashMoney;
-    private int goldNum;
-    private boolean isSelected;
+    @SerializedName("user_id")
+    private String userId;//用户id
+    private double money;//提现金额
+    @SerializedName("is_new_people")
+    private int isNewPeople;//是否新用户专享 1是 0否
 
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public double getCashMoney() {
-        return cashMoney;
+    public double getMoney() {
+        return money;
     }
 
-    public void setCashMoney(double cashMoney) {
-        this.cashMoney = cashMoney;
+    public void setMoney(double money) {
+        this.money = money;
     }
 
-    public int getGoldNum() {
-        return goldNum;
+    public int getIsNewPeople() {
+        return isNewPeople;
     }
 
-    public void setGoldNum(int goldNum) {
-        this.goldNum = goldNum;
-    }
-
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(boolean selected) {
-        isSelected = selected;
+    public void setIsNewPeople(int isNewPeople) {
+        this.isNewPeople = isNewPeople;
     }
 }

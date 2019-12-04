@@ -14,11 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.blankj.utilcode.util.SizeUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaeger.library.StatusBarUtil;
+import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.CashRecordInfo;
+import com.ydys.moneywalk.bean.CashRecordInfoRet;
+import com.ydys.moneywalk.common.Constants;
+import com.ydys.moneywalk.presenter.CashRecordInfoPresenterImp;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.ui.adapter.CashRecordAdapter;
 import com.ydys.moneywalk.ui.custom.NormalDecoration;
+import com.ydys.moneywalk.view.CashRecordInfoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class CashRecordActivity extends BaseActivity {
+public class CashRecordActivity extends BaseActivity implements CashRecordInfoView {
 
     @BindView(R.id.tv_title)
     TextView mTitleTv;
@@ -35,6 +40,12 @@ public class CashRecordActivity extends BaseActivity {
     RecyclerView mCashRecordListView;
 
     CashRecordAdapter cashRecordAdapter;
+
+    int currentPage = 1;
+
+    int pageSize = 10;
+
+    CashRecordInfoPresenterImp cashRecordInfoPresenterImp;
 
     @Override
     protected int getLayoutId() {
@@ -56,21 +67,13 @@ public class CashRecordActivity extends BaseActivity {
     protected void initViews() {
         mTitleTv.setTextColor(ContextCompat.getColor(this, R.color.black));
         mTitleTv.setText("提现记录");
-
     }
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        List<CashRecordInfo> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            CashRecordInfo cashRecordInfo = new CashRecordInfo();
-            cashRecordInfo.setCashMoney(1.2);
-            cashRecordInfo.setCashState(1);
-            cashRecordInfo.setCashType(1);
-            list.add(cashRecordInfo);
-        }
-        cashRecordAdapter = new CashRecordAdapter(this, list);
+        cashRecordInfoPresenterImp = new CashRecordInfoPresenterImp(this, this);
 
+        cashRecordAdapter = new CashRecordAdapter(this, null);
         mCashRecordListView.setLayoutManager(new LinearLayoutManager(this));
         mCashRecordListView.addItemDecoration(new NormalDecoration(ContextCompat.getColor(this, R.color.line1_color), 1));
         mCashRecordListView.setAdapter(cashRecordAdapter);
@@ -84,9 +87,22 @@ public class CashRecordActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(CashRecordActivity.this, CashDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("cash_record_info", cashRecordAdapter.getData().get(position));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
+
+        cashRecordAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                currentPage++;
+                cashRecordInfoPresenterImp.cashRecordList(App.mUserInfo != null ? App.mUserInfo.getId() : "", currentPage);
+            }
+        }, mCashRecordListView);
+
+        cashRecordInfoPresenterImp.cashRecordList(App.mUserInfo != null ? App.mUserInfo.getId() : "", currentPage);
     }
 
     @OnClick(R.id.iv_back)
@@ -94,4 +110,37 @@ public class CashRecordActivity extends BaseActivity {
         finish();
     }
 
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void dismissProgress() {
+
+    }
+
+    @Override
+    public void loadDataSuccess(CashRecordInfoRet tData) {
+        if (tData != null && tData.getCode() == Constants.SUCCESS) {
+            if (currentPage == 1) {
+                if (tData.getData() != null) {
+                    cashRecordAdapter.setNewData(tData.getData());
+                }
+            } else {
+                cashRecordAdapter.addData(tData.getData());
+            }
+
+            if (tData.getData() != null && tData.getData().size() == pageSize) {
+                cashRecordAdapter.loadMoreComplete();
+            } else {
+                cashRecordAdapter.loadMoreEnd();
+            }
+        }
+    }
+
+    @Override
+    public void loadDataError(Throwable throwable) {
+
+    }
 }

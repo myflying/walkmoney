@@ -6,4 +6,5 @@ package com.ydys.moneywalk.presenter;
 
 public interface SendMsgInfoPresenter {
     void sendMsg(String phoneNumber);
+    void sendValidateMsg(String phoneNumber);
 }

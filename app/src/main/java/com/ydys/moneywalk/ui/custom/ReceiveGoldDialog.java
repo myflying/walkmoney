@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.orhanobut.logger.Logger;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.util.RandomUtils;
@@ -70,6 +72,7 @@ public class ReceiveGoldDialog extends Dialog implements View.OnClickListener {
     }
 
     private void initView() {
+
         mReceiveGoldIv = findViewById(R.id.iv_receive_gold_bg);
         mGoldNumTv = findViewById(R.id.tv_gold_num);
         mTotalGoldNumTv = findViewById(R.id.tv_total_gold_num);

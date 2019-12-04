@@ -9,5 +9,7 @@ import com.ydys.moneywalk.bean.BodyInfo;
  */
 
 public interface BodyInfoModel<T> {
+    void getBodyInfo(String userId,IBaseRequestCallBack<T> iBaseRequestCallBack);
+
     void updateBodyInfo(String userId, String filed, String value, IBaseRequestCallBack<T> iBaseRequestCallBack);
 }

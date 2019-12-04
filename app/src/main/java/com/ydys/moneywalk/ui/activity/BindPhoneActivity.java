@@ -1,6 +1,7 @@
 package com.ydys.moneywalk.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -150,6 +151,7 @@ public class BindPhoneActivity extends BaseActivity implements IBaseView {
         }
 
         startCountDown();
+        mValidateCodeEt.requestFocus();
         sendMsgInfoPresenterImp.sendMsg(mPhoneNumberEt.getText().toString());
     }
 
@@ -174,7 +176,7 @@ public class BindPhoneActivity extends BaseActivity implements IBaseView {
             progressDialog.show();
         }
 
-        userInfoPresenterImp.login(PhoneUtils.getIMEI(), "mobile", mPhoneNumberEt.getText().toString(), mValidateCodeEt.getText().toString(),"","");
+        userInfoPresenterImp.login(PhoneUtils.getIMEI(), "mobile", mPhoneNumberEt.getText().toString(), mValidateCodeEt.getText().toString(), "", "");
     }
 
     public void startCountDown() {
@@ -222,12 +224,15 @@ public class BindPhoneActivity extends BaseActivity implements IBaseView {
             }
 
             if (tData instanceof UserInfoRet && ((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
-                Toasty.normal(BindPhoneActivity.this, "登录成功").show();
+                Toasty.normal(BindPhoneActivity.this, "绑定成功").show();
                 //存储用户信息
                 SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
                 SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
                 App.mUserInfo = ((UserInfoRet) tData).getData();
                 App.isLogin = true;
+
+                Intent intent = new Intent();
+                setResult(1, intent);
                 finish();
             }
         }

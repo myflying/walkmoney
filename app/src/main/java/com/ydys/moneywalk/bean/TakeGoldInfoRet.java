@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class TakeGoldInfoRet extends ResultInfo {
 
-    private List<TakeGoldInfo> data;
+    private TakeGoldInfo data;
 
-    public List<TakeGoldInfo> getData() {
+    public TakeGoldInfo getData() {
         return data;
     }
 
-    public void setData(List<TakeGoldInfo> data) {
+    public void setData(TakeGoldInfo data) {
         this.data = data;
     }
 }

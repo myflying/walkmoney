@@ -25,7 +25,7 @@ public class SignInfoPresenterImp extends BasePresenterImp<IBaseView, SignInfoRe
     }
 
     @Override
-    public void signDay(String userId, int isDouble, int day) {
-        signInfoModelImp.signDay(userId, isDouble, day, this);
+    public void signDay(String userId, String day) {
+        signInfoModelImp.signDay(userId, day, this);
     }
 }

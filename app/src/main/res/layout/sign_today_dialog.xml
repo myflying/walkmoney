@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="492dp"
+        android:background="@color/transparent">
+
+        <ImageView
+            android:id="@+id/iv_receive_gold_bg"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/receive_gold_guang" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="260dp"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="60dp">
+
+            <LinearLayout
+                android:layout_width="313dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center|bottom"
+                android:background="@drawable/common_white_bg"
+                android:gravity="top"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="top">
+
+                    <ImageView
+                        android:id="@+id/iv_close"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="6dp"
+                        android:padding="6dp"
+                        android:src="@mipmap/close_hb" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="已签到"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_sign_day_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1"
+                            android:textColor="@color/sign_gold_num_color"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="天，获得"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_sign_day_gold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100金币"
+                            android:textColor="@color/sign_gold_num_color"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_double_gold"
+                        android:layout_width="242dp"
+                        android:layout_height="44dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/gold_btn_bg"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="金币翻倍"
+                            android:textColor="@color/gold_txt_color"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="我的金币："
+                            android:textColor="@color/common_gray"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/my_gold" />
+
+                        <TextView
+                            android:id="@+id/tv_total_gold_num"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:text="0"
+                            android:textColor="@color/common_gray"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_my_money"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="≈0.00元"
+                            android:textColor="@color/gold_num_color"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:scaleType="centerInside"
+                android:src="@mipmap/receive_top" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="313dp"
+            android:layout_height="175dp"
+            android:layout_gravity="center|bottom"
+            android:visibility="gone"
+            android:background="@color/tab_tv_selected">
+
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

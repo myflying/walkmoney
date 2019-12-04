@@ -18,4 +18,7 @@ public interface SendMsgInfoService {
     @POST("v1.Common/sendBindSms")
     Observable<SendMsgInfoRet> sendMsg(@Body RequestBody requestBody);
 
+
+    @POST("v1.Common/sendCashOutSms")
+    Observable<SendMsgInfoRet> sendValidatePhone(@Body RequestBody requestBody);
 }

@@ -1,5 +1,6 @@
 package com.ydys.moneywalk.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -43,6 +44,20 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void initData(Bundle savedInstanceState) {
 
+    }
+
+    @OnClick(R.id.tv_xieyi)
+    void xieyi() {
+        Intent intent = new Intent(this, PrivacyActivity.class);
+        intent.putExtra("show_type", 0);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.tv_privacy)
+    void privacy() {
+        Intent intent = new Intent(this, PrivacyActivity.class);
+        intent.putExtra("show_type", 1);
+        startActivity(intent);
     }
 
     @OnClick(R.id.iv_back)

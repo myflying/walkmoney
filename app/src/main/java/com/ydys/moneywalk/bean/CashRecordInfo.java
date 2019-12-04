@@ -1,49 +1,55 @@
 package com.ydys.moneywalk.bean;
 
-public class CashRecordInfo {
-    private String id;
-    private int cashType;
-    private long cashDate;
-    private double cashMoney;
-    private int cashState;
+import com.google.gson.annotations.SerializedName;
 
-    public String getId() {
-        return id;
+import java.io.Serializable;
+
+public class CashRecordInfo implements Serializable {
+    private double money;//提现金额
+    private int status;//提现状态 1已到账 2提现中
+    @SerializedName("add_time")
+    private String addTime;//时间
+    @SerializedName("finish_time")
+    private String finishTime;
+    @SerializedName("order_sn")
+    private String orderSn;
+    public double getMoney() {
+        return money;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setMoney(double money) {
+        this.money = money;
     }
 
-    public int getCashType() {
-        return cashType;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCashType(int cashType) {
-        this.cashType = cashType;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public long getCashDate() {
-        return cashDate;
+    public String getAddTime() {
+        return addTime;
     }
 
-    public void setCashDate(long cashDate) {
-        this.cashDate = cashDate;
+    public void setAddTime(String addTime) {
+        this.addTime = addTime;
     }
 
-    public double getCashMoney() {
-        return cashMoney;
+    public String getFinishTime() {
+        return finishTime;
     }
 
-    public void setCashMoney(double cashMoney) {
-        this.cashMoney = cashMoney;
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
     }
 
-    public int getCashState() {
-        return cashState;
+    public String getOrderSn() {
+        return orderSn;
     }
 
-    public void setCashState(int cashState) {
-        this.cashState = cashState;
+    public void setOrderSn(String orderSn) {
+        this.orderSn = orderSn;
     }
 }

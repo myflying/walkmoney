@@ -1,10 +1,13 @@
 package com.ydys.moneywalk.bean;
 
 public class GoldDetailInfo {
+
     private String id;
-    private long goldDate;
-    private int goldType;
-    private int goldNum;
+    private int num;//金币数量
+    private int type;//金币类型 1金币增加 2金币减少
+    private int gold;
+    private String title;//金币标题
+    private String time;//时间
 
     public String getId() {
         return id;
@@ -14,27 +17,43 @@ public class GoldDetailInfo {
         this.id = id;
     }
 
-    public long getGoldDate() {
-        return goldDate;
+    public int getNum() {
+        return num;
     }
 
-    public void setGoldDate(long goldDate) {
-        this.goldDate = goldDate;
+    public void setNum(int num) {
+        this.num = num;
     }
 
-    public int getGoldType() {
-        return goldType;
+    public int getType() {
+        return type;
     }
 
-    public void setGoldType(int goldType) {
-        this.goldType = goldType;
+    public void setType(int type) {
+        this.type = type;
     }
 
-    public int getGoldNum() {
-        return goldNum;
+    public int getGold() {
+        return gold;
     }
 
-    public void setGoldNum(int goldNum) {
-        this.goldNum = goldNum;
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

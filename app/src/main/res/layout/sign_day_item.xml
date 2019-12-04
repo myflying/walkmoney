@@ -10,15 +10,14 @@
         android:layout_width="40dp"
         android:layout_height="20dp"
         android:background="@mipmap/add_gold_bubble"
-        android:visibility="gone"
-        android:gravity="top|center">
+        android:gravity="top|center"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_top_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:text="+18金币"
             android:textColor="@color/white"
             android:textSize="9sp" />
     </LinearLayout>
@@ -32,6 +31,7 @@
             android:id="@+id/tv_day_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:background="@mipmap/sign_day_gold_bg"
             android:gravity="center"
             android:text="23"
@@ -43,11 +43,13 @@
             android:id="@+id/iv_double_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:src="@mipmap/double_item_icon" />
+            android:layout_gravity="center"
+            android:src="@mipmap/double_item_icon"
+            android:visibility="gone" />
     </FrameLayout>
 
     <TextView
+        android:id="@+id/tv_sign_day_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"

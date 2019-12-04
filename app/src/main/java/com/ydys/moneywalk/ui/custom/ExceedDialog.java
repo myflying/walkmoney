@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ydys.moneywalk.R;
 
@@ -16,6 +18,26 @@ public class ExceedDialog extends Dialog implements View.OnClickListener {
     private Context mContext;
 
     private ImageView mCloseIv;
+
+    LinearLayout mSeeVideoLayout;
+
+    LinearLayout mCancelLayout;
+
+    TextView mTotalGoldNumTv;
+
+    TextView mMoneyTv;
+
+    public interface ExceedListener {
+        void seeVideo();
+
+        void cancelSeeVideo();
+    }
+
+    public ExceedListener exceedListener;
+
+    public void setExceedListener(ExceedListener exceedListener) {
+        this.exceedListener = exceedListener;
+    }
 
     public ExceedDialog(Context context) {
         super(context);
@@ -36,14 +58,34 @@ public class ExceedDialog extends Dialog implements View.OnClickListener {
     }
 
     private void initView() {
+        mSeeVideoLayout = findViewById(R.id.layout_see_video);
+        mCancelLayout = findViewById(R.id.layout_cancel);
+        mTotalGoldNumTv = findViewById(R.id.tv_total_gold_num);
+        mMoneyTv = findViewById(R.id.tv_money);
+
         mCloseIv = findViewById(R.id.iv_close);
         mCloseIv.setOnClickListener(this);
+        mSeeVideoLayout.setOnClickListener(this);
+        mCancelLayout.setOnClickListener(this);
         setCanceledOnTouchOutside(false);
+    }
+
+    public void updateGoldInfo(String gold, String money) {
+        mTotalGoldNumTv.setText(gold);
+        mMoneyTv.setText("≈" + money + "元");
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.layout_see_video:
+                this.exceedListener.seeVideo();
+                dismiss();
+                break;
+            case R.id.layout_cancel:
+                this.exceedListener.cancelSeeVideo();
+                dismiss();
+                break;
             case R.id.iv_close:
                 this.dismiss();
                 break;

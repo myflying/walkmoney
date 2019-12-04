@@ -14,7 +14,7 @@ public class TaskInfo {
     @SerializedName("has_complete_num")
     private int hasCompleteNum;//任务已完成数量
     private int num;//任务数量
-    private int complete;//当前任务是否已完成 1是 0否
+    private int state;//任务状态 1去完成 2领取金币 3已完成
 
     private int taskState;//任务状态，1,未完成，2，已完成，3倒计时
 
@@ -68,12 +68,12 @@ public class TaskInfo {
         this.num = num;
     }
 
-    public int getComplete() {
-        return complete;
+    public int getState() {
+        return state;
     }
 
-    public void setComplete(int complete) {
-        this.complete = complete;
+    public void setState(int state) {
+        this.state = state;
     }
 
     public String getTaskId() {

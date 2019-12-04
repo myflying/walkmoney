@@ -1,11 +1,9 @@
 package com.ydys.moneywalk.ui.fragment;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,25 +15,29 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.constant.TimeConstants;
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.orhanobut.logger.Logger;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -46,31 +48,31 @@ import com.ydys.moneywalk.base.IBaseView;
 import com.ydys.moneywalk.bean.HomeDataInfo;
 import com.ydys.moneywalk.bean.HomeDateInfoRet;
 import com.ydys.moneywalk.bean.MessageEvent;
-import com.ydys.moneywalk.bean.ResultInfo;
 import com.ydys.moneywalk.bean.TakeGoldInfo;
 import com.ydys.moneywalk.bean.TakeGoldInfoRet;
 import com.ydys.moneywalk.bean.UserInfoRet;
 import com.ydys.moneywalk.bean.UserStepInfo;
 import com.ydys.moneywalk.bean.UserStepInfoRet;
+import com.ydys.moneywalk.bean.VersionInfo;
+import com.ydys.moneywalk.bean.VersionInfoRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.HomeDataInfoPresenterImp;
 import com.ydys.moneywalk.presenter.TakeGoldInfoPresenterImp;
 import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
 import com.ydys.moneywalk.presenter.UserStepInfoPresenterImp;
-import com.ydys.moneywalk.ui.activity.BindPhoneActivity;
+import com.ydys.moneywalk.presenter.VersionInfoPresenterImp;
 import com.ydys.moneywalk.ui.activity.InviteFriendActivity;
-import com.ydys.moneywalk.ui.activity.LoginActivity;
 import com.ydys.moneywalk.ui.activity.MakeMoneyActivity;
-import com.ydys.moneywalk.ui.custom.Constant;
+import com.ydys.moneywalk.ui.custom.ExceedDialog;
 import com.ydys.moneywalk.ui.custom.GlideImageLoader;
 import com.ydys.moneywalk.ui.custom.LoginDialog;
+import com.ydys.moneywalk.ui.custom.ReceiveDoubleGoldDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveGoldDialog;
 import com.ydys.moneywalk.ui.custom.StepNumProgressView;
+import com.ydys.moneywalk.ui.custom.VersionDialog;
 import com.ydys.moneywalk.ui.custom.step.BindService;
 import com.ydys.moneywalk.ui.custom.step.UpdateUiCallBack;
 import com.ydys.moneywalk.util.RandomUtils;
-import com.ydys.moneywalk.view.HomeDataInfoView;
-import com.ydys.moneywalk.view.UserInfoView;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
@@ -78,7 +80,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.security.PublicKey;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,14 +90,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
-import permissions.dispatcher.NeedsPermission;
-import permissions.dispatcher.OnNeverAskAgain;
-import permissions.dispatcher.OnPermissionDenied;
-import permissions.dispatcher.OnShowRationale;
-import permissions.dispatcher.PermissionRequest;
-import permissions.dispatcher.RuntimePermissions;
 
-public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefreshLayout.OnRefreshListener, LoginDialog.LoginListener {
+public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefreshLayout.OnRefreshListener, LoginDialog.LoginListener, ReceiveGoldDialog.GoldDialogListener, ReceiveDoubleGoldDialog.GoldDoubleDialogListener, ExceedDialog.ExceedListener, VersionDialog.VersionListener {
 
     public static int EXCHANGE_SCALE = 10;
 
@@ -118,6 +113,9 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     public static int TODAY_MIN = 30;
 
     public static int TODAY_MAX = 100;
+
+    //单次领取金币的上线，超过后需要观看视频
+    public static int GET_ON_LINE = 1;
 
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -191,6 +189,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
     private TakeGoldInfoPresenterImp takeGoldInfoPresenterImp;
 
+    private VersionInfoPresenterImp versionInfoPresenterImp;
+
     private HomeDataInfo homeDataInfo;
 
     private List<String> receiveTitles;
@@ -210,11 +210,42 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
     UserInfoPresenterImp userInfoPresenterImp;
 
+    ReceiveDoubleGoldDialog receiveDoubleGoldDialog;
+
+    ExceedDialog exceedDialog;
+
+    VersionDialog versionDialog;
+
+    private VersionInfo versionInfo;
+
+    BaseDownloadTask task;
+
+    private int goldType = 1;
+
+    //幸运金币可以领取的次数
+    private int goldCanGetNum;
+
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                setStepAndProgress();
+
+            switch (msg.what) {
+                case 1:
+                    setStepAndProgress();
+                    break;
+                case 2:
+                    int progress = (Integer) msg.obj;
+                    versionDialog.updateProgress(progress);
+                    break;
+                case 3:
+                    versionDialog.downFinish();
+                    break;
+                case 4:
+                    //处理3个金币的显示
+                    oneStart();
+                    twoStart();
+                    threeStart();
+                    break;
             }
         }
     };
@@ -237,6 +268,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
     @Override
     public void initViews() {
+        FileDownloader.setup(getActivity());
+
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("正在登录");
 
@@ -250,7 +283,29 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         loginDialog = new LoginDialog(getActivity(), R.style.common_dialog);
         loginDialog.setLoginListener(this);
 
-        receiveGoldDialog = new ReceiveGoldDialog(getActivity(), R.style.common_dialog);
+        receiveGoldDialog = new ReceiveGoldDialog(getActivity(), R.style.gold_dialog);
+        receiveGoldDialog.setGoldDialogListener(this);
+
+        receiveDoubleGoldDialog = new ReceiveDoubleGoldDialog(getActivity(), R.style.gold_dialog);
+        receiveDoubleGoldDialog.setGoldDoubleDialogListener(this);
+
+        exceedDialog = new ExceedDialog(getActivity(), R.style.common_dialog);
+        exceedDialog.setExceedListener(this);
+
+        versionDialog = new VersionDialog(getActivity(), R.style.common_dialog);
+        versionDialog.setVersionListener(this);
+        versionDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (versionInfo != null && versionInfo.getForceUpdate() == 1) {
+                        return true;//不执行父类点击事件
+                    }
+                    return false;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -259,6 +314,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         userStepInfoPresenterImp = new UserStepInfoPresenterImp(this, getActivity());
         takeGoldInfoPresenterImp = new TakeGoldInfoPresenterImp(this, getActivity());
         userInfoPresenterImp = new UserInfoPresenterImp(this, getActivity());
+        versionInfoPresenterImp = new VersionInfoPresenterImp(this, getActivity());
 
         todayDate = TimeUtils.getNowString(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()));
 
@@ -314,15 +370,11 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
             public void OnBannerClick(int position) {
                 if (position == 0) {
                     Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+                    intent.putExtra("share_type", 1);
                     startActivity(intent);
                 }
             }
         });
-
-        //处理3个金币的显示
-        oneStart();
-        twoStart();
-        threeStart();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -331,8 +383,15 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    //可领取次数
+                    goldCanGetNum = App.initInfo != null ? App.initInfo.getUserStepData().getLuckRestNum() : 0;
+                    Message message = Message.obtain();
+                    message.what = 4;
+                    mHandler.sendMessage(message);
+
                     //初始化首页数据
                     homeDataInfoPresenterImp.initHomeData();
+                    versionInfoPresenterImp.updateVersion(App.agentId);
                 }
             }).start();
         }
@@ -348,6 +407,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     }
 
     public void setStepAndProgress() {
+        App.newStepNum = currentStepNum;
+
         //设置实时的步数及刻度进度值
         mStepNumProgress.setWalkStepNum(currentStepNum);
         currentProgress = currentStepNum / 100;
@@ -446,10 +507,26 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     }
 
     /**
+     * 设备绑定过，但是本地未登录
+     *
+     * @return
+     */
+    public boolean bindButNotLogin() {
+        return (App.mUserInfo != null && App.mUserInfo.getIsBind() == 1 && !SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false));
+    }
+
+    /**
      * 领取金币
      */
     @OnClick(R.id.btn_get_gold)
     void getStateGold() {
+        //此设备绑定过账户，但是本地未登录
+        if (App.mUserInfo == null || bindButNotLogin()) {
+            if (loginDialog != null && !loginDialog.isShowing()) {
+                loginDialog.show();
+            }
+            return;
+        }
 
         if (currentStepNum < 10) {
             return;
@@ -494,7 +571,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
 
-        timeCount = currentProgress;
+        //timeCount = currentProgress;
+        timeCount = 0;
 
         //刷新时数值增加
         mHandler.postDelayed(new Runnable() {
@@ -526,7 +604,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                 SPUtils.getInstance().put(todayDate + "_random_step", todayStartStep);
 
                 //同步步数
-                sendStepToServer();
+                sendStepToServer(todayStartStep);
             } else {
                 currentStepNum = todayStartStep;
             }
@@ -562,33 +640,37 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     /**
      * 同步步数到服务器
      */
-    void sendStepToServer() {
-        new Thread(new Runnable() {
+    void sendStepToServer(int newStepNum) {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 UserStepInfo userStepInfo = new UserStepInfo();
                 userStepInfo.setUserId(App.mUserInfo != null ? App.mUserInfo.getId() : "");
-                userStepInfo.setStepNum(todayStartStep);
-
+                userStepInfo.setStepNum(newStepNum);
                 userStepInfoPresenterImp.updateStepInfo(userStepInfo);
             }
-        }).start();
+        }, 1000);
     }
 
     //步数金币领取
     @OnClick(R.id.layout_gold_four)
     void stepExchange() {
-        isExchangeStepNum = currentStepNum - currentStepNum % EXCHANGE_SCALE;
-        mFourGoldLayout.setVisibility(View.GONE);
-
-        SPUtils.getInstance().put(todayDate + Constants.CURRENT_DAY_EXCHANGE_STEP, isExchangeStepNum);
-
-        takeGoldNum(2, mStepGoldNumTv.getText().toString(), 0);
+        int tempGold = Integer.parseInt(mStepGoldNumTv.getText().toString());
+        if (tempGold >= GET_ON_LINE) {
+            if (exceedDialog != null && !exceedDialog.isShowing()) {
+                exceedDialog.show();
+            }
+        } else {
+            isExchangeStepNum = currentStepNum - currentStepNum % EXCHANGE_SCALE;
+            mFourGoldLayout.setVisibility(View.GONE);
+            SPUtils.getInstance().put(todayDate + Constants.CURRENT_DAY_EXCHANGE_STEP, isExchangeStepNum);
+            takeGoldNum(2, mStepGoldNumTv.getText().toString(), 0);
+        }
     }
 
     void oneStart() {
         if (SPUtils.getInstance().getBoolean("one_over", false)) {
-            mOneGoldTv.setVisibility(View.VISIBLE);
+            mOneGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         } else {
             oneBubbleGoldNum();
         }
@@ -596,7 +678,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
     void twoStart() {
         if (SPUtils.getInstance().getBoolean("two_over", false)) {
-            mTwoGoldTv.setVisibility(View.VISIBLE);
+            mTwoGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         } else {
             twoBubbleGoldNum();
         }
@@ -604,7 +686,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
     void threeStart() {
         if (SPUtils.getInstance().getBoolean("three_over", false)) {
-            mThreeGoldTv.setVisibility(View.VISIBLE);
+            mThreeGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         } else {
             threeBubbleGoldNum();
         }
@@ -616,31 +698,70 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
      * @param type
      */
     public void takeGoldNum(int type, String gold, int state) {
+        goldType = type;
         currentTakeGold = gold;
 
-        TakeGoldInfo takeGoldInfo = new TakeGoldInfo();
-        takeGoldInfo.setTaskId(homeDataInfo != null ? homeDataInfo.getBubbleTaskInfo().getId() : "");
-        takeGoldInfo.setUserId(App.mUserInfo != null ? App.mUserInfo.getId() : "");
-        takeGoldInfo.setGold(gold);
-        if (type == 1) {
-            takeGoldInfo.setIsDouble(state);
-            takeGoldInfoPresenterImp.takeLuckGold(takeGoldInfo);
-        }
+        try {
+            TakeGoldInfo takeGoldInfo = new TakeGoldInfo();
+            takeGoldInfo.setTaskId(homeDataInfo != null ? homeDataInfo.getBubbleTaskInfo().getId() : "");
+            takeGoldInfo.setUserId(App.mUserInfo != null ? App.mUserInfo.getId() : "");
+            takeGoldInfo.setGold(Integer.parseInt(gold));
+            if (type == 1) {
+                takeGoldInfo.setIsDouble(state);
+                takeGoldInfoPresenterImp.takeLuckGold(takeGoldInfo);
+            }
 
-        if (type == 2) {
-            takeGoldInfo.setIsPlay(state);
-            takeGoldInfoPresenterImp.takeStepGold(takeGoldInfo);
-        }
-        if (type == 3) {
-            takeGoldInfo.setStage(state);
-            takeGoldInfoPresenterImp.takeStageGold(takeGoldInfo);
+            if (type == 2) {
+                takeGoldInfo.setIsPlay(state);
+                takeGoldInfoPresenterImp.takeStepGold(takeGoldInfo);
+            }
+            if (type == 3) {
+                takeGoldInfo.setStage(state);
+                takeGoldInfoPresenterImp.takeStageGold(takeGoldInfo);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
     }
 
     @OnClick(R.id.tv_gold_one)
+    void oneClick() {
+        //此设备绑定过账户，但是本地未登录
+        if (App.mUserInfo == null || bindButNotLogin()) {
+            if (loginDialog != null && !loginDialog.isShowing()) {
+                loginDialog.show();
+            }
+            return;
+        }
+        oneBubbleGoldNum();
+    }
+
+    @OnClick(R.id.tv_gold_two)
+    void twoClick() {
+        //此设备绑定过账户，但是本地未登录
+        if (App.mUserInfo == null || bindButNotLogin()) {
+            if (loginDialog != null && !loginDialog.isShowing()) {
+                loginDialog.show();
+            }
+            return;
+        }
+        twoBubbleGoldNum();
+    }
+
+    @OnClick(R.id.tv_gold_three)
+    void threeClick() {
+        //此设备绑定过账户，但是本地未登录
+        if (App.mUserInfo == null || bindButNotLogin()) {
+            if (loginDialog != null && !loginDialog.isShowing()) {
+                loginDialog.show();
+            }
+            return;
+        }
+        threeBubbleGoldNum();
+    }
+
     void oneBubbleGoldNum() {
         long diffSecond;
-
         if (SPUtils.getInstance().getLong("one_gold_get_date", 0L) > 0) {
             if (SPUtils.getInstance().getBoolean("one_over", false)) {
                 long dateNow = TimeUtils.getNowMills();
@@ -657,6 +778,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         Logger.i("间隔的时间--->" + diffSecond);
 
         if (diffSecond > 0) {
+
             takeGoldNum(1, mOneGoldTv.getText().toString(), 0);
 
             SPUtils.getInstance().put("one_over", false);
@@ -671,17 +793,16 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                 @Override
                 public void onFinish() {
                     SPUtils.getInstance().put("one_over", true);
-                    mOneGoldTv.setVisibility(View.VISIBLE);
+                    mOneGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
                     mOneGoldTv.setText(RandomUtils.nextInt(BUBBLE_START, BUBBLE_END) + "");
                 }
             }.start();
         } else {
             SPUtils.getInstance().put("one_over", true);
-            mOneGoldTv.setVisibility(View.VISIBLE);
+            mOneGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         }
     }
 
-    @OnClick(R.id.tv_gold_two)
     void twoBubbleGoldNum() {
         long diffSecond;
 
@@ -715,17 +836,16 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                 @Override
                 public void onFinish() {
                     SPUtils.getInstance().put("two_over", true);
-                    mTwoGoldTv.setVisibility(View.VISIBLE);
+                    mTwoGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
                     mTwoGoldTv.setText(RandomUtils.nextInt(BUBBLE_START, BUBBLE_END) + "");
                 }
             }.start();
         } else {
             SPUtils.getInstance().put("two_over", true);
-            mTwoGoldTv.setVisibility(View.VISIBLE);
+            mTwoGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         }
     }
 
-    @OnClick(R.id.tv_gold_three)
     void threeBubbleGoldNum() {
         long diffSecond;
 
@@ -759,13 +879,13 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                 @Override
                 public void onFinish() {
                     SPUtils.getInstance().put("three_over", true);
-                    mThreeGoldTv.setVisibility(View.VISIBLE);
+                    mThreeGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
                     mThreeGoldTv.setText(RandomUtils.nextInt(BUBBLE_START, BUBBLE_END) + "");
                 }
             }.start();
         } else {
             SPUtils.getInstance().put("three_over", true);
-            mThreeGoldTv.setVisibility(View.VISIBLE);
+            mThreeGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         }
     }
 
@@ -823,11 +943,45 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                 Logger.i("result info--->" + JSON.toJSONString(tData));
             }
 
-            if (tData instanceof TakeGoldInfoRet && ((TakeGoldInfoRet) tData).getCode() == Constants.SUCCESS) {
+            if (tData instanceof TakeGoldInfoRet) {
                 Logger.i("take gold info--->" + JSON.toJSONString(tData));
-                if (receiveGoldDialog != null && !receiveGoldDialog.isShowing()) {
-                    receiveGoldDialog.show();
-                    receiveGoldDialog.updateGoldInfo(currentTakeGold, "1000", "≈1.0元");
+                if (((TakeGoldInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    if (((TakeGoldInfoRet) tData).getData() != null) {
+                        TakeGoldInfo takeGoldInfo = ((TakeGoldInfoRet) tData).getData();
+                        goldCanGetNum = takeGoldInfo.getLuckRestNum();
+                        //可翻倍
+                        if (goldType == 1) {
+                            if (receiveDoubleGoldDialog == null) {
+                                receiveDoubleGoldDialog = new ReceiveDoubleGoldDialog(getActivity(), R.style.gold_dialog);
+                                receiveDoubleGoldDialog.setGoldDoubleDialogListener(this);
+                            }
+                            receiveDoubleGoldDialog.show();
+                            receiveDoubleGoldDialog.updateGoldInfo(currentTakeGold, takeGoldInfo.getGold() + "", "≈" + takeGoldInfo.getAmount() + "元");
+                        } else if (goldType == 2) {
+                            if (receiveDoubleGoldDialog == null) {
+                                receiveDoubleGoldDialog = new ReceiveDoubleGoldDialog(getActivity(), R.style.gold_dialog);
+                                receiveDoubleGoldDialog.setGoldDoubleDialogListener(this);
+                            }
+                            receiveDoubleGoldDialog.show();
+                            int exchangeStep = Integer.parseInt(mStepGoldNumTv.getText().toString()) * homeDataInfo.getStepTaskInfo().getStepNum();
+                            receiveDoubleGoldDialog.updateGoldByStep(currentTakeGold, takeGoldInfo.getGold() + "", "≈" + takeGoldInfo.getAmount() + "元", exchangeStep);
+                        } else {
+                            //不可翻倍
+                            if (receiveGoldDialog == null) {
+                                receiveGoldDialog = new ReceiveGoldDialog(getActivity(), R.style.gold_dialog);
+                                receiveGoldDialog.setGoldDialogListener(this);
+                            }
+                            receiveGoldDialog.show();
+                            receiveGoldDialog.updateGoldInfo(currentTakeGold, takeGoldInfo.getGold() + "", "≈" + takeGoldInfo.getAmount() + "元");
+                        }
+
+                        //每次领取金币后同步一次最新的步数
+                        sendStepToServer(currentStepNum);
+                    } else {
+                        ToastUtils.showLong(((TakeGoldInfoRet) tData).getMsg());
+                    }
+                } else {
+                    ToastUtils.showLong(((TakeGoldInfoRet) tData).getMsg());
                 }
             }
 
@@ -841,6 +995,27 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                     App.isLogin = true;
                 } else {
                     Toasty.normal(getActivity(), ((UserInfoRet) tData).getMsg()).show();
+                }
+            }
+
+            if (tData instanceof VersionInfoRet) {
+                if (((VersionInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    if (((VersionInfoRet) tData).getData() != null) {
+                        versionInfo = ((VersionInfoRet) tData).getData();
+
+                        int currentCode = AppUtils.getAppVersionCode();
+                        if (versionInfo != null && versionInfo.getVersionCode() > currentCode) {
+                            if (versionDialog != null && !versionDialog.isShowing()) {
+                                versionDialog.setVersionName(versionInfo.getVersionNum());
+                                versionDialog.setVersionContent(versionInfo.getUpdateContent());
+                                versionDialog.setIsForceUpdate(versionInfo.getForceUpdate());
+                                versionDialog.show();
+                            }
+                        } else {
+                            //Toasty.normal(this, "已经是最新版本").show();
+                            Logger.i("已经是最新版本--->" + currentCode);
+                        }
+                    }
                 }
             }
         }
@@ -862,6 +1037,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     void inviteFriend() {
         if (App.mUserInfo != null && App.mUserInfo.getIsBind() == 1) {
             Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+            intent.putExtra("share_type", 1);
             startActivity(intent);
         } else {
             if (loginDialog != null && !loginDialog.isShowing()) {
@@ -893,7 +1069,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
             try {
                 App.isLogin = true;
                 if (data != null) {
-                    userInfoPresenterImp.login(PhoneUtils.getIMEI(), "wechat", data.get("uid"), "", data.get("name"), data.get("iconurl"));
+                    userInfoPresenterImp.login(PhoneUtils.getIMEI(), "wechat", data.get("openid"), "", data.get("name"), data.get("iconurl"));
 
                     Logger.i("wx login info--->" + data.toString());
                 }
@@ -942,5 +1118,111 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     @Override
     public void phoneLogin() {
 
+    }
+
+    @Override
+    public void closeGoldDialog() {
+        if (receiveGoldDialog != null && receiveGoldDialog.isShowing()) {
+            receiveGoldDialog.dismiss();
+            receiveGoldDialog = null;
+        }
+    }
+
+    @Override
+    public void closeDoubleGoldDialog() {
+        if (receiveDoubleGoldDialog != null && receiveDoubleGoldDialog.isShowing()) {
+            receiveDoubleGoldDialog.dismiss();
+            receiveDoubleGoldDialog = null;
+        }
+    }
+
+    @Override
+    public void seeVideo() {
+        ToastUtils.showLong("模拟视频看完，领取金币成功");
+
+        isExchangeStepNum = currentStepNum - currentStepNum % EXCHANGE_SCALE;
+        mFourGoldLayout.setVisibility(View.GONE);
+        SPUtils.getInstance().put(todayDate + Constants.CURRENT_DAY_EXCHANGE_STEP, isExchangeStepNum);
+        takeGoldNum(2, mStepGoldNumTv.getText().toString(), 0);
+    }
+
+    @Override
+    public void cancelSeeVideo() {
+
+    }
+
+    @Override
+    public void versionUpdate() {
+        if (versionInfo != null && !StringUtils.isEmpty(versionInfo.getDownUrl())) {
+            downAppFile(versionInfo.getDownUrl());
+        }
+    }
+
+    @Override
+    public void cancelUpdate() {
+
+    }
+
+    public void downAppFile(String downUrl) {
+        Logger.i("down url --->" + downUrl);
+
+        final String filePath = PathUtils.getExternalAppFilesPath() + "/new_walk.apk";
+        Logger.i("down app path --->" + filePath);
+
+        task = FileDownloader.getImpl().create(downUrl)
+                .setPath(filePath)
+                .setListener(new FileDownloadListener() {
+                    @Override
+                    protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        //Toasty.normal(SettingActivity.this, "正在更新版本后...").show();
+                    }
+
+                    @Override
+                    protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
+                    }
+
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        int progress = (int) ((soFarBytes * 1.0 / totalBytes) * 100);
+                        Logger.i("progress--->" + soFarBytes + "---" + totalBytes + "---" + progress);
+
+                        Message message = new Message();
+                        message.what = 2;
+                        message.obj = progress;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    protected void blockComplete(BaseDownloadTask task) {
+                    }
+
+                    @Override
+                    protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        Toasty.normal(getActivity(), "下载完成").show();
+                        Message message = new Message();
+                        message.what = 3;
+                        mHandler.sendMessage(message);
+
+                        AppUtils.installApp(filePath);
+                    }
+
+                    @Override
+                    protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                    }
+
+                    @Override
+                    protected void warn(BaseDownloadTask task) {
+                    }
+                });
+
+        task.start();
     }
 }

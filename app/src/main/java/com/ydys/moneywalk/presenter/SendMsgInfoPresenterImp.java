@@ -27,4 +27,9 @@ public class SendMsgInfoPresenterImp extends BasePresenterImp<IBaseView, SendMsg
     public void sendMsg(String phoneNumber) {
         sendMsgInfoModelImp.sendMsg(phoneNumber, this);
     }
+
+    @Override
+    public void sendValidateMsg(String phoneNumber) {
+        sendMsgInfoModelImp.sendValidateMsg(phoneNumber, this);
+    }
 }

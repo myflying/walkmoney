@@ -15,17 +15,19 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_cash_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1元"
+            android:text="0元"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/tv_cash_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="售价10000金币"
+            android:text="售价0金币"
             android:textColor="@color/common_title_color"
             android:textSize="12sp" />
     </LinearLayout>

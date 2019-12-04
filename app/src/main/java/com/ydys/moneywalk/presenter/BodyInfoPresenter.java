@@ -5,5 +5,7 @@ package com.ydys.moneywalk.presenter;
  */
 
 public interface BodyInfoPresenter {
+    void getBodyInfo(String userId);
+
     void updateBodyInfo(String userId, String filed, String value);
 }

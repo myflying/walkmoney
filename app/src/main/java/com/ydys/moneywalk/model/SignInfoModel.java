@@ -8,5 +8,5 @@ import com.ydys.moneywalk.base.IBaseRequestCallBack;
  */
 
 public interface SignInfoModel<T> {
-    void signDay(String userId, int isDouble, int day, IBaseRequestCallBack<T> iBaseRequestCallBack);
+    void signDay(String userId, String day, IBaseRequestCallBack<T> iBaseRequestCallBack);
 }

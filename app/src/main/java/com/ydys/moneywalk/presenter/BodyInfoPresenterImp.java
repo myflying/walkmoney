@@ -26,6 +26,11 @@ public class BodyInfoPresenterImp extends BasePresenterImp<BodyInfoView, BodyInf
     }
 
     @Override
+    public void getBodyInfo(String userId) {
+        bodyInfoModelImp.getBodyInfo(userId, this);
+    }
+
+    @Override
     public void updateBodyInfo(String userId, String filed, String value) {
         bodyInfoModelImp.updateBodyInfo(userId, filed, value, this);
     }

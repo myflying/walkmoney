@@ -89,4 +89,11 @@
     <color name="round_border_color">#8f9198</color>
 
     <color name="copy_code_color">#fcb755</color>
+    <color name="dialog_color">#40000000</color>
+
+    <color name="sign_gold_num_color">#fbc40f</color>
+
+    <color name="validate_normal">#f9c19b</color>
+    <color name="validate_focus">#ff7213</color>
+    <color name="progress_end">#fa760f</color>
 </resources>

@@ -9,4 +9,6 @@ import com.ydys.moneywalk.base.IBaseRequestCallBack;
 
 public interface SendMsgInfoModel<T> {
     void sendMsg(String phoneNumber, IBaseRequestCallBack<T> iBaseRequestCallBack);
+
+    void sendValidateMsg(String phoneNumber, IBaseRequestCallBack<T> iBaseRequestCallBack);
 }

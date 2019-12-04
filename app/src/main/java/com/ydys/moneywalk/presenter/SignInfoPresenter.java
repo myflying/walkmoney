@@ -5,5 +5,5 @@ package com.ydys.moneywalk.presenter;
  */
 
 public interface SignInfoPresenter {
-    void signDay(String userId, int isDouble, int day);
+    void signDay(String userId, String day);
 }

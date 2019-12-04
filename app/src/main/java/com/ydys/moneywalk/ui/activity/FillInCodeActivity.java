@@ -1,11 +1,13 @@
 package com.ydys.moneywalk.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 
 import androidx.core.content.ContextCompat;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.ydys.moneywalk.App;
@@ -18,6 +20,7 @@ import com.ydys.moneywalk.view.FillInCodeView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 public class FillInCodeActivity extends BaseActivity implements FillInCodeView {
 
@@ -57,6 +60,11 @@ public class FillInCodeActivity extends BaseActivity implements FillInCodeView {
 
     @OnClick(R.id.btn_commit_code)
     void commitCode() {
+        if (StringUtils.isEmpty(mCodeEt.getText())) {
+            Toasty.normal(FillInCodeActivity.this, "请输入邀请码").show();
+            return;
+        }
+
         if (progressDialog != null && !progressDialog.isShowing()) {
             progressDialog.show();
         }
@@ -81,7 +89,10 @@ public class FillInCodeActivity extends BaseActivity implements FillInCodeView {
         }
 
         if (tData != null && tData.getCode() == Constants.SUCCESS) {
-            ToastUtils.showLong("填写成功");
+            Toasty.normal(FillInCodeActivity.this, "填写成功").show();
+
+            Intent intent = new Intent();
+            setResult(1, intent);
             finish();
         } else {
             ToastUtils.showLong(tData.getMsg());
@@ -93,8 +104,7 @@ public class FillInCodeActivity extends BaseActivity implements FillInCodeView {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-
-        ToastUtils.showLong("系统错误");
+        Toasty.normal(FillInCodeActivity.this, "系统错误").show();
     }
 
     @OnClick(R.id.iv_back)

@@ -63,6 +63,9 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     @BindView(R.id.tv_cash_money)
     TextView mCashMoneyTv;
 
+    @BindView(R.id.iv_can_cash)
+    ImageView mCanCashIv;
+
     @BindView(R.id.layout_user_account)
     LinearLayout mUserAccountLayout;
 
@@ -117,58 +120,78 @@ public class MyFragment extends BaseFragment implements UserInfoView {
 
     @OnClick(R.id.layout_user_info)
     void login() {
-        if (mUserInfo != null) {
-            //if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
+        if (!SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
-            // }
         } else {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
+            if (App.mUserInfo != null) {
+                if (App.mUserInfo.getIsBind() == 0) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
         }
     }
 
     @OnClick(R.id.layout_body_data)
     void bodyData() {
-        Intent intent = new Intent(getActivity(), BodyDataActivity.class);
-        startActivity(intent);
+        if (!SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        } else {
+            if (App.mUserInfo != null) {
+                Intent intent = new Intent(getActivity(), BodyDataActivity.class);
+                startActivity(intent);
+            }
+        }
     }
 
     @OnClick(R.id.layout_setting)
     void setting() {
-        Intent intent = new Intent(getActivity(), SettingActivity.class);
-        startActivity(intent);
+        if (!SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        } else {
+            if (App.mUserInfo != null) {
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
+                startActivity(intent);
+            }
+        }
     }
 
     @OnClick(R.id.layout_my_wallet)
     void myWallet() {
-        if (mUserInfo != null) {
-//            if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
-//                Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                startActivity(intent);
-//            } else {
-//                Intent intent = new Intent(getActivity(), MyWalletActivity.class);
-//                startActivity(intent);
-//            }
-        } else {
+        if (!SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
+        } else {
+            if (App.mUserInfo != null) {
+                if (App.mUserInfo.getIsBind() == 0) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(getActivity(), MyWalletActivity.class);
+                    startActivity(intent);
+                }
+            }
         }
     }
 
     @OnClick({R.id.layout_cash_money, R.id.btn_cash_now})
     void myCashMoney() {
-        if (mUserInfo != null) {
-//            if (StringUtils.isEmpty(mUserInfo.getOpenid())) {
-//                Intent intent = new Intent(getActivity(), LoginActivity.class);
-//                startActivity(intent);
-//            } else {
-//                Intent intent = new Intent(getActivity(), CashActivity.class);
-//                startActivity(intent);
-//            }
-        } else {
+        if (!SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
+        } else {
+            if (App.mUserInfo != null) {
+                if (App.mUserInfo.getIsBind() == 0) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(getActivity(), CashActivity.class);
+                    startActivity(intent);
+                }
+            }
         }
     }
 
@@ -206,7 +229,9 @@ public class MyFragment extends BaseFragment implements UserInfoView {
                     if (SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
                         nickName = StringUtils.isEmpty(mUserInfo.getNickname()) ? "走路宝" + mUserInfo.getId() : mUserInfo.getNickname();
                         inviteCode = "邀请码：" + mUserInfo.getId();
+                        mCashMoneyBtn.setBackgroundResource(R.mipmap.cash_btn_bg);
                         Glide.with(getActivity()).load(mUserInfo.getFace()).apply(options).into(mUserHeadIv);
+                        mCanCashIv.setVisibility(View.VISIBLE);
                     } else {
                         nickName = "点击登录";
                         inviteCode = "让走路更有趣";
@@ -214,10 +239,12 @@ public class MyFragment extends BaseFragment implements UserInfoView {
 
                         mUserGoldNumTv.setText("--");
                         mCashMoneyTv.setText("--");
+                        mCanCashIv.setVisibility(View.INVISIBLE);
                         mCashMoneyBtn.setBackgroundResource(R.drawable.cash_btn_normal_bg);
                         mCopyCodeTv.setVisibility(View.GONE);
                     }
                 } else {
+                    mCanCashIv.setVisibility(View.VISIBLE);
                     mCopyCodeTv.setVisibility(View.GONE);
                     Glide.with(getActivity()).load(mUserInfo.getFace()).apply(options).into(mUserHeadIv);
                 }
@@ -257,6 +284,7 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     @OnClick(R.id.layout_invite_friend)
     void inviteFriend() {
         Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+        intent.putExtra("share_type", 1);
         startActivity(intent);
     }
 

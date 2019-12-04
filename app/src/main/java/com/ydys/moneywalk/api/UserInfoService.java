@@ -24,4 +24,8 @@ public interface UserInfoService {
 
     @POST("v1.User/fillInCode")
     Observable<FillInCodeInfoRet> fillInCode(@Body RequestBody requestBody);
+
+
+    @POST("v1.cash_out/checkMobile")
+    Observable<UserInfoRet> validatePhone(@Body RequestBody requestBody);
 }

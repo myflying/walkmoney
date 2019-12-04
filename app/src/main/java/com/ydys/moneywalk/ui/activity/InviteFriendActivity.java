@@ -16,6 +16,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.PathUtils;
@@ -42,6 +44,7 @@ import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.orhanobut.logger.Logger;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.editorpage.ShareActivity;
@@ -49,9 +52,12 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
+import com.ydys.moneywalk.bean.ShareInfoRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.Presenter;
+import com.ydys.moneywalk.presenter.ShareInfoPresenterImp;
 import com.ydys.moneywalk.ui.custom.ActRuleDialog;
+import com.ydys.moneywalk.view.ShareInfoView;
 
 import java.io.File;
 
@@ -60,7 +66,7 @@ import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 import pl.droidsonroids.gif.GifImageView;
 
-public class InviteFriendActivity extends BaseActivity {
+public class InviteFriendActivity extends BaseActivity implements ShareInfoView {
 
     @BindView(R.id.wx_invite)
     GifImageView mWxInviteGif;
@@ -78,6 +84,20 @@ public class InviteFriendActivity extends BaseActivity {
     private ShareAction shareAction;
 
     private ProgressDialog progressDialog = null;
+
+    private int shareType = 1;
+
+    ShareInfoPresenterImp shareInfoPresenterImp;
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                ToastUtils.showLong("分享成功");
+            }
+        }
+    };
 
     @Override
     protected int getLayoutId() {
@@ -108,7 +128,12 @@ public class InviteFriendActivity extends BaseActivity {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            shareType = bundle.getInt("share_type", 1);
+        }
         mInviteCodeTv.setText(App.mUserInfo != null ? App.mUserInfo.getId() : "");
+        shareInfoPresenterImp = new ShareInfoPresenterImp(this, this);
     }
 
     @OnClick(R.id.layout_act_rule)
@@ -322,6 +347,10 @@ public class InviteFriendActivity extends BaseActivity {
         }
     }
 
+    public void shareDone() {
+        shareInfoPresenterImp.shareDone(App.mUserInfo != null ? App.mUserInfo.getId() : "", shareType);
+    }
+
     private UMShareListener shareListener = new UMShareListener() {
         /**
          * @descrption 分享开始的回调
@@ -338,8 +367,12 @@ public class InviteFriendActivity extends BaseActivity {
          */
         @Override
         public void onResult(SHARE_MEDIA platform) {
-            dismissShareView();
-            Toast.makeText(InviteFriendActivity.this, "分享成功", Toast.LENGTH_LONG).show();
+            Logger.i("share success--->");
+            //dismissShareView();
+            Message message = Message.obtain();
+            message.what = 1;
+            mHandler.sendMessageDelayed(message, 2000);
+            shareDone();
         }
 
         /**
@@ -365,8 +398,37 @@ public class InviteFriendActivity extends BaseActivity {
         }
     };
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
     @OnClick(R.id.iv_back)
     void back() {
         finish();
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void dismissProgress() {
+
+    }
+
+    @Override
+    public void loadDataSuccess(ShareInfoRet tData) {
+        dismissShareView();
+        if (tData != null && tData.getCode() == Constants.SUCCESS) {
+            Logger.i(JSON.toJSONString(tData));
+        }
+    }
+
+    @Override
+    public void loadDataError(Throwable throwable) {
+        dismissShareView();
     }
 }

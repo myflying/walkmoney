@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class BodyInfoRet extends ResultInfo {
 
-    private List<BodyInfo> data;
+    private BodyInfo data;
 
-    public List<BodyInfo> getData() {
+    public BodyInfo getData() {
         return data;
     }
 
-    public void setData(List<BodyInfo> data) {
+    public void setData(BodyInfo data) {
         this.data = data;
     }
 }

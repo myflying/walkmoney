@@ -1,17 +1,25 @@
 package com.ydys.moneywalk.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.annotations.SerializedName;
 import com.jaeger.library.StatusBarUtil;
+import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.GoldDayInfo;
 import com.ydys.moneywalk.bean.GoldDetailInfo;
+import com.ydys.moneywalk.bean.WalletInfoRet;
+import com.ydys.moneywalk.common.Constants;
+import com.ydys.moneywalk.presenter.MyWalletInfoPresenterImp;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.ui.adapter.GoldDayAdapter;
 import com.ydys.moneywalk.ui.custom.ActRuleDialog;
+import com.ydys.moneywalk.view.MyWalletInfoView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +27,29 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MyWalletActivity extends BaseActivity {
+public class MyWalletActivity extends BaseActivity implements MyWalletInfoView {
 
     @BindView(R.id.gold_day_list_view)
     RecyclerView mGoldDayListView;
 
+    @BindView(R.id.tv_gold_num)
+    TextView mGoldNumTv;
+
+    @BindView(R.id.tv_money)
+    TextView mMoneyTv;
+
+    @BindView(R.id.tv_today_gold_num)
+    TextView mTodayGoldNumTv;
+
+    @BindView(R.id.tv_total_gold_num)
+    TextView mTotalGoldNumTv;
+
+    @BindView(R.id.tv_exchange_desc)
+    TextView mExchangeTv;
+
     GoldDayAdapter goldDayAdapter;
+
+    MyWalletInfoPresenterImp myWalletInfoPresenterImp;
 
     @Override
     protected int getLayoutId() {
@@ -53,29 +78,54 @@ public class MyWalletActivity extends BaseActivity {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        List<GoldDayInfo> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            GoldDayInfo goldDayInfo = new GoldDayInfo();
-            goldDayInfo.setGoldDate("今天");
-            List<GoldDetailInfo> detailList = new ArrayList<>();
-            for (int j = 0; j < 8; j++) {
-                GoldDetailInfo goldDetailInfo = new GoldDetailInfo();
-                goldDetailInfo.setGoldNum(1000 + (i + j + 1));
-                detailList.add(goldDetailInfo);
-            }
-            goldDayInfo.setDetailList(detailList);
-
-            list.add(goldDayInfo);
-        }
+        myWalletInfoPresenterImp = new MyWalletInfoPresenterImp(this, this);
 
         mGoldDayListView.setLayoutManager(new LinearLayoutManager(this));
-        goldDayAdapter = new GoldDayAdapter(this, list);
+        goldDayAdapter = new GoldDayAdapter(this, null);
+
         mGoldDayListView.setLayoutManager(new LinearLayoutManager(this));
         mGoldDayListView.setAdapter(goldDayAdapter);
+        myWalletInfoPresenterImp.loadWalletInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "");
+    }
+
+    @OnClick(R.id.btn_cash_money)
+    void cashNow() {
+        Intent intent = new Intent(this, CashActivity.class);
+        startActivity(intent);
     }
 
     @OnClick(R.id.iv_back)
     void back() {
         finish();
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void dismissProgress() {
+
+    }
+
+    @Override
+    public void loadDataSuccess(WalletInfoRet tData) {
+        if (tData != null && tData.getCode() == Constants.SUCCESS) {
+            if (tData.getData() != null) {
+                goldDayAdapter.setNewData(tData.getData().getList());
+
+                mGoldNumTv.setText(tData.getData().getGold() + "");
+                mMoneyTv.setText("约" + tData.getData().getMoney() + "元");
+                mTodayGoldNumTv.setText(tData.getData().getToDayGold() + "");
+                mTotalGoldNumTv.setText(tData.getData().getCountGold() + "");
+                mExchangeTv.setText(tData.getData().getExchangeRate() + "金币=1元");
+            }
+        }
+    }
+
+    @Override
+    public void loadDataError(Throwable throwable) {
+
     }
 }

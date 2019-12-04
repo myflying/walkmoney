@@ -25,6 +25,8 @@ public class GoldDayAdapter extends BaseQuickAdapter<GoldDayInfo, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder holder, GoldDayInfo temp) {
+        holder.setText(R.id.tv_money_title,temp.getGoldDate());
+
         RecyclerView detailListView = holder.getView(R.id.gold_detail_list_view);
         GoldDetailAdapter goldDetailAdapter = new GoldDetailAdapter(mContext, temp.getDetailList());
         detailListView.setLayoutManager(new LinearLayoutManager(mContext));

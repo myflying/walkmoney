@@ -6,71 +6,24 @@ import com.google.gson.annotations.SerializedName;
  * Created by zhangdinghui on 2019/4/25.
  */
 public class VersionInfo {
-    private int id;
-
-    @SerializedName("app_name")
-    private String appName;
-
-    @SerializedName("version_name")
-    private String versionName;
-
+    @SerializedName("force_update")
+    private int forceUpdate;//是否强制更新 1是 0否
+    @SerializedName("update_content")
+    private String updateContent;//版本内容描述
     @SerializedName("version_code")
-    private int versionCode;
+    private int versionCode;//版本code
+    @SerializedName("version_num")
+    private String versionNum;//版本号
 
-    @SerializedName("version_date")
-    private String versionDate;
+    @SerializedName("download_url")
+    private String downUrl;
 
-    @SerializedName("version_url")
-    private String updateUrl;
-
-    @SerializedName("version_desc")
-    private String updateContent;
-
-    @SerializedName("version_is_change")
-    private int isForce;//版本是否强制更新  0:不强制 1：强制
-
-    private String kfemail;//客服邮箱
-
-    private String kfway;//客服联系方式
-
-    public int getId() {
-        return id;
+    public int getForceUpdate() {
+        return forceUpdate;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAppName() {
-        return appName;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
-    public String getVersionName() {
-        return versionName;
-    }
-
-    public void setVersionName(String versionName) {
-        this.versionName = versionName;
-    }
-
-    public int getVersionCode() {
-        return versionCode;
-    }
-
-    public void setVersionCode(int versionCode) {
-        this.versionCode = versionCode;
-    }
-
-    public String getUpdateUrl() {
-        return updateUrl;
-    }
-
-    public void setUpdateUrl(String updateUrl) {
-        this.updateUrl = updateUrl;
+    public void setForceUpdate(int forceUpdate) {
+        this.forceUpdate = forceUpdate;
     }
 
     public String getUpdateContent() {
@@ -81,35 +34,27 @@ public class VersionInfo {
         this.updateContent = updateContent;
     }
 
-    public int getIsForce() {
-        return isForce;
+    public int getVersionCode() {
+        return versionCode;
     }
 
-    public void setIsForce(int isForce) {
-        this.isForce = isForce;
+    public void setVersionCode(int versionCode) {
+        this.versionCode = versionCode;
     }
 
-    public String getVersionDate() {
-        return versionDate;
+    public String getVersionNum() {
+        return versionNum;
     }
 
-    public void setVersionDate(String versionDate) {
-        this.versionDate = versionDate;
+    public void setVersionNum(String versionNum) {
+        this.versionNum = versionNum;
     }
 
-    public String getKfemail() {
-        return kfemail;
+    public String getDownUrl() {
+        return downUrl;
     }
 
-    public void setKfemail(String kfemail) {
-        this.kfemail = kfemail;
-    }
-
-    public String getKfway() {
-        return kfway;
-    }
-
-    public void setKfway(String kfway) {
-        this.kfway = kfway;
+    public void setDownUrl(String downUrl) {
+        this.downUrl = downUrl;
     }
 }

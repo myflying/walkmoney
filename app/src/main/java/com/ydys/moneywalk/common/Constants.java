@@ -44,4 +44,7 @@ public class Constants {
 
     //标记APP本地是否登录过账号(主要是考虑app卸载后，与后台综合判断，再次安装app时，此设备是否登录过系统)
     public static final String LOCAL_LOGIN = "local_login";
+
+    //本次提现是否验证过手机，在提现完成后，
+    public static final String THIS_CASH_VALIDATE = "this_cash_validate";
 }

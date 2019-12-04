@@ -3,6 +3,7 @@ package com.ydys.moneywalk.ui.activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -26,6 +27,7 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
+import com.umeng.socialize.UMShareAPI;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.base.IBaseView;
@@ -206,7 +208,7 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
                 }
                 if (pos == 1) {
                     if (mFragmentList.get(pos) instanceof MakeMoneyFragment) {
-                        ((MakeMoneyFragment) mFragmentList.get(pos)).loadUserInfo();
+                        ((MakeMoneyFragment) mFragmentList.get(pos)).makeMoneySelect();
                     }
                 }
                 if (pos == 2) {
@@ -323,7 +325,6 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
     @Override
     public void loadDataSuccess(Object tData) {
 
-
         if (tData != null) {
             if (tData instanceof UserInfoRet && ((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
                 Logger.i("user info --->" + JSON.toJSONString(tData));
@@ -331,9 +332,6 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
                     App.mUserInfo = ((UserInfoRet) tData).getData();
                     initInfoPresenterImp.initInfo(((UserInfoRet) tData).getData().getId());
                 }
-
-                MessageEvent messageEvent = new MessageEvent("init_success");
-                EventBus.getDefault().post(messageEvent);
             }
 
             if (tData instanceof InitInfoRet && ((InitInfoRet) tData).getCode() == Constants.SUCCESS) {
@@ -343,8 +341,12 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
                     App.userTodayStep = App.initInfo.getUserStepData().getStepNum();
                     Logger.i("user today step--->" + App.userTodayStep);
                 }
+
+                MessageEvent messageEvent = new MessageEvent("init_success");
+                EventBus.getDefault().post(messageEvent);
+
                 if (hongBaoDialog != null && !hongBaoDialog.isShowing()) {
-                    if (App.initInfo.getNewTaskConfig().getIsDel() == 0) {
+                    if (App.mUserInfo.getShowNew() == 1) {
                         hongBaoDialog.show();
                         mHandler.postDelayed(new Runnable() {
                             @Override
@@ -356,13 +358,17 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
                 }
             }
         }
-
-
     }
 
     @Override
     public void loadDataError(Throwable throwable) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

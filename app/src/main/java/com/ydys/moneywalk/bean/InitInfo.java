@@ -50,6 +50,8 @@ public class InitInfo {
         private String appLogo;//应用logo
         @SerializedName("app_name")
         private String appName;//应用名称
+        @SerializedName("exchange_rate")
+        private int exchangeRate;
 
         public String getInviteRule() {
             return inviteRule;
@@ -114,6 +116,14 @@ public class InitInfo {
         public void setAppName(String appName) {
             this.appName = appName;
         }
+
+        public int getExchangeRate() {
+            return exchangeRate;
+        }
+
+        public void setExchangeRate(int exchangeRate) {
+            this.exchangeRate = exchangeRate;
+        }
     }
 
     public class NewTaskConfig {
@@ -141,13 +151,22 @@ public class InitInfo {
     public class UserStepData{
         @SerializedName("step_num")
         private int stepNum;
-
+        @SerializedName("luck_rest_num")
+        private int luckRestNum;//当天幸运金币剩余领取次数
         public int getStepNum() {
             return stepNum;
         }
 
         public void setStepNum(int stepNum) {
             this.stepNum = stepNum;
+        }
+
+        public int getLuckRestNum() {
+            return luckRestNum;
+        }
+
+        public void setLuckRestNum(int luckRestNum) {
+            this.luckRestNum = luckRestNum;
         }
     }
 

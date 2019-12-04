@@ -23,8 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/layout_top"
-        android:background="@color/bg_color"
         android:layout_marginBottom="62dp"
+        android:background="@color/bg_color"
         android:fillViewport="true">
 
         <LinearLayout
@@ -54,9 +54,10 @@
                         android:textSize="14sp" />
 
                     <TextView
+                        android:id="@+id/tv_user_gold_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5,081"
+                        android:text="0"
                         android:textColor="@color/black"
                         android:textSize="28sp"
                         android:textStyle="bold" />
@@ -146,25 +147,31 @@
                         android:textColor="@color/common_gray"
                         android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tv_go_to_bind"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
                         android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/iv_wx_head_right"
-                        android:text="去绑定"
-                        android:textColor="@color/common_gray"
-                        android:textSize="12sp" />
-
-                    <ImageView
-                        android:id="@+id/iv_wx_head_right"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginRight="12dp"
-                        android:src="@mipmap/right_icon" />
+                        android:layout_marginRight="12dp">
+
+                        <TextView
+                            android:id="@+id/tv_go_to_bind"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="去绑定"
+                            android:textColor="@color/common_gray"
+                            android:textSize="12sp"
+                            android:visibility="gone" />
+
+                        <ImageView
+                            android:id="@+id/iv_wx_head_right"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@mipmap/right_icon"
+                            android:visibility="gone" />
+                    </LinearLayout>
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -188,7 +195,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/cash_money_list_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:layout_below="@+id/tv_cash_money"
                     android:layout_margin="12dp" />
             </RelativeLayout>
@@ -209,17 +216,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:lineSpacingMultiplier="1.2"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:text="@string/cash_step1"
-                    android:textColor="@color/common_title_color"
-                    android:textSize="14sp" />
-
-                <TextView
+                    android:id="@+id/tv_cash_step_remark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
@@ -227,7 +224,7 @@
                     android:lineSpacingMultiplier="1.2"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
-                    android:text="@string/cash_step2"
+                    android:text="@string/cash_step"
                     android:textColor="@color/common_title_color"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -252,12 +249,13 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/tv_need_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="4dp"
             android:layout_toRightOf="@+id/tv_need_txt"
-            android:text="10000"
+            android:text="0"
             android:textColor="@color/black"
             android:textSize="18sp" />
 

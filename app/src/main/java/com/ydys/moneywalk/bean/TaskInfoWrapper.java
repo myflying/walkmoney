@@ -41,6 +41,11 @@ public class TaskInfoWrapper {
         @SerializedName("task_id")
         private int taskId;
 
+        @SerializedName("show_sign_suss")
+        private int showSignSuss;
+
+        private int gold;
+
         private List<SignInfo> list;
 
         public int getIsDouble() {
@@ -75,12 +80,28 @@ public class TaskInfoWrapper {
             this.continueNum = continueNum;
         }
 
+        public int getGold() {
+            return gold;
+        }
+
+        public void setGold(int gold) {
+            this.gold = gold;
+        }
+
         public int getTomorrowGold() {
             return tomorrowGold;
         }
 
         public void setTomorrowGold(int tomorrowGold) {
             this.tomorrowGold = tomorrowGold;
+        }
+
+        public int getShowSignSuss() {
+            return showSignSuss;
+        }
+
+        public void setShowSignSuss(int showSignSuss) {
+            this.showSignSuss = showSignSuss;
         }
     }
 

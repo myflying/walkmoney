@@ -151,6 +151,7 @@ public class PhoneLoginActivity extends BaseActivity implements IBaseView {
         }
 
         startCountDown();
+        mValidateCodeEt.requestFocus();
         sendMsgInfoPresenterImp.sendMsg(mPhoneNumberEt.getText().toString());
     }
 

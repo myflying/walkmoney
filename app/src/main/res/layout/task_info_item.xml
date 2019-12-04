@@ -76,7 +76,7 @@
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_marginTop="4dp"
-            android:background="@drawable/task_get_now_bg"
+            android:background="@drawable/task_do_it_bg"
             android:text="去完成"
             android:textColor="@color/white"
             android:textSize="14sp" />

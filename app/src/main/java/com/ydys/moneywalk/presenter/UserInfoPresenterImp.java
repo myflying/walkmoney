@@ -32,4 +32,9 @@ public class UserInfoPresenterImp extends BasePresenterImp<IBaseView, UserInfoRe
     public void imeiLogin(String imei, String agentId, String siteId) {
         userInfoModelImp.imeiLogin(imei, agentId, siteId, this);
     }
+
+    @Override
+    public void validatePhone(String imei, String mobile, String code) {
+        userInfoModelImp.validatePhone(imei, mobile, code, this);
+    }
 }

@@ -14,6 +14,9 @@ import rx.Observable;
 
 public interface BodyInfoService {
 
+    @POST("v1.User/getBodyData")
+    Observable<BodyInfoRet> getBodyInfo(@Body RequestBody requestBody);
+
     @POST("v1.User/fillBodyData")
     Observable<BodyInfoRet> updateBodyInfo(@Body RequestBody requestBody);
 

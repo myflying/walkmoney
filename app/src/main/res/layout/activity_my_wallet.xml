@@ -103,9 +103,10 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/tv_gold_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2,342"
+                            android:text="0"
                             android:textColor="@color/black1"
                             android:textSize="30sp"
                             android:textStyle="bold" />
@@ -121,14 +122,16 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="约0.23元"
+                            android:text="约0.00元"
                             android:textColor="@color/white"
                             android:textSize="10sp" />
                     </LinearLayout>
 
                     <Button
+                        android:id="@+id/btn_cash_money"
                         android:layout_width="66dp"
                         android:layout_height="29dp"
                         android:layout_alignParentRight="true"
@@ -137,7 +140,7 @@
                         android:background="@mipmap/wallet_cash_btn"
                         android:text="提现"
                         android:textColor="@color/white"
-                        android:textSize="12sp"></Button>
+                        android:textSize="12sp"/>
                 </RelativeLayout>
 
                 <LinearLayout
@@ -163,9 +166,10 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tv_today_gold_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="5070"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -186,9 +190,10 @@
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/tv_total_gold_num"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="2342142"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="24sp"
                             android:textStyle="bold" />
@@ -204,6 +209,7 @@
                     android:background="@drawable/line_ver"></View>
 
                 <TextView
+                    android:id="@+id/tv_exchange_desc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"

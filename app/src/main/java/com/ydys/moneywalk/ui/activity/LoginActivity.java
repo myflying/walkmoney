@@ -125,8 +125,9 @@ public class LoginActivity extends BaseActivity implements UserInfoView {
                     if (progressDialog != null && !progressDialog.isShowing()) {
                         progressDialog.show();
                     }
+                    Logger.i("wx openid--->" + data.get("openid"));
 
-                    userInfoPresenterImp.login(PhoneUtils.getIMEI(), "wechat", data.get("uid"), "", data.get("name"), data.get("iconurl"));
+                    userInfoPresenterImp.login(PhoneUtils.getIMEI(), "wechat", data.get("openid"), "", data.get("name"), data.get("iconurl"));
 
                     Logger.i("wx login info--->" + data.toString());
                 }

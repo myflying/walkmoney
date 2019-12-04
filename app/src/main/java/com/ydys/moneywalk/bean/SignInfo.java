@@ -6,6 +6,7 @@ public class SignInfo {
 
     private int gold;//金币
     @SerializedName("is_sign")
+
     private int isSign;//是否已经签到 1是 0否
 
     private String day;

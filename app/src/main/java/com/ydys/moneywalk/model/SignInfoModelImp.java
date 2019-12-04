@@ -33,11 +33,10 @@ public class SignInfoModelImp extends BaseModel implements SignInfoModel<SignInf
     }
 
     @Override
-    public void signDay(String userId, int isDouble, int day, IBaseRequestCallBack<SignInfoRet> iBaseRequestCallBack) {
+    public void signDay(String userId,String day, IBaseRequestCallBack<SignInfoRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
             params.put("user_id", userId);
-            params.put("is_double", isDouble);
             params.put("double_day", day);
         } catch (JSONException e) {
             e.printStackTrace();

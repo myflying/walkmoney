@@ -1,11 +1,16 @@
 package com.ydys.moneywalk.ui.activity;
 
 import android.os.Bundle;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.jaeger.library.StatusBarUtil;
+import com.orhanobut.logger.Logger;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.presenter.Presenter;
 
@@ -16,6 +21,22 @@ public class BMIDataActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView mTitleTv;
+
+    @BindView(R.id.iv_sign)
+    ImageView mSignIv;
+
+    @BindView(R.id.tv_bmi_desc)
+    TextView mBmiDescTv;
+
+    String bmiHeight;
+
+    String bmiWeight;
+
+    private double bmiData;
+
+    private double space;
+
+    private double totalWidth = 920;
 
     @Override
     protected int getLayoutId() {
@@ -37,6 +58,56 @@ public class BMIDataActivity extends BaseActivity {
     protected void initViews() {
         mTitleTv.setTextColor(ContextCompat.getColor(this, R.color.black));
         mTitleTv.setText("BMI");
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            bmiHeight = bundle.getString("bmi_height");
+            bmiWeight = bundle.getString("bmi_weight");
+        }
+
+        try {
+            double tempHeight = 0;
+            double tempWeight = 0;
+            if (!StringUtils.isEmpty(bmiHeight) && bmiHeight.contains("厘米")) {
+                String temp = bmiHeight.substring(0, bmiHeight.indexOf("厘米"));
+                if (!StringUtils.isEmpty(temp)) {
+                    tempHeight = Double.parseDouble(temp);
+                }
+            }
+            if (!StringUtils.isEmpty(bmiWeight) && bmiWeight.contains("kg")) {
+                String tempH = bmiWeight.substring(0, bmiWeight.indexOf("kg"));
+                if (!StringUtils.isEmpty(tempH)) {
+                    tempWeight = Double.parseDouble(tempH);
+                }
+            }
+            bmiData = tempWeight / ((tempHeight / 100) * (tempHeight / 100));
+            Logger.i("bmi data--->" + bmiData);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        space = totalWidth / 4;
+        int xWidth = 0;
+        if (bmiData < 18.5) {
+            mBmiDescTv.setText("偏瘦");
+            xWidth = (int) ((space / 18.5) * bmiData);
+        } else if (bmiData >= 18.5 && bmiData < 24) {
+            mBmiDescTv.setText("理想");
+            xWidth = (int) ((space / (24 - 18.5)) * (bmiData - 18.5)) + (int) space;
+        } else if (bmiData >= 24 && bmiData < 28) {
+            mBmiDescTv.setText("偏胖");
+            xWidth = (int) ((space / (28 - 24)) * (bmiData - 24)) + (int) (space * 2);
+        } else if (bmiData >= 28 && bmiData < 35) {
+            mBmiDescTv.setText("肥胖");
+            xWidth = (int) ((space / (35 - 24)) * (bmiData - 28)) + (int) (space * 3);
+        } else {
+            mBmiDescTv.setText("超胖");
+            xWidth = (int) totalWidth;
+        }
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(xWidth, 0, 0, 0);
+        mSignIv.setLayoutParams(params);
     }
 
     @Override

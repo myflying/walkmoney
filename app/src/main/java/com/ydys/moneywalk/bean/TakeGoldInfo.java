@@ -1,13 +1,20 @@
 package com.ydys.moneywalk.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 public class TakeGoldInfo {
 
     private String userId;//用户id
     private String taskId;//任务id
-    private String gold;//领取金币
+    private int gold;//领取金币
     private int isDouble;//是否翻倍
     private int isPlay;
     private int stage;
+
+    private double amount;//用户最新金币余额-对应的人民币余额
+
+    @SerializedName("luck_rest_num")
+    private int luckRestNum;
 
     public String getUserId() {
         return userId;
@@ -25,12 +32,20 @@ public class TakeGoldInfo {
         this.taskId = taskId;
     }
 
-    public String getGold() {
+    public int getGold() {
         return gold;
     }
 
-    public void setGold(String gold) {
+    public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public int getIsDouble() {
@@ -55,5 +70,13 @@ public class TakeGoldInfo {
 
     public void setStage(int stage) {
         this.stage = stage;
+    }
+
+    public int getLuckRestNum() {
+        return luckRestNum;
+    }
+
+    public void setLuckRestNum(int luckRestNum) {
+        this.luckRestNum = luckRestNum;
     }
 }

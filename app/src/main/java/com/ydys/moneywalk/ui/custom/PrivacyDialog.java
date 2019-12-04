@@ -3,12 +3,15 @@ package com.ydys.moneywalk.ui.custom;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.ydys.moneywalk.R;
+import com.ydys.moneywalk.ui.activity.PrivacyActivity;
 
 
 public class PrivacyDialog extends Dialog implements View.OnClickListener {
@@ -20,6 +23,10 @@ public class PrivacyDialog extends Dialog implements View.OnClickListener {
     private LinearLayout mNotAgreeLayout;
 
     public PrivacyListener privacyListener;
+
+    TextView mXieYiTv;
+
+    TextView mPrivacyTv;
 
     public interface PrivacyListener {
         void agree();
@@ -52,7 +59,11 @@ public class PrivacyDialog extends Dialog implements View.OnClickListener {
     private void initView() {
         mConfigLayout = findViewById(R.id.layout_config);
         mNotAgreeLayout = findViewById(R.id.layout_not_agree);
+        mXieYiTv = findViewById(R.id.tv_xieyi);
+        mPrivacyTv = findViewById(R.id.tv_privacy);
 
+        mXieYiTv.setOnClickListener(this);
+        mPrivacyTv.setOnClickListener(this);
         mConfigLayout.setOnClickListener(this);
         mNotAgreeLayout.setOnClickListener(this);
         setCanceledOnTouchOutside(false);
@@ -76,6 +87,16 @@ public class PrivacyDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.layout_not_agree:
                 this.privacyListener.notAgree();
+                break;
+            case R.id.tv_xieyi:
+                Intent intent = new Intent(mContext, PrivacyActivity.class);
+                intent.putExtra("show_type", 0);
+                mContext.startActivity(intent);
+                break;
+            case R.id.tv_privacy:
+                Intent intent1 = new Intent(mContext, PrivacyActivity.class);
+                intent1.putExtra("show_type", 1);
+                mContext.startActivity(intent1);
                 break;
             default:
                 break;

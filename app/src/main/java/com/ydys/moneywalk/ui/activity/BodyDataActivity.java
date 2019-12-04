@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.jaeger.library.StatusBarUtil;
@@ -16,6 +18,7 @@ import com.wx.wheelview.adapter.ArrayWheelAdapter;
 import com.wx.wheelview.widget.WheelView;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
+import com.ydys.moneywalk.bean.BodyInfo;
 import com.ydys.moneywalk.bean.BodyInfoRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.BodyInfoPresenterImp;
@@ -50,14 +53,22 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
 
     @BindView(R.id.tv_sex)
     TextView mSexTv;
+
     @BindView(R.id.tv_age)
     TextView mAgeTv;
+
     @BindView(R.id.tv_height)
     TextView mHeightTv;
+
     @BindView(R.id.tv_weight)
     TextView mWeightTv;
+
     @BindView(R.id.tv_step_num)
     TextView mStepNumTv;
+
+    private BodyInfo bodyInfo;
+
+    private boolean isUpdate;
 
     @Override
     protected int getLayoutId() {
@@ -106,6 +117,7 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initData(Bundle savedInstanceState) {
         bodyInfoPresenterImp = new BodyInfoPresenterImp(this, this);
+        bodyInfoPresenterImp.getBodyInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "");
     }
 
     @OnClick(R.id.layout_sex)
@@ -180,7 +192,18 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
 
     @OnClick(R.id.layout_bmi)
     void bmiData() {
+//        if (StringUtils.isEmpty(bodyInfo.getHeight())) {
+//            ToastUtils.showLong("请先填写身高");
+//            return;
+//        }
+//        if (StringUtils.isEmpty(bodyInfo.getWeight())) {
+//            ToastUtils.showLong("请先填写身高");
+//            return;
+//        }
+
         Intent intent = new Intent(this, BMIDataActivity.class);
+        intent.putExtra("bmi_height", "165厘米");
+        intent.putExtra("bmi_weight", "70kg");
         startActivity(intent);
     }
 
@@ -213,6 +236,7 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
                     default:
                         break;
                 }
+                isUpdate = true;
 
                 bodyInfoPresenterImp.updateBodyInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", files[chooseIndex], tempStr);
                 break;
@@ -239,14 +263,43 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void loadDataSuccess(BodyInfoRet tData) {
         if (tData != null && tData.getCode() == Constants.SUCCESS) {
-            ToastUtils.showLong("保存成功");
+            bodyInfo = tData.getData();
+            Logger.i(JSON.toJSONString(bodyInfo));
+
+            if (isUpdate) {
+                ToastUtils.showLong("保存成功");
+            }
+            if (tData != null) {
+                mSexTv.setText(bodyInfo.getSex() == 1 ? "男" : "女");
+                mAgeTv.setText(bodyInfo.getAge() + "");
+                mHeightTv.setText(bodyInfo.getHeight());
+                mWeightTv.setText(bodyInfo.getWeight());
+                mStepNumTv.setText(bodyInfo.getTarget_step() + "");
+            }
         } else {
-            ToastUtils.showLong("保存失败");
+            if (isUpdate) {
+                ToastUtils.showLong("保存失败");
+            }
         }
     }
 
     @Override
     public void loadDataError(Throwable throwable) {
         ToastUtils.showLong("系统错误");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        setResult(1, intent);
+        finish();
+    }
+
+    @OnClick(R.id.iv_back)
+    void back() {
+        Intent intent = new Intent();
+        setResult(1, intent);
+        finish();
     }
 }
