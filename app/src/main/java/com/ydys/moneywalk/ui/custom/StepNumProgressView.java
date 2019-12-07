@@ -299,7 +299,7 @@ public class StepNumProgressView extends View {
         canvas.save();
         canvas.translate(getWidth() / 2, getHeight() / 2);
         float tempWidth = mStepNumPaint.measureText(num);
-        canvas.drawText(num, -tempWidth / 2 - dp2px(4), mTemDialRadius / 4, mStepNumPaint);
+        canvas.drawText(num, -tempWidth / 2 - dp2px(4), mTemDialRadius / 4 - 6, mStepNumPaint);
         canvas.restore();
     }
 
@@ -318,7 +318,7 @@ public class StepNumProgressView extends View {
 
         canvas.translate(getWidth() / 2, getHeight() / 2);
         float stepWidth = mStepNumPaint.measureText(walkNum + "");
-        canvas.drawText(mTempTitle, stepWidth / 2, mTemDialRadius / 4 - 4, mTitlePaint);
+        canvas.drawText(mTempTitle, stepWidth / 2, mTemDialRadius / 4 - 10, mTitlePaint);
         canvas.restore();
     }
 

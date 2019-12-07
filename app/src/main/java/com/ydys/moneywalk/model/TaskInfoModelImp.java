@@ -35,11 +35,11 @@ public class TaskInfoModelImp extends BaseModel implements TaskInfoModel<TaskInf
     }
 
     @Override
-    public void taskList(String userId, IBaseRequestCallBack<TaskInfoWrapperRet> iBaseRequestCallBack) {
+    public void taskList(String userId, int isLogin,IBaseRequestCallBack<TaskInfoWrapperRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
             params.put("user_id", userId);
-
+            params.put("is_login", isLogin + "");
         } catch (JSONException e) {
             e.printStackTrace();
         }

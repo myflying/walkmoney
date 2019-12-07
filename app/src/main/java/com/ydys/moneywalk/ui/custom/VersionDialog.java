@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 
@@ -21,6 +22,8 @@ public class VersionDialog extends Dialog implements View.OnClickListener {
     private Context mContext;
 
     ImageView mCloseIv;
+
+    TextView mVersionNameTv;
 
     TextView mContentTv;
 
@@ -81,6 +84,7 @@ public class VersionDialog extends Dialog implements View.OnClickListener {
 
     private void initView() {
         mCloseIv = findViewById(R.id.iv_close);
+        mVersionNameTv = findViewById(R.id.tv_version_name);
         mContentTv = findViewById(R.id.tv_update_content);
         mUpdateBtn = findViewById(R.id.btn_update);
         mProgressLayout = findViewById(R.id.layout_progress);
@@ -89,7 +93,14 @@ public class VersionDialog extends Dialog implements View.OnClickListener {
 
         mUpdateBtn.setOnClickListener(this);
         mCloseIv.setOnClickListener(this);
+        mCloseIv.setVisibility(isForceUpdate == 1 ? View.GONE : View.VISIBLE);
         setCanceledOnTouchOutside(isForceUpdate == 1 ? false : true);
+        if (!StringUtils.isEmpty(versionName)) {
+            mVersionNameTv.setText("V" + versionName);
+        }
+        if (!StringUtils.isEmpty(versionContent)) {
+            mContentTv.setText(Html.fromHtml(versionContent));
+        }
     }
 
     public void updateProgress(int progress) {

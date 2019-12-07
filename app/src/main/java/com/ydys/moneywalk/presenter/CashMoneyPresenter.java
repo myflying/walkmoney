@@ -5,5 +5,5 @@ package com.ydys.moneywalk.presenter;
  */
 
 public interface CashMoneyPresenter {
-    void cashMoney(String userId, double money, int isNewPer);
+    void cashMoney(String userId, String money, int isNewPer);
 }

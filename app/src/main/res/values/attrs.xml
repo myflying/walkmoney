@@ -55,4 +55,10 @@
         <!-- 背景圆弧宽度 -->
         <attr name="bgArcWidth" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="RoundRelativeLayout">
+        <attr name="rlRadius" format="dimension" />
+        <attr name="rlClipBackground" format="boolean" />
+    </declare-styleable>
+
 </resources>

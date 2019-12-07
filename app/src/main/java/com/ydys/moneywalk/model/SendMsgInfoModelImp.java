@@ -83,7 +83,7 @@ public class SendMsgInfoModelImp extends BaseModel implements SendMsgInfoModel<S
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), params.toString());
 
-        mCompositeSubscription.add(sendMsgInfoService.sendValidatePhone(requestBody)
+        mCompositeSubscription.add(sendMsgInfoService.sendMsg(requestBody)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<SendMsgInfoRet>() {

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class CashMoneyItem {
     @SerializedName("is_new_people")
     private int isNewPeople;//是否新人专享 1是 0否
-    private double amount;//提现金额
+    private String amount;//提现金额
     @SerializedName("need_gold")
     private int needGold;
 
@@ -19,11 +19,11 @@ public class CashMoneyItem {
         this.isNewPeople = isNewPeople;
     }
 
-    public double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

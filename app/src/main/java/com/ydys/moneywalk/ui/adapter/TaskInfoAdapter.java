@@ -3,8 +3,10 @@ package com.ydys.moneywalk.ui.adapter;
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.text.Html;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
@@ -24,10 +26,18 @@ import com.ydys.moneywalk.util.MyTimeUtil;
 
 import java.util.List;
 
+import pl.droidsonroids.gif.GifImageView;
+
 
 public class TaskInfoAdapter extends BaseQuickAdapter<TaskInfo, BaseViewHolder> {
 
     private Context mContext;
+
+    private boolean isLogin;
+
+    public void setLogin(boolean login) {
+        isLogin = login;
+    }
 
     public TaskInfoAdapter(Context context, List<TaskInfo> datas) {
         super(R.layout.task_info_item, datas);
@@ -36,6 +46,11 @@ public class TaskInfoAdapter extends BaseQuickAdapter<TaskInfo, BaseViewHolder> 
 
     @Override
     protected void convert(BaseViewHolder holder, TaskInfo taskInfo) {
+        if (!isLogin) {
+            taskInfo.setState(1);
+            taskInfo.setHasCompleteNum(0);
+        }
+
         String tempTitle = taskInfo.getTitle();
         if (taskInfo.getTaskType().equals("ad") || taskInfo.getTaskType().equals("share")) {
             tempTitle = taskInfo.getTitle() + "(<font color='#ff5555'>" + taskInfo.getHasCompleteNum() + "</font>/" + taskInfo.getNum() + ")";
@@ -50,21 +65,25 @@ public class TaskInfoAdapter extends BaseQuickAdapter<TaskInfo, BaseViewHolder> 
                 .setText(R.id.tv_task_gold_num, "+" + taskInfo.getGold());
 
         Glide.with(mContext).load(Constants.BASE_IMAGE_URL + taskInfo.getPic()).into((ImageView) holder.getView(R.id.iv_task_icon));
-        holder.addOnClickListener(R.id.btn_get_now);
+        holder.addOnClickListener(R.id.btn_get_now).addOnClickListener(R.id.get_now_gif);
 
-        Button getNowBtn = holder.getView(R.id.btn_get_now);
+        TextView getNowBtn = holder.getView(R.id.btn_get_now);
+        GifImageView getNowGif = holder.getView(R.id.get_now_gif);
 
         if (taskInfo.getState() == 1) {
+            getNowBtn.setVisibility(View.VISIBLE);
+            getNowGif.setVisibility(View.GONE);
             getNowBtn.setClickable(true);
             holder.setText(R.id.btn_get_now, "去完成");
             holder.setBackgroundRes(R.id.btn_get_now, R.mipmap.go_to_done_bg);
             holder.setTextColor(R.id.btn_get_now, ContextCompat.getColor(mContext, R.color.white));
         } else if (taskInfo.getState() == 2) {
-            getNowBtn.setClickable(true);
-            holder.setText(R.id.btn_get_now, "立即领取");
-            holder.setBackgroundRes(R.id.btn_get_now, R.drawable.task_get_now_bg);
-            holder.setTextColor(R.id.btn_get_now, ContextCompat.getColor(mContext, R.color.white));
+            getNowBtn.setVisibility(View.GONE);
+            getNowGif.setVisibility(View.VISIBLE);
+            getNowGif.setClickable(true);
         } else {
+            getNowBtn.setVisibility(View.VISIBLE);
+            getNowGif.setVisibility(View.GONE);
             getNowBtn.setClickable(false);
             holder.setText(R.id.btn_get_now, "已完成");
             holder.setBackgroundRes(R.id.btn_get_now, R.drawable.task_count_down_bg);

@@ -16,6 +16,9 @@ public class TakeGoldInfo {
     @SerializedName("luck_rest_num")
     private int luckRestNum;
 
+    @SerializedName("request_gold")
+    private int requestGold;//请求的金币数
+
     public String getUserId() {
         return userId;
     }
@@ -78,5 +81,13 @@ public class TakeGoldInfo {
 
     public void setLuckRestNum(int luckRestNum) {
         this.luckRestNum = luckRestNum;
+    }
+
+    public int getRequestGold() {
+        return requestGold;
+    }
+
+    public void setRequestGold(int requestGold) {
+        this.requestGold = requestGold;
     }
 }

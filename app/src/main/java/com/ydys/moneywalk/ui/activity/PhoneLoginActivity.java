@@ -1,6 +1,7 @@
 package com.ydys.moneywalk.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -60,6 +61,8 @@ public class PhoneLoginActivity extends BaseActivity implements IBaseView {
 
     private ProgressDialog progressDialog = null;
 
+    private boolean isCountDown;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_phone_login;
@@ -90,9 +93,11 @@ public class PhoneLoginActivity extends BaseActivity implements IBaseView {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 11) {
-                    mGetCodeLayout.setBackgroundResource(R.drawable.validate_focus_bg);
-                    mGetCodeTv.setTextColor(ContextCompat.getColor(PhoneLoginActivity.this, R.color.white));
-                    mGetCodeLayout.setClickable(true);
+                    if (!isCountDown) {
+                        mGetCodeLayout.setBackgroundResource(R.drawable.validate_focus_bg);
+                        mGetCodeTv.setTextColor(ContextCompat.getColor(PhoneLoginActivity.this, R.color.white));
+                        mGetCodeLayout.setClickable(true);
+                    }
                 } else {
                     mGetCodeLayout.setBackgroundResource(R.drawable.validate_normal_bg);
                     mGetCodeTv.setTextColor(ContextCompat.getColor(PhoneLoginActivity.this, R.color.common_title_color));
@@ -186,11 +191,13 @@ public class PhoneLoginActivity extends BaseActivity implements IBaseView {
 
         CountDownTimer timer = new CountDownTimer(60 * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
+                isCountDown = true;
                 Logger.i("倒计时" + millisUntilFinished / 1000 + "秒");
                 mGetCodeTv.setText(millisUntilFinished / 1000 + " s");
             }
 
             public void onFinish() {
+                isCountDown = false;
                 Logger.i("倒计时完成");
                 mGetCodeTv.setText("获取验证码");
                 mGetCodeLayout.setClickable(true);
@@ -213,30 +220,51 @@ public class PhoneLoginActivity extends BaseActivity implements IBaseView {
 
     @Override
     public void loadDataSuccess(Object tData) {
+        Logger.i("phone login --->" + JSON.toJSONString(tData));
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
 
         if (tData != null) {
-            if (tData instanceof SendMsgInfoRet && ((SendMsgInfoRet) tData).getCode() == Constants.SUCCESS) {
-                Toasty.normal(this, "验证码已发送").show();
-                Logger.i("send msg info --->" + JSON.toJSONString(tData));
+            if (tData instanceof SendMsgInfoRet) {
+                if (((SendMsgInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    Toasty.normal(this, "验证码已发送").show();
+                    Logger.i("send msg info --->" + JSON.toJSONString(tData));
+                } else {
+                    Toasty.normal(PhoneLoginActivity.this, ((SendMsgInfoRet) tData).getMsg()).show();
+                }
             }
 
-            if (tData instanceof UserInfoRet && ((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
-                Toasty.normal(PhoneLoginActivity.this, "登录成功").show();
-                //存储用户信息
-                SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
-                SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
-                App.mUserInfo = ((UserInfoRet) tData).getData();
-                App.isLogin = true;
-                finish();
+            if (tData instanceof UserInfoRet) {
+                if (((UserInfoRet) tData).getData() != null && ((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    Toasty.normal(PhoneLoginActivity.this, "登录成功").show();
+                    //存储用户信息
+                    SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
+                    SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
+                    App.mUserInfo = ((UserInfoRet) tData).getData();
+                    App.isLogin = true;
+
+                    Intent intent = new Intent();
+                    setResult(1, intent);
+                    finish();
+                } else {
+                    App.mUserInfo = null;
+                    App.isLogin = false;
+                    SPUtils.getInstance().put(Constants.LOCAL_LOGIN, false);
+                    Toasty.normal(PhoneLoginActivity.this, ((UserInfoRet) tData).getMsg()).show();
+                }
             }
+        } else {
+//            App.mUserInfo = null;
+//            App.isLogin = false;
+//            SPUtils.getInstance().put(Constants.LOCAL_LOGIN, false);
+            Toasty.normal(PhoneLoginActivity.this, "系统错误").show();
         }
     }
 
     @Override
     public void loadDataError(Throwable throwable) {
+        Toasty.normal(PhoneLoginActivity.this, "系统错误").show();
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }

@@ -8,5 +8,5 @@ import com.ydys.moneywalk.base.IBaseRequestCallBack;
  */
 
 public interface CashMoneyModel<T> {
-    void cashMoney(String userId, double money, int isNewPer, IBaseRequestCallBack<T> iBaseRequestCallBack);
+    void cashMoney(String userId, String money, int isNewPer, IBaseRequestCallBack<T> iBaseRequestCallBack);
 }

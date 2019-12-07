@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.presenter.Presenter;
@@ -17,6 +18,9 @@ public class AboutActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView mTitleTv;
+
+    @BindView(R.id.tv_version_name)
+    TextView mVersionNameTv;
 
     @Override
     protected int getLayoutId() {
@@ -43,7 +47,7 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-
+        mVersionNameTv.setText("V" + AppUtils.getAppVersionName());
     }
 
     @OnClick(R.id.tv_xieyi)

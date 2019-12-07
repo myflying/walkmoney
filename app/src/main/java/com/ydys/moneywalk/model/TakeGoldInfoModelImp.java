@@ -92,7 +92,7 @@ public class TakeGoldInfoModelImp extends BaseModel implements TakeGoldInfoModel
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), params.toString());
 
-        mCompositeSubscription.add(takeGoldInfoService.takeLuckGold(requestBody)
+        mCompositeSubscription.add(takeGoldInfoService.takeStepGold(requestBody)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<TakeGoldInfoRet>() {
@@ -136,7 +136,7 @@ public class TakeGoldInfoModelImp extends BaseModel implements TakeGoldInfoModel
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), params.toString());
 
-        mCompositeSubscription.add(takeGoldInfoService.takeLuckGold(requestBody)
+        mCompositeSubscription.add(takeGoldInfoService.takeStageGold(requestBody)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<TakeGoldInfoRet>() {

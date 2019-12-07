@@ -8,8 +8,8 @@ public class BodyInfo {
 
     private int sex;//性别
     private int age;//年龄
-    private String height;//身高
-    private String weight;//体重
+    private int height;//身高
+    private int weight;//体重
     private int target_step;//目标步数
 
     public String getUser_id() {
@@ -52,19 +52,19 @@ public class BodyInfo {
         this.age = age;
     }
 
-    public String getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
-    public String getWeight() {
+    public int getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
 

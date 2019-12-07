@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
@@ -27,7 +28,6 @@ import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.presenter.SendMsgInfoPresenterImp;
 import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
-import com.ydys.moneywalk.util.StringUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -35,8 +35,11 @@ import es.dmoral.toasty.Toasty;
 
 public class ValidatePhoneActivity extends BaseActivity implements IBaseView {
 
-    @BindView(R.id.et_phone_number)
-    EditText mPhoneNumberEt;
+    @BindView(R.id.tv_title)
+    TextView mTitleTv;
+
+    @BindView(R.id.tv_phone_number)
+    TextView mPhoneNumberTv;
 
     @BindView(R.id.et_validate_code)
     EditText mValidateCodeEt;
@@ -59,6 +62,8 @@ public class ValidatePhoneActivity extends BaseActivity implements IBaseView {
 
     private ProgressDialog progressDialog = null;
 
+    private String realMobile = "";
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_validate_phone;
@@ -77,34 +82,15 @@ public class ValidatePhoneActivity extends BaseActivity implements IBaseView {
 
     @Override
     protected void initViews() {
+        mTitleTv.setText("验证手机");
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("正在登录");
-
-        mPhoneNumberEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 11) {
-                    mGetCodeLayout.setBackgroundResource(R.drawable.validate_focus_bg);
-                    mGetCodeTv.setTextColor(ContextCompat.getColor(ValidatePhoneActivity.this, R.color.white));
-                    mGetCodeLayout.setClickable(true);
-                } else {
-                    mGetCodeLayout.setBackgroundResource(R.drawable.validate_normal_bg);
-                    mGetCodeTv.setTextColor(ContextCompat.getColor(ValidatePhoneActivity.this, R.color.common_title_color));
-                    mGetCodeLayout.setClickable(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
+        if (App.mUserInfo != null && !StringUtils.isEmpty(App.mUserInfo.getMobile())) {
+            realMobile = App.mUserInfo.getMobile();
+            String temp = App.mUserInfo.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+            mPhoneNumberTv.setText(temp);
+        }
         mValidateCodeEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -139,32 +125,14 @@ public class ValidatePhoneActivity extends BaseActivity implements IBaseView {
 
     @OnClick(R.id.layout_get_code)
     void getValidateCode() {
-        if (StringUtils.isEmpty(mPhoneNumberEt.getText())) {
-            ToastUtils.showLong("请输入手机号");
-            return;
-        }
-
-        if (mPhoneNumberEt.getText().length() < 11) {
-            ToastUtils.showLong("手机号格式错误");
-            return;
-        }
 
         startCountDown();
         mValidateCodeEt.requestFocus();
-        sendMsgInfoPresenterImp.sendValidateMsg(mPhoneNumberEt.getText().toString());
+        sendMsgInfoPresenterImp.sendValidateMsg(realMobile);
     }
 
     @OnClick(R.id.layout_login)
     void login() {
-        if (StringUtils.isEmpty(mPhoneNumberEt.getText())) {
-            ToastUtils.showLong("请输入手机号");
-            return;
-        }
-
-        if (mPhoneNumberEt.getText().length() < 11) {
-            ToastUtils.showLong("手机号格式错误");
-            return;
-        }
 
         if (com.blankj.utilcode.util.StringUtils.isEmpty(mValidateCodeEt.getText())) {
             ToastUtils.showLong("请输入验证码");
@@ -175,7 +143,7 @@ public class ValidatePhoneActivity extends BaseActivity implements IBaseView {
             progressDialog.show();
         }
 
-        userInfoPresenterImp.validatePhone(PhoneUtils.getIMEI(), mPhoneNumberEt.getText().toString(), mValidateCodeEt.getText().toString());
+        userInfoPresenterImp.validatePhone(PhoneUtils.getIMEI(), realMobile, mValidateCodeEt.getText().toString());
     }
 
     public void startCountDown() {

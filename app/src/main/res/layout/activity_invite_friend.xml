@@ -160,6 +160,7 @@
                         android:src="@mipmap/reg_step_icon" />
 
                     <TextView
+                        android:id="@+id/tv_gold_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -176,11 +177,27 @@
                     android:paddingBottom="6dp"
                     android:src="@drawable/wx_invite" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="@string/share_wx_qun" />
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/share_wx_qun"
+                        android:textColor="@color/black1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/share_tishen"
+                        android:textColor="@color/privacy_text_color"
+                        android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

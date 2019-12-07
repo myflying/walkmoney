@@ -18,6 +18,8 @@ public class SignTodayDialog extends Dialog implements View.OnClickListener {
 
     private Context mContext;
 
+    RoundRelativeLayout mAdLayout;
+
     ImageView mReceiveGoldIv;
 
     ImageView mCloseIv;
@@ -32,7 +34,7 @@ public class SignTodayDialog extends Dialog implements View.OnClickListener {
 
     LinearLayout mDoubleGoldLayout;
 
-    public interface SignDayListener{
+    public interface SignDayListener {
         void doubleGoldVideo();
     }
 
@@ -61,6 +63,9 @@ public class SignTodayDialog extends Dialog implements View.OnClickListener {
     }
 
     private void initView() {
+        //广告位
+        mAdLayout = findViewById(R.id.express_container);
+
         mReceiveGoldIv = findViewById(R.id.iv_receive_gold_bg);
         mCloseIv = findViewById(R.id.iv_close);
         mSignDayNumTv = findViewById(R.id.tv_sign_day_num);
@@ -85,11 +90,14 @@ public class SignTodayDialog extends Dialog implements View.OnClickListener {
         }
     }
 
-    public void updateTodayInfo(String day, String gold, String totalGold, String money) {
+    public void updateTodayInfo(String day, String gold, String totalGold, String money, View adView) {
         mSignDayNumTv.setText(day);
         mSignDayGoldTv.setText(gold + "金币");
         mTotalGoldNumTv.setText(totalGold);
         mMoneyTv.setText("≈" + money + "元");
+        if (adView != null) {
+            mAdLayout.addView(adView);
+        }
     }
 
     @Override
@@ -97,6 +105,7 @@ public class SignTodayDialog extends Dialog implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.layout_double_gold:
                 signDayListener.doubleGoldVideo();
+                dismiss();
                 break;
             case R.id.iv_close:
                 dismiss();

@@ -16,7 +16,9 @@ import com.blankj.utilcode.util.SpanUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.orhanobut.logger.Logger;
 import com.ydys.moneywalk.common.Constants;
+import com.ydys.moneywalk.ui.fragment.HomeFragment;
 import com.ydys.moneywalk.util.Constant;
+import com.ydys.moneywalk.util.RandomUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -162,9 +164,8 @@ public class BindService extends Service implements SensorEventListener {
         if (mCallback != null) {
             Log.i("BindService", "数据更新");
             mCallback.updateUi(nowBuSu);
-
-            SPUtils.getInstance().put(todayDate, nowBuSu);
         }
+        SPUtils.getInstance().put(todayDate, nowBuSu);
     }
 
     @Override
@@ -200,9 +201,14 @@ public class BindService extends Service implements SensorEventListener {
 //            }
 
             int tempStep = (int) event.values[0];
-            if (hasStepCount == 0) {
+            //此处tempStep 在重启时为0，考虑重置步数
+            if (tempStep == 0 || hasStepCount == 0) {
                 Logger.i("首次获取系统步数--->" + tempStep);
                 hasStepCount = tempStep;
+
+                //重新开机之后，除去今天已经上报的步数以外，统计到的最新的已走步数，如果是0，则随机一个步数值增加到
+                //nowBuSu = 0;
+                //SPUtils.getInstance().put(todayDate, nowBuSu);
                 SPUtils.getInstance().put(Constants.GET_SYS_STEP, hasStepCount);
             } else {
                 Logger.i("系统步数--->" + tempStep + "---上次记录的最后的步数--->" + hasStepCount);

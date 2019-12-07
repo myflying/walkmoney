@@ -13,6 +13,20 @@ public class InitInfo {
     @SerializedName("user_data")
     private UserStepData userStepData;
 
+    @SerializedName("invite_config")
+    private InviteConfig inviteConfig;
+
+    @SerializedName("stage_task_finish")
+    private int stageTaskFinish; //步数阶段任务是否完成 1是 0否
+
+    public int getStageTaskFinish() {
+        return stageTaskFinish;
+    }
+
+    public void setStageTaskFinish(int stageTaskFinish) {
+        this.stageTaskFinish = stageTaskFinish;
+    }
+
     public AppConfig getAppConfig() {
         return appConfig;
     }
@@ -35,6 +49,14 @@ public class InitInfo {
 
     public void setUserStepData(UserStepData userStepData) {
         this.userStepData = userStepData;
+    }
+
+    public InviteConfig getInviteConfig() {
+        return inviteConfig;
+    }
+
+    public void setInviteConfig(InviteConfig inviteConfig) {
+        this.inviteConfig = inviteConfig;
     }
 
     public class AppConfig {
@@ -148,11 +170,14 @@ public class InitInfo {
         }
     }
 
-    public class UserStepData{
+    public class UserStepData {
         @SerializedName("step_num")
         private int stepNum;
         @SerializedName("luck_rest_num")
         private int luckRestNum;//当天幸运金币剩余领取次数
+
+        private int weight;
+
         public int getStepNum() {
             return stepNum;
         }
@@ -167,6 +192,36 @@ public class InitInfo {
 
         public void setLuckRestNum(int luckRestNum) {
             this.luckRestNum = luckRestNum;
+        }
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public void setWeight(int weight) {
+            this.weight = weight;
+        }
+    }
+
+    public class InviteConfig {
+        private int gold;//金币
+        @SerializedName("is_del")
+        private int isDel;//是否下架 1是 0否
+
+        public int getGold() {
+            return gold;
+        }
+
+        public void setGold(int gold) {
+            this.gold = gold;
+        }
+
+        public int getIsDel() {
+            return isDel;
+        }
+
+        public void setIsDel(int isDel) {
+            this.isDel = isDel;
         }
     }
 

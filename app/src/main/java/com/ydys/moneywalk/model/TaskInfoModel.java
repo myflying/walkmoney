@@ -8,5 +8,5 @@ import com.ydys.moneywalk.base.IBaseRequestCallBack;
  */
 
 public interface TaskInfoModel<T> {
-    void taskList(String userId, IBaseRequestCallBack<T> iBaseRequestCallBack);
+    void taskList(String userId, int isLogin,IBaseRequestCallBack<T> iBaseRequestCallBack);
 }

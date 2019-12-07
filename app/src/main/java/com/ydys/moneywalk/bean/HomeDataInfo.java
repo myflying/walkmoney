@@ -86,6 +86,8 @@ public class HomeDataInfo {
         private String type;
         @SerializedName("is_double")
         private int isDouble;//是否翻倍 1是 0否
+        @SerializedName("gold_limit")
+        private int goldLimit;//限额的最大兑换金币数
         private int gold;//走路步数-对应金币
         @SerializedName("step_num")
         private int stepNum;//走路步数
@@ -136,6 +138,14 @@ public class HomeDataInfo {
 
         public void setStepNum(int stepNum) {
             this.stepNum = stepNum;
+        }
+
+        public int getGoldLimit() {
+            return goldLimit;
+        }
+
+        public void setGoldLimit(int goldLimit) {
+            this.goldLimit = goldLimit;
         }
     }
 
@@ -221,6 +231,7 @@ public class HomeDataInfo {
     public class StageTaskInfo {
         @SerializedName("is_double")
         private int isDouble;
+
         private List<StageInfo> list;
 
         public int getIsDouble() {

@@ -95,7 +95,7 @@ public class FillInCodeActivity extends BaseActivity implements FillInCodeView {
             setResult(1, intent);
             finish();
         } else {
-            ToastUtils.showLong(tData.getMsg());
+            Toasty.normal(FillInCodeActivity.this, tData.getMsg()).show();
         }
     }
 
@@ -107,8 +107,18 @@ public class FillInCodeActivity extends BaseActivity implements FillInCodeView {
         Toasty.normal(FillInCodeActivity.this, "系统错误").show();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        setResult(1, intent);
+        finish();
+    }
+
     @OnClick(R.id.iv_back)
     void back() {
+        Intent intent = new Intent();
+        setResult(1, intent);
         finish();
     }
 }

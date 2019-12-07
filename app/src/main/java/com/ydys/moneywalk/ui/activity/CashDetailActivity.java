@@ -10,6 +10,9 @@ import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.CashRecordInfo;
 import com.ydys.moneywalk.presenter.Presenter;
+import com.ydys.moneywalk.util.MatrixUtils;
+
+import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -72,8 +75,8 @@ public class CashDetailActivity extends BaseActivity {
             cashRecordInfo = (CashRecordInfo) bundle.getSerializable("cash_record_info");
         }
         if (cashRecordInfo != null) {
-            mCashTitleTv.setText("微信" + cashRecordInfo.getMoney() + "提现");
-            mCashMoneyTv.setText("+" + cashRecordInfo.getMoney());
+            mCashTitleTv.setText("微信" + MatrixUtils.getPrecisionMoney(cashRecordInfo.getMoney()) + "元提现");
+            mCashMoneyTv.setText("+" + MatrixUtils.getPrecisionMoney(cashRecordInfo.getMoney()));
             mCashStateTv.setText(cashRecordInfo.getStatus() == 1 ? "已到账" : "审核中");
             mCashDateTv.setText(cashRecordInfo.getAddTime());
             mFinishDateTv.setText(cashRecordInfo.getFinishTime());

@@ -13,6 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -109,7 +110,8 @@ public class UserInfoActivity extends BaseActivity implements UserInfoView {
             options.placeholder(R.mipmap.def_head);
             options.transform(new RoundedCorners(SizeUtils.dp2px(34)));
             Glide.with(this).load(mUserInfo.getFace()).apply(options).into(mUserHeadIv);
-            mNickNameTv.setText(mUserInfo.getNickname());
+
+            mNickNameTv.setText(StringUtils.isEmpty(mUserInfo.getNickname()) ? "走路宝" + mUserInfo.getId() : mUserInfo.getNickname());
             mUserInviteCodeTv.setText(mUserInfo.getId() + "");
             if (mUserInfo.getBindMobile() == 1) {
                 mMobileTv.setText("已绑定");

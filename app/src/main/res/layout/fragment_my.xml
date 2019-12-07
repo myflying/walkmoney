@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg_color"
@@ -336,8 +337,8 @@
                     android:layout_height="54dp"
                     android:layout_marginLeft="22dp"
                     android:layout_marginRight="22dp"
-                    android:visibility="gone"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -474,21 +475,19 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/common_gray_bg"
-                android:gravity="center">
+            <ScrollView
+                android:layout_width="350dp"
+                android:layout_height="233dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="广告"
-                    android:textColor="@color/white"
-                    android:textSize="30sp" />
-            </LinearLayout>
-
+                <FrameLayout
+                    android:id="@+id/express_container"
+                    android:layout_width="350dp"
+                    android:layout_height="233dp"
+                    android:layout_gravity="center"
+                    android:background="@color/white" />
+            </ScrollView>
         </LinearLayout>
     </FrameLayout>
 </androidx.core.widget.NestedScrollView>

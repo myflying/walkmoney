@@ -47,4 +47,16 @@ public class Constants {
 
     //本次提现是否验证过手机，在提现完成后，
     public static final String THIS_CASH_VALIDATE = "this_cash_validate";
+    //用户的本地体重
+    public static final String USER_WEIGHT = "user_weight";
+    //填写邀请码任务是否完成
+    public static final String INVITE_WRITE_CODE = "invite_write_done";
+
+    public static final String BANNER_CODE_ID = "938698144";
+
+    public static final String VIDEO_CODE_ID = "938698384";
+
+    public static final String MY_BANNER_CODE_ID = "938698517";
+
+    public static final String NEW_STEP_NUM = "new_step_num";
 }

@@ -42,25 +42,22 @@
                 android:textColor="@color/black1"
                 android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/et_phone_number"
+            <TextView
+                android:id="@+id/tv_phone_number"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="14dp"
                 android:layout_weight="1"
+                android:textColor="@color/common_title_color"
+                android:gravity="left|center"
                 android:background="@null"
-                android:hint="请输入手机号"
-                android:inputType="number"
-                android:maxLength="11"
-                android:textColorHint="@color/common_gray"
-                android:textFontWeight="1"
                 android:textSize="16sp" />
 
             <LinearLayout
                 android:id="@+id/layout_get_code"
                 android:layout_width="80dp"
                 android:layout_height="30dp"
-                android:background="@drawable/validate_normal_bg"
+                android:background="@drawable/validate_focus_bg"
                 android:gravity="center">
 
                 <TextView
@@ -68,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="获取验证码"
-                    android:textColor="@color/common_title_color"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

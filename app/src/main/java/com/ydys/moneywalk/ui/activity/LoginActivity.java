@@ -201,12 +201,21 @@ public class LoginActivity extends BaseActivity implements UserInfoView {
                 SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(tData.getData()));
                 SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
                 App.mUserInfo = tData.getData();
+                App.mUserInfo.setIsBind(1);
                 App.isLogin = true;
                 finish();
             } else {
+                App.mUserInfo =null;
+                App.isLogin = false;
+                SPUtils.getInstance().put(Constants.LOCAL_LOGIN, false);
+
                 Toasty.normal(LoginActivity.this, tData.getMsg()).show();
             }
         } else {
+            App.mUserInfo =null;
+            App.isLogin = false;
+            SPUtils.getInstance().put(Constants.LOCAL_LOGIN, false);
+
             Toasty.normal(LoginActivity.this, tData.getMsg()).show();
         }
     }
@@ -219,4 +228,19 @@ public class LoginActivity extends BaseActivity implements UserInfoView {
 
         Toasty.normal(LoginActivity.this, "系统错误").show();
     }
+
+    @OnClick(R.id.tv_xieyi)
+    void xieyi() {
+        Intent intent = new Intent(this, PrivacyActivity.class);
+        intent.putExtra("show_type", 0);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.tv_privacy)
+    void privacy() {
+        Intent intent = new Intent(this, PrivacyActivity.class);
+        intent.putExtra("show_type", 1);
+        startActivity(intent);
+    }
+
 }

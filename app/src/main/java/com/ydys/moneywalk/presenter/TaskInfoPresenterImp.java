@@ -23,7 +23,7 @@ public class TaskInfoPresenterImp extends BasePresenterImp<IBaseView, TaskInfoWr
     }
 
     @Override
-    public void taskList(String userId) {
-        taskInfoModelImp.taskList(userId, this);
+    public void taskList(String userId, int isLogin) {
+        taskInfoModelImp.taskList(userId, isLogin, this);
     }
 }

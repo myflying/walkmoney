@@ -30,7 +30,7 @@ public class CashMoneyAdapter extends BaseQuickAdapter<CashMoneyItem, BaseViewHo
             holder.setBackgroundRes(R.id.layout_cash_money, temp.isSelected() ? R.mipmap.cash_money_selected : R.mipmap.cash_money_normal);
         }
 
-        holder.setText(R.id.tv_cash_money, temp.getAmount() + "")
+        holder.setText(R.id.tv_cash_money, temp.getAmount() + "元")
                 .setText(R.id.tv_cash_gold, "售价" + temp.getNeedGold() + "金币");
     }
 }

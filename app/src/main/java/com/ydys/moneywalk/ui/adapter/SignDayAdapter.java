@@ -48,6 +48,7 @@ public class SignDayAdapter extends BaseQuickAdapter<SignInfo, BaseViewHolder> {
 
             holder.setVisible(R.id.tv_day_gold, true);
             holder.setVisible(R.id.iv_double_icon, false);
+            holder.addOnClickListener(R.id.tv_day_gold);
             mDoubleIv.setClickable(false);
             holder.setText(R.id.tv_sign_day_num, (holder.getAdapterPosition() + 1) + "天");
         } else {

@@ -60,6 +60,8 @@ public class BindPhoneActivity extends BaseActivity implements IBaseView {
 
     private ProgressDialog progressDialog = null;
 
+    private boolean isCountDown;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_bind_phone;
@@ -90,9 +92,11 @@ public class BindPhoneActivity extends BaseActivity implements IBaseView {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 11) {
-                    mGetCodeLayout.setBackgroundResource(R.drawable.validate_focus_bg);
-                    mGetCodeTv.setTextColor(ContextCompat.getColor(BindPhoneActivity.this, R.color.white));
-                    mGetCodeLayout.setClickable(true);
+                    if (!isCountDown) {
+                        mGetCodeLayout.setBackgroundResource(R.drawable.validate_focus_bg);
+                        mGetCodeTv.setTextColor(ContextCompat.getColor(BindPhoneActivity.this, R.color.white));
+                        mGetCodeLayout.setClickable(true);
+                    }
                 } else {
                     mGetCodeLayout.setBackgroundResource(R.drawable.validate_normal_bg);
                     mGetCodeTv.setTextColor(ContextCompat.getColor(BindPhoneActivity.this, R.color.common_title_color));
@@ -186,11 +190,13 @@ public class BindPhoneActivity extends BaseActivity implements IBaseView {
 
         CountDownTimer timer = new CountDownTimer(60 * 1000, 1000) {
             public void onTick(long millisUntilFinished) {
+                isCountDown = true;
                 Logger.i("倒计时" + millisUntilFinished / 1000 + "秒");
                 mGetCodeTv.setText(millisUntilFinished / 1000 + " s");
             }
 
             public void onFinish() {
+                isCountDown = false;
                 Logger.i("倒计时完成");
                 mGetCodeTv.setText("获取验证码");
                 mGetCodeLayout.setClickable(true);
@@ -213,40 +219,60 @@ public class BindPhoneActivity extends BaseActivity implements IBaseView {
 
     @Override
     public void loadDataSuccess(Object tData) {
+        Logger.i("bind phone --->" + JSON.toJSONString(tData));
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
 
         if (tData != null) {
-            if (tData instanceof SendMsgInfoRet && ((SendMsgInfoRet) tData).getCode() == Constants.SUCCESS) {
-                Toasty.normal(this, "验证码已发送").show();
-                Logger.i("send msg info --->" + JSON.toJSONString(tData));
+            if (tData instanceof SendMsgInfoRet) {
+                if (((SendMsgInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    Toasty.normal(this, "验证码已发送").show();
+                    Logger.i("send msg info --->" + JSON.toJSONString(tData));
+                } else {
+                    Toasty.normal(BindPhoneActivity.this, ((SendMsgInfoRet) tData).getMsg()).show();
+                }
             }
 
-            if (tData instanceof UserInfoRet && ((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
-                Toasty.normal(BindPhoneActivity.this, "绑定成功").show();
-                //存储用户信息
-                SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
-                SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
-                App.mUserInfo = ((UserInfoRet) tData).getData();
-                App.isLogin = true;
+            if (tData instanceof UserInfoRet) {
+                if (((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    Toasty.normal(BindPhoneActivity.this, "绑定成功").show();
+                    //存储用户信息
+                    SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
+                    SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
+                    App.mUserInfo = ((UserInfoRet) tData).getData();
+                    App.isLogin = true;
 
-                Intent intent = new Intent();
-                setResult(1, intent);
-                finish();
+                    Intent intent = new Intent();
+                    setResult(1, intent);
+                    finish();
+                } else {
+                    Toasty.normal(BindPhoneActivity.this, ((UserInfoRet) tData).getMsg()).show();
+                }
             }
         }
     }
 
     @Override
     public void loadDataError(Throwable throwable) {
+        Toasty.normal(BindPhoneActivity.this, "系统错误").show();
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        setResult(1, intent);
+        finish();
+    }
+
     @OnClick(R.id.iv_back)
     void back() {
+        Intent intent = new Intent();
+        setResult(1, intent);
         finish();
     }
 }

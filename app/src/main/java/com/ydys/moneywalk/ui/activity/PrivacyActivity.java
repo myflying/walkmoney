@@ -39,6 +39,8 @@ public class PrivacyActivity extends BaseActivity {
 
     private int showType;
 
+    private String homeUrl;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_privacy;
@@ -60,6 +62,7 @@ public class PrivacyActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             showType = bundle.getInt("show_type", 0);
+            homeUrl = bundle.getString("web_url");
         }
         if (App.initInfo != null) {
             webUrl = showType == 0 ? App.initInfo.getAppConfig().getAgreement() : App.initInfo.getAppConfig().getPrivacy();
@@ -71,6 +74,15 @@ public class PrivacyActivity extends BaseActivity {
                     .createAgentWeb()
                     .ready()
                     .go(webUrl);
+        }else{
+            mTitleTv.setTextColor(ContextCompat.getColor(this, R.color.black));
+            mTitleTv.setText(titles[showType]);
+            mAgentWeb = AgentWeb.with(this)
+                    .setAgentWebParent(mAdLayout, new LinearLayout.LayoutParams(-1, -1))
+                    .useDefaultIndicator()
+                    .createAgentWeb()
+                    .ready()
+                    .go(homeUrl);
         }
     }
 

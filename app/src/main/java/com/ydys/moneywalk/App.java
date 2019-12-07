@@ -7,8 +7,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.StrictMode.VmPolicy.Builder;
+import android.view.View;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -18,6 +20,9 @@ import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 import com.ydys.moneywalk.bean.InitInfo;
 import com.ydys.moneywalk.bean.UserInfo;
+import com.ydys.moneywalk.common.Constants;
+import com.ydys.moneywalk.util.AppContextUtil;
+import com.ydys.moneywalk.util.TTAdManagerHolder;
 
 /**
  * Created by admin on 2017/4/7.
@@ -51,6 +56,8 @@ public class App extends Application {
 
     public static InitInfo initInfo;
 
+    public static boolean isLowDevice = false;
+
     public static App getApp() {
         if (mInstance != null && mInstance instanceof App) {
             return (App) mInstance;
@@ -66,16 +73,32 @@ public class App extends Application {
         super.onCreate();
         applicationContext = this;
 
-//        if(Build.VERSION.SDK_INT >= 24) {
-//            Builder builder = new Builder();
-//            StrictMode.setVmPolicy(builder.build());
-//        }
+        if (Build.VERSION.SDK_INT < 23) {
+            isLowDevice = true;
+        }
 
-        UMConfigure.init(this,"5ddf398e0cafb2d41b00066a",App.agentId,UMConfigure.DEVICE_TYPE_PHONE, "");
+        //获取渠道信息
+        String channel = AppContextUtil.getChannel(this);
+        try {
+            if (!StringUtils.isEmpty(channel)) {
+                JSONObject jsonObject = JSON.parseObject(channel);
+                App.agentId = jsonObject.getString("agent_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Logger.i("read channel--->" + App.agentId);
+
+        UMConfigure.init(this, "5ddf398e0cafb2d41b00066a", App.agentId, UMConfigure.DEVICE_TYPE_PHONE, "");
         // 选用LEGACY_AUTO页面采集模式
         MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
 
         PlatformConfig.setWeixin("wx6b748df21345e04d", "57b47c686a85e63401b3ecb9ae80f5eb");
+
+        //穿山甲SDK初始化
+        //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
+        TTAdManagerHolder.init(this);
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -118,14 +141,16 @@ public class App extends Application {
 
     /**
      * app是否在前台
+     *
      * @return true前台，false后台
      */
-    public boolean isForeground(){
+    public boolean isForeground() {
         return appCount > 0;
     }
 
 
     public void loadUserInfo() {
+        isLogin = SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false);
 //        if (!StringUtils.isEmpty(SPUtils.getInstance().getString(Constants.USER_INFO))) {
 //            Logger.i(SPUtils.getInstance().getString(Constants.USER_INFO));
 //            mUserInfo = JSON.parseObject(SPUtils.getInstance().getString(Constants.USER_INFO), new TypeReference<UserInfo>() {

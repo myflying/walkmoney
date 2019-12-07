@@ -77,6 +77,9 @@ public class InviteFriendActivity extends BaseActivity implements ShareInfoView 
     @BindView(R.id.tv_copy)
     TextView mCopyTv;
 
+    @BindView(R.id.tv_gold_num)
+    TextView mGoldNumTv;
+
     ActRuleDialog actRuleDialog;
 
     private Bitmap waterHeadBitmap;
@@ -133,6 +136,7 @@ public class InviteFriendActivity extends BaseActivity implements ShareInfoView 
             shareType = bundle.getInt("share_type", 1);
         }
         mInviteCodeTv.setText(App.mUserInfo != null ? App.mUserInfo.getId() : "");
+        mGoldNumTv.setText(App.initInfo != null? "获得奖励\n" + App.initInfo.getInviteConfig().getGold() + "金币":"");
         shareInfoPresenterImp = new ShareInfoPresenterImp(this, this);
     }
 
@@ -404,8 +408,18 @@ public class InviteFriendActivity extends BaseActivity implements ShareInfoView 
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent();
+        setResult(1, intent);
+        finish();
+    }
+
     @OnClick(R.id.iv_back)
     void back() {
+        Intent intent = new Intent();
+        setResult(1, intent);
         finish();
     }
 

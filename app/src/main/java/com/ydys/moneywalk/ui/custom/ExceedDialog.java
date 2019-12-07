@@ -23,10 +23,6 @@ public class ExceedDialog extends Dialog implements View.OnClickListener {
 
     LinearLayout mCancelLayout;
 
-    TextView mTotalGoldNumTv;
-
-    TextView mMoneyTv;
-
     public interface ExceedListener {
         void seeVideo();
 
@@ -60,19 +56,12 @@ public class ExceedDialog extends Dialog implements View.OnClickListener {
     private void initView() {
         mSeeVideoLayout = findViewById(R.id.layout_see_video);
         mCancelLayout = findViewById(R.id.layout_cancel);
-        mTotalGoldNumTv = findViewById(R.id.tv_total_gold_num);
-        mMoneyTv = findViewById(R.id.tv_money);
 
         mCloseIv = findViewById(R.id.iv_close);
         mCloseIv.setOnClickListener(this);
         mSeeVideoLayout.setOnClickListener(this);
         mCancelLayout.setOnClickListener(this);
         setCanceledOnTouchOutside(false);
-    }
-
-    public void updateGoldInfo(String gold, String money) {
-        mTotalGoldNumTv.setText(gold);
-        mMoneyTv.setText("≈" + money + "元");
     }
 
     @Override

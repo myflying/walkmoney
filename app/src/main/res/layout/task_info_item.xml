@@ -22,12 +22,12 @@
             android:id="@+id/tv_task_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left|center"
             android:ellipsize="end"
+            android:gravity="left|center"
             android:lines="1"
             android:text="看视频赚金币"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_task_desc"
@@ -64,21 +64,35 @@
                 android:id="@+id/tv_task_gold_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+50"
                 android:layout_marginLeft="2dp"
+                android:text="+50"
                 android:textColor="@color/privacy_text_color"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_get_now"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/task_do_it_bg"
-            android:text="去完成"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:id="@+id/btn_get_now"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:background="@drawable/task_do_it_bg"
+                android:text="去完成"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/get_now_gif"
+                android:layout_width="83dp"
+                android:layout_height="34dp"
+                android:visibility="gone"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/get_now_gif" />
+        </FrameLayout>
     </LinearLayout>
 </LinearLayout>

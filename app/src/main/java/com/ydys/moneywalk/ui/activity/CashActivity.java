@@ -99,7 +99,7 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
 
     UserInfoPresenterImp userInfoPresenterImp;
 
-    private double cashMoney = 0;
+    //private double cashMoney = 0;
 
     private CashMoneyItem cashMoneyItem;
 
@@ -147,7 +147,7 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
                 cashMoneyAdapter.getData().get(position).setSelected(true);
                 mNeedGoldTv.setText(cashMoneyAdapter.getData().get(position).getNeedGold() + "");
                 cashMoneyAdapter.getData().get(lastIndex).setSelected(false);
-                cashMoney = cashMoneyAdapter.getData().get(lastIndex).getAmount();
+                //cashMoney = cashMoneyAdapter.getData().get(lastIndex).getAmount();
                 lastIndex = position;
                 cashMoneyAdapter.notifyDataSetChanged();
             }
@@ -157,13 +157,9 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
 
     @Override
     protected void initData(Bundle savedInstanceState) {
+        userInfoPresenterImp = new UserInfoPresenterImp(this, this);
         cashInitInfoPresenterImp = new CashInitInfoPresenterImp(this, this);
         cashMoneyPresenterImp = new CashMoneyPresenterImp(this, this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         cashInitInfoPresenterImp.cashInitMoney(App.mUserInfo != null ? App.mUserInfo.getId() : "");
     }
 
@@ -181,6 +177,11 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
                 bindPhoneDialog.show();
                 bindPhoneDialog.setDialogInfo("绑定手机提醒", "为了你的账号安全，请先绑定手机号");
             }
+            return;
+        }
+
+        if (cashInitInfo.getUserInfo().getGold() < cashMoneyItem.getNeedGold()) {
+            Toasty.normal(CashActivity.this, "金币余额不足").show();
             return;
         }
 
@@ -250,18 +251,29 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
                     cashMoneyItem = cashItems.get(0);
                     cashItems.get(0).setSelected(true);
                     mNeedGoldTv.setText(cashItems.get(0).getNeedGold() + "");
-                    cashMoney = cashItems.get(0).getAmount();
+                    //cashMoney = cashItems.get(0).getAmount();
                     cashMoneyAdapter.setNewData(cashItems);
                 }
             }
 
             if (tData instanceof UserInfoRet && ((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
                 Toasty.normal(CashActivity.this, "绑定成功").show();
+
                 //存储用户信息
                 SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
                 SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
                 App.mUserInfo = ((UserInfoRet) tData).getData();
                 App.isLogin = true;
+
+                RequestOptions options = new RequestOptions();
+                options.override(SizeUtils.dp2px(18), SizeUtils.dp2px(18));
+                options.error(R.mipmap.def_head);
+                options.placeholder(R.mipmap.def_head);
+                options.transform(new RoundedCornersTransformation(SizeUtils.dp2px(9), 0));
+                Glide.with(this).load(App.mUserInfo.getFace()).apply(options).into(mWxHeadIv);
+                mWxNickNameTv.setText(App.mUserInfo.getNickname());
+                mGotoBindTv.setVisibility(View.GONE);
+                mBindRightIv.setVisibility(View.GONE);
             }
 
             if (tData instanceof CashMoneyRet) {
@@ -357,12 +369,15 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            cashInitInfoPresenterImp.cashInitMoney(App.mUserInfo != null ? App.mUserInfo.getId() : "");
+        }
     }
 
     @Override
     public void commonConfig() {
         Intent intent = new Intent(this, BindPhoneActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     @Override

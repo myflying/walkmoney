@@ -28,6 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/tv_gold_date"
             android:text="阶段步数领取"
+            android:layout_marginLeft="10dp"
             android:textColor="@color/common_gray"
             android:textSize="14sp" />
 

@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class FillInCodeInfoRet extends ResultInfo {
 
-    private List<FillInCodeInfo> data;
+    private FillInCodeInfo data;
 
-    public List<FillInCodeInfo> getData() {
+    public FillInCodeInfo getData() {
         return data;
     }
 
-    public void setData(List<FillInCodeInfo> data) {
+    public void setData(FillInCodeInfo data) {
         this.data = data;
     }
 }

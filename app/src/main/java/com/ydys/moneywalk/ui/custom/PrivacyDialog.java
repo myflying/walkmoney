@@ -91,11 +91,13 @@ public class PrivacyDialog extends Dialog implements View.OnClickListener {
             case R.id.tv_xieyi:
                 Intent intent = new Intent(mContext, PrivacyActivity.class);
                 intent.putExtra("show_type", 0);
+                intent.putExtra("web_url","http:\\/\\/zlb.zhanyu55.com\\/html\\/service.html");
                 mContext.startActivity(intent);
                 break;
             case R.id.tv_privacy:
                 Intent intent1 = new Intent(mContext, PrivacyActivity.class);
                 intent1.putExtra("show_type", 1);
+                intent1.putExtra("web_url","http:\\/\\/zlb.zhanyu55.com\\/html\\/privacy.html");
                 mContext.startActivity(intent1);
                 break;
             default:

@@ -28,9 +28,9 @@ public class BMIDataActivity extends BaseActivity {
     @BindView(R.id.tv_bmi_desc)
     TextView mBmiDescTv;
 
-    String bmiHeight;
+    double bmiHeight;
 
-    String bmiWeight;
+    double bmiWeight;
 
     private double bmiData;
 
@@ -61,26 +61,12 @@ public class BMIDataActivity extends BaseActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            bmiHeight = bundle.getString("bmi_height");
-            bmiWeight = bundle.getString("bmi_weight");
+            bmiHeight = bundle.getInt("bmi_height");
+            bmiWeight = bundle.getInt("bmi_weight");
         }
 
         try {
-            double tempHeight = 0;
-            double tempWeight = 0;
-            if (!StringUtils.isEmpty(bmiHeight) && bmiHeight.contains("厘米")) {
-                String temp = bmiHeight.substring(0, bmiHeight.indexOf("厘米"));
-                if (!StringUtils.isEmpty(temp)) {
-                    tempHeight = Double.parseDouble(temp);
-                }
-            }
-            if (!StringUtils.isEmpty(bmiWeight) && bmiWeight.contains("kg")) {
-                String tempH = bmiWeight.substring(0, bmiWeight.indexOf("kg"));
-                if (!StringUtils.isEmpty(tempH)) {
-                    tempWeight = Double.parseDouble(tempH);
-                }
-            }
-            bmiData = tempWeight / ((tempHeight / 100) * (tempHeight / 100));
+            bmiData = bmiWeight / ((bmiHeight / 100) * (bmiHeight / 100));
             Logger.i("bmi data--->" + bmiData);
         } catch (NumberFormatException e) {
             e.printStackTrace();

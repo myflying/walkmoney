@@ -5,5 +5,5 @@ package com.ydys.moneywalk.presenter;
  */
 
 public interface TaskInfoPresenter {
-    void taskList(String userId);
+    void taskList(String userId,int isLogin);
 }

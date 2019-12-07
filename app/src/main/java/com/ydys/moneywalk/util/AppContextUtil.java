@@ -14,6 +14,10 @@ import java.util.zip.ZipFile;
 public class AppContextUtil {
     private static Context sContext;
 
+    public static final int DELAY = 1000;
+
+    private static long lastClickTime = 0;
+
     private AppContextUtil() {
 
     }
@@ -107,5 +111,20 @@ public class AppContextUtil {
             result.append(line + "\n");
         }
         return result.toString();
+    }
+
+    /**
+     * 判断是否是快速点击
+     *
+     * @return
+     */
+    public static boolean isNotFastClick() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastClickTime > DELAY) {
+            lastClickTime = currentTime;
+            return true;
+        } else {
+            return false;
+        }
     }
 }

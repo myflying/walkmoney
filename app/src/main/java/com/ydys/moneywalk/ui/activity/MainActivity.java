@@ -150,12 +150,10 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
         }
     }
 
-
-    //
-
+    //读写本地存储权限
     @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     void showReadStorage() {
-        readPhoneTask();
+        MainActivityPermissionsDispatcher.showReadLocationWithPermissionCheck(this);
     }
 
     @OnPermissionDenied(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -184,6 +182,39 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
         }
     }
 
+
+    //读取地理位置权限
+    @NeedsPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+    void showReadLocation() {
+        readPhoneTask();
+    }
+
+    @OnPermissionDenied(Manifest.permission.ACCESS_COARSE_LOCATION)
+    void onReadLocationDenied() {
+        //Toast.makeText(this, R.string.permission_storage_denied, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        }
+    }
+
+    @OnShowRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
+    void showRationaleForReadLocation(PermissionRequest request) {
+        //Toast.makeText(this, R.string.permission_read_phone_rationale, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        } else {
+            request.proceed();
+        }
+    }
+
+    @OnNeverAskAgain(Manifest.permission.ACCESS_COARSE_LOCATION)
+    void onReadLocationNeverAskAgain() {
+        //Toast.makeText(this, R.string.permission_storage_never_ask_again, Toast.LENGTH_SHORT).show();
+        if (permissionDialog != null && !permissionDialog.isShowing()) {
+            permissionDialog.show();
+        }
+    }
+
     @Override
     protected void initViews() {
         mFragmentList.add(new HomeFragment());
@@ -202,9 +233,9 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
                 Logger.i("tab pos --->" + pos);
                 viewPager.setCurrentItem(pos);
                 if (pos == 0) {
-//                    if (mFragmentList.get(pos) instanceof HomeFragment) {
-//                        HomeFragment.
-//                    }
+                    if (mFragmentList.get(pos) instanceof HomeFragment) {
+                        ((HomeFragment) mFragmentList.get(pos)).setTopViewBgColor();
+                    }
                 }
                 if (pos == 1) {
                     if (mFragmentList.get(pos) instanceof MakeMoneyFragment) {
@@ -276,7 +307,7 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
 
     public void readPhoneTask() {
         Logger.i("readPhoneTask--->" + PhoneUtils.getIMEI());
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), "10000", "yangcheng");
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1");
     }
 
     private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {

@@ -23,7 +23,7 @@ public class CashMoneyPresenterImp extends BasePresenterImp<IBaseView, CashMoney
     }
 
     @Override
-    public void cashMoney(String userId, double money, int isNewPer) {
+    public void cashMoney(String userId, String money, int isNewPer) {
         cashMoneyModelImp.cashMoney(userId, money, isNewPer, this);
     }
 }

@@ -35,7 +35,7 @@ public class CashMoneyModelImp extends BaseModel implements CashMoneyModel<CashM
     }
 
     @Override
-    public void cashMoney(String userId, double money, int isNewPer, IBaseRequestCallBack<CashMoneyRet> iBaseRequestCallBack) {
+    public void cashMoney(String userId, String money, int isNewPer, IBaseRequestCallBack<CashMoneyRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
             params.put("user_id", userId);

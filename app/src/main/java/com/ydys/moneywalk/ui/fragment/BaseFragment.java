@@ -1,5 +1,6 @@
 package com.ydys.moneywalk.ui.fragment;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,6 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
         if (getActivity() instanceof BaseActivity) {
             baseActivity = (BaseActivity) getActivity();
         }

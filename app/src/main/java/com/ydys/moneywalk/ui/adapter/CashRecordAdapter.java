@@ -9,7 +9,9 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.CashMoneyInfo;
 import com.ydys.moneywalk.bean.CashRecordInfo;
+import com.ydys.moneywalk.util.MatrixUtils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -25,7 +27,7 @@ public class CashRecordAdapter extends BaseQuickAdapter<CashRecordInfo, BaseView
     @Override
     protected void convert(BaseViewHolder holder, CashRecordInfo temp) {
         holder.setText(R.id.tv_cash_date, temp.getAddTime())
-                .setText(R.id.tv_cash_money, "+" + temp.getMoney())
+                .setText(R.id.tv_cash_money, "+" + MatrixUtils.getPrecisionMoney(temp.getMoney()))
                 .setText(R.id.tv_cash_state, temp.getStatus() == 1 ? "已到账" : "提现中");
         holder.setTextColor(R.id.tv_cash_state, ContextCompat.getColor(mContext, temp.getStatus() == 1 ? R.color.wx_login_color : R.color.gold_num_color));
     }

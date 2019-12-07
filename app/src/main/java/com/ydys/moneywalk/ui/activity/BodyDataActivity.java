@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -20,11 +21,16 @@ import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.BodyInfo;
 import com.ydys.moneywalk.bean.BodyInfoRet;
+import com.ydys.moneywalk.bean.MessageEvent;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.BodyInfoPresenterImp;
 import com.ydys.moneywalk.presenter.Presenter;
+import com.ydys.moneywalk.util.MatrixUtils;
 import com.ydys.moneywalk.view.BodyInfoView;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +71,9 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
 
     @BindView(R.id.tv_step_num)
     TextView mStepNumTv;
+
+    @BindView(R.id.tv_bmi_data)
+    TextView mBmiDataTv;
 
     private BodyInfo bodyInfo;
 
@@ -192,18 +201,18 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
 
     @OnClick(R.id.layout_bmi)
     void bmiData() {
-//        if (StringUtils.isEmpty(bodyInfo.getHeight())) {
-//            ToastUtils.showLong("请先填写身高");
-//            return;
-//        }
-//        if (StringUtils.isEmpty(bodyInfo.getWeight())) {
-//            ToastUtils.showLong("请先填写身高");
-//            return;
-//        }
+        if (bodyInfo.getHeight() == 0) {
+            ToastUtils.showLong("请先填写身高");
+            return;
+        }
+        if (bodyInfo.getWeight() == 0) {
+            ToastUtils.showLong("请先填写身高");
+            return;
+        }
 
         Intent intent = new Intent(this, BMIDataActivity.class);
-        intent.putExtra("bmi_height", "165厘米");
-        intent.putExtra("bmi_weight", "70kg");
+        intent.putExtra("bmi_height", bodyInfo.getHeight());
+        intent.putExtra("bmi_weight", bodyInfo.getWeight());
         startActivity(intent);
     }
 
@@ -212,26 +221,28 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.tv_sex_config:
                 String tempStr = sexWheelView.getSelectionItem().toString();
-                Logger.i("choose txt--->" + tempStr);
+                Logger.i("choose txt--->" + tempStr + "---selection--->" + sexWheelView.getSelection());
                 if (commonDialog != null && commonDialog.isShowing()) {
                     commonDialog.dismiss();
                 }
                 switch (chooseIndex) {
                     case 0:
-                        mSexTv.setText(tempStr);
+                        //mSexTv.setText(tempStr);
                         tempStr = "男".equals(tempStr) ? "1" : "2";
                         break;
                     case 1:
-                        mAgeTv.setText(tempStr);
+                        //mAgeTv.setText(tempStr);
                         break;
                     case 2:
-                        mHeightTv.setText(tempStr);
+                        tempStr = tempStr.substring(0, tempStr.indexOf("厘米"));
+                        //mHeightTv.setText(tempStr);
                         break;
                     case 3:
-                        mWeightTv.setText(tempStr);
+                        tempStr = tempStr.substring(0, tempStr.indexOf("kg"));
+                        //mWeightTv.setText(tempStr);
                         break;
                     case 4:
-                        mStepNumTv.setText(tempStr);
+                        //mStepNumTv.setText(tempStr);
                         break;
                     default:
                         break;
@@ -270,11 +281,27 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
                 ToastUtils.showLong("保存成功");
             }
             if (tData != null) {
-                mSexTv.setText(bodyInfo.getSex() == 1 ? "男" : "女");
-                mAgeTv.setText(bodyInfo.getAge() + "");
-                mHeightTv.setText(bodyInfo.getHeight());
-                mWeightTv.setText(bodyInfo.getWeight());
-                mStepNumTv.setText(bodyInfo.getTarget_step() + "");
+                String sex = "未知";
+                if (bodyInfo.getSex() > 0) {
+                    sex = bodyInfo.getSex() == 1 ? "男" : "女";
+                }
+                mSexTv.setText(sex);
+                mAgeTv.setText(bodyInfo.getAge() == 0 ? "" : bodyInfo.getAge() + "");
+                mHeightTv.setText(bodyInfo.getHeight() == 0 ? "" : bodyInfo.getHeight() + "厘米");
+                mWeightTv.setText(bodyInfo.getWeight() == 0 ? "" : bodyInfo.getWeight() + "kg");
+                mStepNumTv.setText(bodyInfo.getTarget_step() == 0 ? "" : bodyInfo.getTarget_step() + "");
+
+                if (bodyInfo.getHeight() > 0 && bodyInfo.getWeight() > 0) {
+                    double bmiData = (double) bodyInfo.getWeight() / (((double) bodyInfo.getHeight() / 100) * ((double) bodyInfo.getHeight() / 100));
+                    mBmiDataTv.setText(MatrixUtils.getPrecisionMoney(bmiData));
+                }
+
+                if (bodyInfo.getWeight() > 0 && App.initInfo != null) {
+                    App.initInfo.getUserStepData().setWeight(bodyInfo.getWeight());
+
+                    MessageEvent messageEvent = new MessageEvent("update_weight");
+                    EventBus.getDefault().post(messageEvent);
+                }
             }
         } else {
             if (isUpdate) {

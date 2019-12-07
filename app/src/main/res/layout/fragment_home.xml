@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <View
@@ -169,7 +170,10 @@
                     android:id="@+id/layout_invite"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:layout_margin="9dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="6dp"
                     android:background="@mipmap/share_friend_bg"
                     android:gravity="left|center">
 
@@ -183,12 +187,34 @@
                         android:src="@mipmap/laba" />
 
                     <TextView
+                        android:id="@+id/tv_share_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="12dp"
                         android:layout_toRightOf="@+id/iv_left_icon"
                         android:text="@string/share_friend_txt"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_share_gold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="2dp"
+                        android:layout_toRightOf="@+id/tv_share_txt"
+                        android:text="2000"
+                        android:textColor="@color/privacy_text_color"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="2dp"
+                        android:layout_toRightOf="@+id/tv_share_gold"
+                        android:text="@string/share_friend_unit"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
@@ -238,6 +264,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
                         android:gravity="center">
 
                         <com.youth.banner.Banner

@@ -94,6 +94,12 @@ public class MyWalletActivity extends BaseActivity implements MyWalletInfoView {
         startActivity(intent);
     }
 
+    @OnClick(R.id.layout_cash_record)
+    void cashRecord() {
+        Intent intent = new Intent(this, CashRecordActivity.class);
+        startActivity(intent);
+    }
+
     @OnClick(R.id.iv_back)
     void back() {
         finish();

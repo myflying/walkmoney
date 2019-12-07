@@ -39,6 +39,10 @@ public class CashRecordActivity extends BaseActivity implements CashRecordInfoVi
     @BindView(R.id.cash_record_list_view)
     RecyclerView mCashRecordListView;
 
+
+    @BindView(R.id.layout_no_data)
+    LinearLayout mNoDataLayout;
+
     CashRecordAdapter cashRecordAdapter;
 
     int currentPage = 1;
@@ -124,8 +128,11 @@ public class CashRecordActivity extends BaseActivity implements CashRecordInfoVi
     public void loadDataSuccess(CashRecordInfoRet tData) {
         if (tData != null && tData.getCode() == Constants.SUCCESS) {
             if (currentPage == 1) {
-                if (tData.getData() != null) {
+                if (tData.getData() != null && tData.getData().size() > 0) {
                     cashRecordAdapter.setNewData(tData.getData());
+                } else {
+                    mCashRecordListView.setVisibility(View.GONE);
+                    mNoDataLayout.setVisibility(View.VISIBLE);
                 }
             } else {
                 cashRecordAdapter.addData(tData.getData());
@@ -136,11 +143,19 @@ public class CashRecordActivity extends BaseActivity implements CashRecordInfoVi
             } else {
                 cashRecordAdapter.loadMoreEnd();
             }
+        } else {
+            if (currentPage == 1) {
+                mCashRecordListView.setVisibility(View.GONE);
+                mNoDataLayout.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     @Override
     public void loadDataError(Throwable throwable) {
-
+        if (currentPage == 1) {
+            mCashRecordListView.setVisibility(View.GONE);
+            mNoDataLayout.setVisibility(View.VISIBLE);
+        }
     }
 }

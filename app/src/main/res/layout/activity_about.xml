@@ -46,10 +46,11 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_version_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="V1.1.0"
+                android:text="V1.0.0"
                 android:textColor="@color/common_title_color"
                 android:textSize="14sp" />
         </LinearLayout>

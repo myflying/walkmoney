@@ -25,6 +25,8 @@ import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.orhanobut.logger.Logger;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.base.IBaseView;
@@ -66,6 +68,8 @@ public class SettingActivity extends BaseActivity implements CommonDialog.Common
 
     private ProgressDialog progressDialog = null;
 
+    private UMShareAPI mShareAPI = null;
+
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -101,7 +105,7 @@ public class SettingActivity extends BaseActivity implements CommonDialog.Common
     @Override
     protected void initViews() {
         FileDownloader.setup(this);
-
+        mShareAPI = UMShareAPI.get(this);
         mTitleTv.setTextColor(ContextCompat.getColor(this, R.color.black));
         mTitleTv.setText("设置");
 
@@ -188,11 +192,13 @@ public class SettingActivity extends BaseActivity implements CommonDialog.Common
 
     @Override
     public void commonConfig() {
-        App.mUserInfo = null;
-        App.isLogin = false;
-        SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(""));
+        SPUtils.getInstance().put(Constants.USER_INFO, "");
         SPUtils.getInstance().remove(Constants.USER_INFO);
         SPUtils.getInstance().put(Constants.LOCAL_LOGIN, false);
+        App.mUserInfo = null;
+        App.isLogin = false;
+
+        mShareAPI.deleteOauth(this, SHARE_MEDIA.WEIXIN, null);
         finish();
     }
 
