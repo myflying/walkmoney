@@ -59,4 +59,6 @@ public class Constants {
     public static final String MY_BANNER_CODE_ID = "938698517";
 
     public static final String NEW_STEP_NUM = "new_step_num";
+
+    public static final String EVERY_DAY_START = "every_day_start";
 }

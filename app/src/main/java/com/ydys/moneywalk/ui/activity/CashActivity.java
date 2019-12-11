@@ -248,9 +248,10 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
 
                 List<CashMoneyItem> cashItems = ((CashInitInfoRet) tData).getData().getCashMoneyItems();
                 if (cashItems != null && cashItems.size() > 0) {
-                    cashMoneyItem = cashItems.get(0);
-                    cashItems.get(0).setSelected(true);
-                    mNeedGoldTv.setText(cashItems.get(0).getNeedGold() + "");
+                    lastIndex = 0;
+                    cashMoneyItem = cashItems.get(lastIndex);
+                    cashItems.get(lastIndex).setSelected(true);
+                    mNeedGoldTv.setText(cashItems.get(lastIndex).getNeedGold() + "");
                     //cashMoney = cashItems.get(0).getAmount();
                     cashMoneyAdapter.setNewData(cashItems);
                 }
@@ -370,6 +371,7 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
+            Logger.i("reload list--->");
             cashInitInfoPresenterImp.cashInitMoney(App.mUserInfo != null ? App.mUserInfo.getId() : "");
         }
     }

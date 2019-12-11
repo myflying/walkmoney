@@ -211,11 +211,20 @@ public class BindService extends Service implements SensorEventListener {
                 //SPUtils.getInstance().put(todayDate, nowBuSu);
                 SPUtils.getInstance().put(Constants.GET_SYS_STEP, hasStepCount);
             } else {
-                Logger.i("系统步数--->" + tempStep + "---上次记录的最后的步数--->" + hasStepCount);
-                int thisStepCount = tempStep - hasStepCount;
-                nowBuSu += (thisStepCount);
-                hasStepCount = tempStep;
-                SPUtils.getInstance().put(Constants.GET_SYS_STEP, hasStepCount);
+                if (SPUtils.getInstance().getBoolean(Constants.EVERY_DAY_START, false)) {
+                    Logger.i("系统步数--->" + tempStep + "---每天第一次打开APP，同步--->" + hasStepCount);
+                    hasStepCount = tempStep;
+                    //打开时同步已走的步数与系统步数一致
+                    nowBuSu = 0;
+                    SPUtils.getInstance().put(Constants.EVERY_DAY_START,false);
+                    SPUtils.getInstance().put(Constants.GET_SYS_STEP, hasStepCount);
+                } else {
+                    Logger.i("系统步数--->" + tempStep + "---上次记录的最后的步数--->" + hasStepCount);
+                    int thisStepCount = tempStep - hasStepCount;
+                    nowBuSu += (thisStepCount);
+                    hasStepCount = tempStep;
+                    SPUtils.getInstance().put(Constants.GET_SYS_STEP, hasStepCount);
+                }
             }
 
         }

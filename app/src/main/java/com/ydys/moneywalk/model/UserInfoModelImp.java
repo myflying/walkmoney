@@ -80,12 +80,13 @@ public class UserInfoModelImp extends BaseModel implements UserInfoModel<UserInf
     }
 
     @Override
-    public void imeiLogin(String imei, String agentId, String siteId, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
+    public void imeiLogin(String imei, String agentId, String siteId, int stepNum,IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
             params.put("imei", imei);
             params.put("agent_id",agentId);
             params.put("site_id",siteId);
+            params.put("step_num",stepNum + "");
         } catch (JSONException e) {
             e.printStackTrace();
         }

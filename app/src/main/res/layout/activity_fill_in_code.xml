@@ -99,9 +99,9 @@
 
             <Button
                 android:id="@+id/btn_commit_code"
-                android:layout_width="233dp"
-                android:layout_height="38dp"
-                android:background="@mipmap/cash_btn_bg"
+                android:layout_width="296dp"
+                android:layout_height="44dp"
+                android:background="@mipmap/phone_login_bg"
                 android:text="立即提交"
                 android:textColor="@color/white"
                 android:textSize="18sp" />

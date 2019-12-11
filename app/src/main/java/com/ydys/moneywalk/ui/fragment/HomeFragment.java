@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,9 +34,13 @@ import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.FilterWord;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
@@ -103,6 +108,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefreshLayout.OnRefreshListener, LoginDialog.LoginListener, ReceiveGoldDialog.GoldDialogListener, ReceiveDoubleGoldDialog.GoldDoubleDialogListener, ExceedDialog.ExceedListener, VersionDialog.VersionListener {
 
@@ -168,8 +174,10 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     @BindView(R.id.tv_calorie)
     TextView mCalorieTv;
 
-    @BindView(R.id.banner)
-    Banner mBanner;
+    //    @BindView(R.id.banner)
+//    Banner mBanner;
+    @BindView(R.id.iv_banner)
+    ImageView mBannerIv;
 
     @BindView(R.id.btn_get_gold)
     Button mGetGoldBtn;
@@ -255,6 +263,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
     private View adView;
 
+    private boolean isClickStage;
+
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -298,8 +308,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                 case 10:
                     mThreeGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
                     break;
-                    default:
-                        break;
+                default:
+                    break;
             }
         }
     };
@@ -414,33 +424,40 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         btnSexAnimatorSet.start();
 
 
-        List<Integer> bannerList = new ArrayList<>();
-        bannerList.add(R.mipmap.home_banner);
-        //设置图片加载器
-        mBanner.setImageLoader(new GlideImageLoader());
-        //设置图片集合
-        mBanner.setImages(bannerList);
-        //banner设置方法全部调用完毕时最后调用
-        mBanner.start();
+//        List<Integer> bannerList = new ArrayList<>();
+//        bannerList.add(R.mipmap.bt);
+//        //设置图片加载器
+//        mBanner.setImageLoader(new GlideImageLoader());
+//        //设置图片集合
+//        mBanner.setImages(bannerList);
+//        //banner设置方法全部调用完毕时最后调用
+//        mBanner.start();
+//        mBanner.setOnBannerListener(new OnBannerListener() {
+//            @Override
+//            public void OnBannerClick(int position) {
+//
+//            }
+//        });
 
-        mBanner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                if (position == 0) {
-                    if (App.mUserInfo == null || !SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
-                        if (loginDialog != null && !loginDialog.isShowing()) {
-                            loginDialog.show();
-                        }
-                    } else {
-                        Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
-                        intent.putExtra("share_type", 1);
-                        startActivity(intent);
-                    }
-                }
-            }
-        });
+        RequestOptions options = new RequestOptions();
+        options.override(ScreenUtils.getScreenWidth() - SizeUtils.dp2px(24), SizeUtils.dp2px(116));
+        options.transform(new RoundedCornersTransformation(SizeUtils.dp2px(10), 0));
+        Glide.with(getActivity()).load(R.mipmap.bt).apply(options).into(mBannerIv);
 
         //PermissionUtils.launchAppDetailsSettings();
+    }
+
+    @OnClick(R.id.iv_banner)
+    void bannerClick() {
+        if (App.mUserInfo == null || !SPUtils.getInstance().getBoolean(Constants.LOCAL_LOGIN, false)) {
+            if (loginDialog != null && !loginDialog.isShowing()) {
+                loginDialog.show();
+            }
+        } else {
+            Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+            intent.putExtra("share_type", 1);
+            startActivity(intent);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -458,10 +475,6 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                     if (App.initInfo != null && App.initInfo.getUserStepData().getWeight() > 0) {
                         WEIGHT = App.initInfo.getUserStepData().getWeight();
                     }
-
-                    Message message = Message.obtain();
-                    message.what = 4;
-                    mHandler.sendMessage(message);
 
                     //初始化首页数据
                     homeDataInfoPresenterImp.initHomeData();
@@ -561,6 +574,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                 mGetGoldBtn.setBackgroundResource(R.mipmap.get_gold_btn_bg);
             }
         } else {
+            receiveGoldTitleIndex = stepInStageNum();
             mGetGoldBtn.setText("目标完成");
             mGetGoldBtn.setBackgroundResource(R.mipmap.continue_bg);
         }
@@ -571,10 +585,15 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
         mStepNumProgress.updateStateTitle(receiveTitles, receiveGoldTitleIndex);
 
+        int totalStepNum = currentStepNum;
+        if (currentStepNum > 20000) {
+            totalStepNum = 20000;
+        }
+
         //设置步数金币的显示/隐藏，数值
-        int getGoldNum = (currentStepNum - isExchangeStepNum) / 10;
+        int getGoldNum = (totalStepNum - isExchangeStepNum) / 10;
         //总步数 < 20000，且未领取的的步数 > 10
-        if (currentStepNum < 20000 && getGoldNum > 0) {
+        if (getGoldNum > 0) {
             mFourGoldLayout.setVisibility(View.VISIBLE);
             mStepGoldNumTv.setText(getGoldNum + "");
         } else {
@@ -673,6 +692,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 //        }
 
         if (SPUtils.getInstance().getInt(Constants.IS_GET_STAGE + "_" + todayDate) <= tempIndex) {
+            isClickStage = true;
+
             int takeGold = homeDataInfo != null ? homeDataInfo.getStageTaskInfo().getList().get(tempIndex).getGold() : 0;
             takeGoldNum(3, takeGold + "", tempIndex + 1);
 
@@ -723,23 +744,25 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
             //当天有步数记录
             if (App.userTodayStep > 0 || SPUtils.getInstance().getInt(todayDate + "_" + Constants.NEW_STEP_NUM) > 0) {
+                SPUtils.getInstance().put(Constants.EVERY_DAY_START, false);
+
                 todayStartStep = SPUtils.getInstance().getInt(todayDate + "_random_step", 0);
-                if (todayStartStep > 0) {
-                    int tempWalkNum = SPUtils.getInstance().getInt(todayDate, 0);
-                    if (tempWalkNum == 0) {
-                        currentStepNum = todayStartStep + SPUtils.getInstance().getInt(todayDate + "_" + Constants.NEW_STEP_NUM);
-                    } else {
-                        currentStepNum = todayStartStep + tempWalkNum;
-                    }
+                int tempWalkNum = SPUtils.getInstance().getInt(todayDate, 0);
+                currentStepNum = todayStartStep + tempWalkNum;
+
+                if (currentStepNum > 0) {
                     //同步步数
                     sendStepToServer(currentStepNum);
                 } else {
                     todayStartStep = App.userTodayStep;
-                    currentStepNum = todayStartStep;
+                    currentStepNum = App.userTodayStep;
                 }
+
             } else {
                 todayStartStep = RandomUtils.nextInt(TODAY_MIN, TODAY_MAX);
                 Logger.i("产生随机步数--->" + todayStartStep);
+                //标记当天第一次产生随机步数
+                SPUtils.getInstance().put(Constants.EVERY_DAY_START, true);
                 //当天的初始化步数
                 SPUtils.getInstance().put(todayDate + "_random_step", todayStartStep);
                 currentStepNum = todayStartStep;
@@ -763,6 +786,8 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
             bindService.registerCallback(new UpdateUiCallBack() {
                 @Override
                 public void updateUi(int stepCount) {
+                    SPUtils.getInstance().put(Constants.EVERY_DAY_START, false);
+
                     Logger.i("current step --->" + stepCount);
                     currentStepNum = todayStartStep + stepCount;
                     isExchangeStepNum = SPUtils.getInstance().getInt(todayDate + Constants.CURRENT_DAY_EXCHANGE_STEP, 0);
@@ -824,7 +849,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         if (SPUtils.getInstance().getBoolean("one_over", false)) {
             mOneGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         } else {
-            oneBubbleGoldNum();
+            oneBubbleGoldNum(true);
         }
     }
 
@@ -832,7 +857,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         if (SPUtils.getInstance().getBoolean("two_over", false)) {
             mTwoGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         } else {
-            twoBubbleGoldNum();
+            twoBubbleGoldNum(true);
         }
     }
 
@@ -840,7 +865,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         if (SPUtils.getInstance().getBoolean("three_over", false)) {
             mThreeGoldTv.setVisibility(goldCanGetNum > 0 ? View.VISIBLE : View.GONE);
         } else {
-            threeBubbleGoldNum();
+            threeBubbleGoldNum(true);
         }
     }
 
@@ -885,7 +910,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
             }
             return;
         }
-        oneBubbleGoldNum();
+        oneBubbleGoldNum(false);
     }
 
     @OnClick(R.id.tv_gold_two)
@@ -897,7 +922,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
             }
             return;
         }
-        twoBubbleGoldNum();
+        twoBubbleGoldNum(false);
     }
 
     @OnClick(R.id.tv_gold_three)
@@ -909,10 +934,10 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
             }
             return;
         }
-        threeBubbleGoldNum();
+        threeBubbleGoldNum(false);
     }
 
-    void oneBubbleGoldNum() {
+    void oneBubbleGoldNum(boolean isStart) {
         long diffSecond;
         if (SPUtils.getInstance().getLong("one_gold_get_date", 0L) > 0) {
             if (SPUtils.getInstance().getBoolean("one_over", false)) {
@@ -930,9 +955,9 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         Logger.i("间隔的时间--->" + diffSecond);
 
         if (diffSecond > 0) {
-
-            takeGoldNum(1, mOneGoldTv.getText().toString(), 0);
-
+            if (!isStart) {
+                takeGoldNum(1, mOneGoldTv.getText().toString(), 0);
+            }
             SPUtils.getInstance().put("one_over", false);
             mOneGoldTv.setVisibility(View.GONE);
             //翻倍看视频
@@ -958,7 +983,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         }
     }
 
-    void twoBubbleGoldNum() {
+    void twoBubbleGoldNum(boolean isStart) {
         long diffSecond;
 
         if (SPUtils.getInstance().getLong("two_gold_get_date", 0L) > 0) {
@@ -977,7 +1002,9 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         Logger.i("间隔的时间--->" + diffSecond);
 
         if (diffSecond > 0) {
-            takeGoldNum(1, mTwoGoldTv.getText().toString(), 0);
+            if (!isStart) {
+                takeGoldNum(1, mTwoGoldTv.getText().toString(), 0);
+            }
 
             SPUtils.getInstance().put("two_over", false);
             mTwoGoldTv.setVisibility(View.GONE);
@@ -1004,7 +1031,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         }
     }
 
-    void threeBubbleGoldNum() {
+    void threeBubbleGoldNum(boolean isStart) {
         long diffSecond;
 
         if (SPUtils.getInstance().getLong("three_gold_get_date", 0L) > 0) {
@@ -1023,7 +1050,9 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         Logger.i("间隔的时间--->" + diffSecond);
 
         if (diffSecond > 0) {
-            takeGoldNum(1, mThreeGoldTv.getText().toString(), 0);
+            if (!isStart) {
+                takeGoldNum(1, mThreeGoldTv.getText().toString(), 0);
+            }
 
             SPUtils.getInstance().put("three_over", false);
             mThreeGoldTv.setVisibility(View.GONE);
@@ -1102,6 +1131,10 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
 
                     mStepNumProgress.updateStateTitle(receiveTitles, receiveGoldTitleIndex);
 
+                    Message message = Message.obtain();
+                    message.what = 4;
+                    mHandler.sendMessage(message);
+
                     startStepService();
                 }
             }
@@ -1133,6 +1166,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                             int exchangeStep = Integer.parseInt(mStepGoldNumTv.getText().toString()) * homeDataInfo.getStepTaskInfo().getStepNum();
                             receiveDoubleGoldDialog.updateGoldByStep(currentTakeGold, takeGoldInfo.getGold() + "", "≈" + MatrixUtils.getPrecisionMoney(takeGoldInfo.getAmount()) + "元", exchangeStep, adView);
                         } else {
+
                             //不可翻倍
                             if (receiveGoldDialog == null) {
                                 receiveGoldDialog = new ReceiveGoldDialog(getActivity(), R.style.gold_dialog);
@@ -1141,11 +1175,12 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                             receiveGoldDialog.show();
                             receiveGoldDialog.updateGoldInfo(currentTakeGold, takeGoldInfo.getGold() + "", "≈" + MatrixUtils.getPrecisionMoney(takeGoldInfo.getAmount()) + "元", adView);
 
-                            if (receiveGoldTitleIndex == 4) {
+                            if (receiveGoldTitleIndex == 4 && isClickStage) {
                                 mGetGoldBtn.setText("目标完成");
                                 mGetGoldBtn.setBackgroundResource(R.mipmap.continue_bg);
                                 App.initInfo.setStageTaskFinish(1);
                             }
+                            isClickStage = false;
                         }
 
                         loadExpressAd(Constants.BANNER_CODE_ID);
@@ -1156,6 +1191,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
                         ToastUtils.showLong(((TakeGoldInfoRet) tData).getMsg());
                     }
                 } else {
+                    isClickStage = false;
                     ToastUtils.showLong(((TakeGoldInfoRet) tData).getMsg());
                 }
             }
@@ -1212,7 +1248,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-
+        isClickStage = false;
         Logger.e("error--->" + throwable.getMessage());
         randomBubbleGoldNum();
     }
@@ -1335,6 +1371,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
     public void seeVideo() {
         //ToastUtils.showLong("模拟视频看完，领取金币成功");
         if (mttRewardVideoAd != null) {
+            mFourGoldLayout.setVisibility(View.GONE);
             goldType = 2;
             //step6:在获取到广告后展示
             mttRewardVideoAd.showRewardVideoAd(getActivity(), TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");

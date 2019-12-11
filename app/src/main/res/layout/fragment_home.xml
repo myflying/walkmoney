@@ -171,8 +171,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginRight="3dp"
                     android:layout_marginBottom="6dp"
                     android:background="@mipmap/share_friend_bg"
                     android:gravity="left|center">
@@ -267,10 +267,17 @@
                         android:layout_marginBottom="24dp"
                         android:gravity="center">
 
-                        <com.youth.banner.Banner
-                            android:id="@+id/banner"
-                            android:layout_width="330dp"
-                            android:layout_height="116dp" />
+                        <ImageView
+                            android:id="@+id/iv_banner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@mipmap/bt" />
+                        <!--                        <com.youth.banner.Banner-->
+                        <!--                            android:id="@+id/banner"-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginLeft="12dp"-->
+                        <!--                            android:layout_marginRight="12dp" />-->
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>

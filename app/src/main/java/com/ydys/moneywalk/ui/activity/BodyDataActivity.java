@@ -57,6 +57,9 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
 
     int chooseIndex;
 
+    @BindView(R.id.tv_title)
+    TextView mTitleTv;
+
     @BindView(R.id.tv_sex)
     TextView mSexTv;
 
@@ -97,6 +100,8 @@ public class BodyDataActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void initViews() {
+        mTitleTv.setText("身体数据");
+
         wheelViewStyle = new WheelView.WheelViewStyle();
         wheelViewStyle.textSize = 16;
         wheelViewStyle.selectedTextSize = 16;

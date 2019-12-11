@@ -58,6 +58,10 @@ public class TaskInfoAdapter extends BaseQuickAdapter<TaskInfo, BaseViewHolder> 
 
         if (taskInfo.getTaskType().equals("target_num") && taskInfo.getNum() > 0) {
             tempTitle = taskInfo.getTitle() + "(<font color='#ff5555'>" + App.newStepNum + "</font>/" + taskInfo.getNum() + ")";
+
+            if (App.mUserInfo == null || (!App.isLogin && App.mUserInfo != null && App.mUserInfo.getIsBind() == 1) || taskInfo.getState() == 3) {
+                tempTitle = taskInfo.getTitle();
+            }
         }
 
         holder.setText(R.id.tv_task_title, Html.fromHtml(tempTitle))

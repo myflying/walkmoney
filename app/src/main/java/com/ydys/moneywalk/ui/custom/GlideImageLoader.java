@@ -3,6 +3,7 @@ package com.ydys.moneywalk.ui.custom;
 import android.content.Context;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -22,7 +23,8 @@ public class GlideImageLoader extends ImageLoader {
          */
         //Glide 加载图片简单用法
         RequestOptions options = new RequestOptions();
-        options.transform(new RoundedCornersTransformation(SizeUtils.dp2px(6),0));
+        options.override(ScreenUtils.getScreenWidth() - SizeUtils.dp2px(24), SizeUtils.dp2px(116));
+        options.transform(new RoundedCornersTransformation(SizeUtils.dp2px(10), 0));
         Glide.with(context).load(path).apply(options).into(imageView);
     }
 }

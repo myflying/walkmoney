@@ -7,48 +7,43 @@
 
     <FrameLayout
         android:layout_width="313dp"
-        android:layout_height="282dp"
-        android:background="@mipmap/act_rule_img_bg"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_marginTop="12dp">
-
-            <ImageView
-                android:id="@+id/iv_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:padding="12dp"
-                android:src="@mipmap/close_hb" />
-        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/common_white_bg"
+            android:gravity="top|center"
+            android:minHeight="282dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:gravity="center"
-                android:text="活动规则"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp">
+
+                <ImageView
+                    android:id="@+id/iv_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="12dp"
+                    android:src="@mipmap/close_hb" />
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tv_rule_content"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
                 android:layout_weight="1"
-                android:padding="8dp"
+                android:lineSpacingMultiplier="1.2"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
                 android:textColor="@color/common_title_color"
                 android:textSize="14sp" />
 
@@ -62,6 +57,27 @@
                 android:textColor="@color/privacy_text_color"
                 android:textSize="13sp" />
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/rule_top_bg" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="3dp"
+                android:text="活动规则"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </FrameLayout>
     </FrameLayout>
 
 </LinearLayout>

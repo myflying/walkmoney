@@ -29,8 +29,8 @@ public class UserInfoPresenterImp extends BasePresenterImp<IBaseView, UserInfoRe
     }
 
     @Override
-    public void imeiLogin(String imei, String agentId, String siteId) {
-        userInfoModelImp.imeiLogin(imei, agentId, siteId, this);
+    public void imeiLogin(String imei, String agentId, String siteId,int stepNum) {
+        userInfoModelImp.imeiLogin(imei, agentId, siteId, stepNum,this);
     }
 
     @Override

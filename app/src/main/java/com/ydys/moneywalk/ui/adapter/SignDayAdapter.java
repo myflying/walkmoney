@@ -37,6 +37,7 @@ public class SignDayAdapter extends BaseQuickAdapter<SignInfo, BaseViewHolder> {
                 holder.setBackgroundRes(R.id.layout_top_bubble, R.mipmap.add_gold_bubble);
                 holder.setText(R.id.tv_top_gold, "神秘宝箱");
             } else if (holder.getAdapterPosition() == signDay) {
+                holder.setBackgroundRes(R.id.tv_day_gold, R.mipmap.sign_day_gold_bg);
                 holder.setVisible(R.id.layout_top_bubble, true);
                 holder.setText(R.id.tv_top_gold, "翻2倍");
                 holder.setBackgroundRes(R.id.layout_top_bubble, R.mipmap.top_double_bg);

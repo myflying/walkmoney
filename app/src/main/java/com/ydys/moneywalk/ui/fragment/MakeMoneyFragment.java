@@ -384,7 +384,7 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
     public void makeMoneySelect() {
         setTopViewBgColor();
         taskType = "";
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1");
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1",App.newStepNum);
 
         if (App.mUserInfo == null || (!App.isLogin && App.mUserInfo != null && App.mUserInfo.getIsBind() == 1)) {
             isLogin = false;
@@ -431,6 +431,7 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
 
         if (tData != null) {
             if (tData instanceof TaskInfoWrapperRet && ((TaskInfoWrapperRet) tData).getCode() == Constants.SUCCESS) {
+                Logger.i("load success task info");
                 if (((TaskInfoWrapperRet) tData).getData() != null) {
                     signTaskInfo = ((TaskInfoWrapperRet) tData).getData().getSignTaskInfo();
                     mSignDaysTv.setText(signTaskInfo.getContinueNum() + "天");
@@ -473,6 +474,7 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
             }
 
             if (tData instanceof UserInfoRet) {
+                Logger.i("load success user info");
                 if (((UserInfoRet) tData).getCode() == Constants.SUCCESS) {
                     SPUtils.getInstance().put(Constants.USER_INFO, JSONObject.toJSONString(((UserInfoRet) tData).getData()));
                     App.mUserInfo = ((UserInfoRet) tData).getData();
