@@ -29,7 +29,6 @@ import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.presenter.SendMsgInfoPresenterImp;
 import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
 import com.ydys.moneywalk.util.StringUtils;
-import com.ydys.moneywalk.view.SendMsgInfoView;
 
 import butterknife.BindView;
 import butterknife.OnClick;

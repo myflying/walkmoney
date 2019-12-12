@@ -6,7 +6,6 @@ import com.ydys.moneywalk.base.BasePresenterImp;
 import com.ydys.moneywalk.base.IBaseView;
 import com.ydys.moneywalk.bean.HomeDateInfoRet;
 import com.ydys.moneywalk.model.HomeDataInfoModelImp;
-import com.ydys.moneywalk.view.HomeDataInfoView;
 
 /**
  * Created by admin on 2017/4/7.

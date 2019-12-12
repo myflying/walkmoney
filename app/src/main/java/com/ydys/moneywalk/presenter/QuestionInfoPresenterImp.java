@@ -3,7 +3,6 @@ package com.ydys.moneywalk.presenter;
 import android.content.Context;
 
 import com.ydys.moneywalk.base.BasePresenterImp;
-import com.ydys.moneywalk.base.IBaseView;
 import com.ydys.moneywalk.bean.QuestionCategoryRet;
 import com.ydys.moneywalk.model.QuestionInfoModelImp;
 import com.ydys.moneywalk.view.QuestionInfoView;

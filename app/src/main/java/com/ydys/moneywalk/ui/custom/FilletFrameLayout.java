@@ -15,8 +15,6 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.blankj.utilcode.util.SizeUtils;
-
 public class FilletFrameLayout extends FrameLayout {
     public FilletFrameLayout(@NonNull Context context) {
         super(context);

@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.ydys.moneywalk.api.SendMsgInfoService;
 import com.ydys.moneywalk.api.TakeGoldInfoService;
 import com.ydys.moneywalk.base.BaseModel;
 import com.ydys.moneywalk.base.IBaseRequestCallBack;
-import com.ydys.moneywalk.bean.SendMsgInfoRet;
 import com.ydys.moneywalk.bean.TakeGoldInfo;
 import com.ydys.moneywalk.bean.TakeGoldInfoRet;
 

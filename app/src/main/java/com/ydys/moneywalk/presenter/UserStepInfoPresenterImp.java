@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.ydys.moneywalk.base.BasePresenterImp;
 import com.ydys.moneywalk.base.IBaseView;
-import com.ydys.moneywalk.bean.ResultInfo;
 import com.ydys.moneywalk.bean.UserStepInfo;
 import com.ydys.moneywalk.bean.UserStepInfoRet;
 import com.ydys.moneywalk.model.UserStepInfoModelImp;

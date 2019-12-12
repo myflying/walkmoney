@@ -12,13 +12,9 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.SpanUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.orhanobut.logger.Logger;
 import com.ydys.moneywalk.common.Constants;
-import com.ydys.moneywalk.ui.fragment.HomeFragment;
-import com.ydys.moneywalk.util.Constant;
-import com.ydys.moneywalk.util.RandomUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;

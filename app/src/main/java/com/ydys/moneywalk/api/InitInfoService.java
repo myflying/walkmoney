@@ -1,6 +1,5 @@
 package com.ydys.moneywalk.api;
 
-import com.ydys.moneywalk.bean.HomeDateInfoRet;
 import com.ydys.moneywalk.bean.InitInfoRet;
 
 import okhttp3.RequestBody;

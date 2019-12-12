@@ -12,9 +12,7 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.AppUtils;
-import com.blankj.utilcode.util.CacheDiskStaticUtils;
 import com.blankj.utilcode.util.CacheDiskUtils;
 import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.SPUtils;

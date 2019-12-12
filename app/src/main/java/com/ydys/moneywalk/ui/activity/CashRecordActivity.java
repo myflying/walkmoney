@@ -16,7 +16,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaeger.library.StatusBarUtil;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
-import com.ydys.moneywalk.bean.CashRecordInfo;
 import com.ydys.moneywalk.bean.CashRecordInfoRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.CashRecordInfoPresenterImp;
@@ -24,9 +23,6 @@ import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.ui.adapter.CashRecordAdapter;
 import com.ydys.moneywalk.ui.custom.NormalDecoration;
 import com.ydys.moneywalk.view.CashRecordInfoView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;

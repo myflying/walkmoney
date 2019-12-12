@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ydys.moneywalk.R;
-import com.ydys.moneywalk.bean.CashMoneyInfo;
 import com.ydys.moneywalk.bean.GoldDayInfo;
 
 import java.util.List;

@@ -10,7 +10,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.QuestionCategory;
-import com.ydys.moneywalk.bean.QuestionInfo;
 
 import java.util.List;
 

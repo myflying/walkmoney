@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">走路宝</string>
-
+    <string name="app_name">2048弹弹球</string>
+    <string name="tab_game_txt">游戏</string>
     <string name="tab_home_txt">走路</string>
     <string name="tab_act_txt">活动</string>
     <string name="tab_money_txt">赚钱</string>

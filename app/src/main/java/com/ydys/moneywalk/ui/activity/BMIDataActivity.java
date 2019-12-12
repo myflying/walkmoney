@@ -7,8 +7,6 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
-import com.blankj.utilcode.util.SizeUtils;
-import com.blankj.utilcode.util.StringUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.ydys.moneywalk.R;

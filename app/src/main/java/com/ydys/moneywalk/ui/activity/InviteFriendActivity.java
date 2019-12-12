@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,17 +24,12 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.SizeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.jaeger.library.StatusBarUtil;
 import com.liulishuo.filedownloader.BaseDownloadTask;
@@ -47,9 +40,7 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.editorpage.ShareActivity;
 import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.ShareInfoRet;
@@ -59,11 +50,8 @@ import com.ydys.moneywalk.presenter.ShareInfoPresenterImp;
 import com.ydys.moneywalk.ui.custom.ActRuleDialog;
 import com.ydys.moneywalk.view.ShareInfoView;
 
-import java.io.File;
-
 import butterknife.BindView;
 import butterknife.OnClick;
-import es.dmoral.toasty.Toasty;
 import pl.droidsonroids.gif.GifImageView;
 
 public class InviteFriendActivity extends BaseActivity implements ShareInfoView {

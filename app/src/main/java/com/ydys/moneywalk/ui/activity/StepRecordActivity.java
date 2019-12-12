@@ -4,9 +4,6 @@ import android.os.Bundle;
 
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.presenter.Presenter;
-import com.ydys.moneywalk.ui.custom.CircleProgress;
-
-import butterknife.BindView;
 
 public class StepRecordActivity extends BaseActivity {
 

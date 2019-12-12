@@ -54,7 +54,6 @@ import com.ydys.moneywalk.ui.activity.BodyDataActivity;
 import com.ydys.moneywalk.ui.activity.CashActivity;
 import com.ydys.moneywalk.ui.activity.FillInCodeActivity;
 import com.ydys.moneywalk.ui.activity.InviteFriendActivity;
-import com.ydys.moneywalk.ui.activity.MainActivity;
 import com.ydys.moneywalk.ui.activity.MakeMoneyActivity;
 import com.ydys.moneywalk.ui.activity.PhoneLoginActivity;
 import com.ydys.moneywalk.ui.adapter.SignDayAdapter;
@@ -68,10 +67,8 @@ import com.ydys.moneywalk.util.AppContextUtil;
 import com.ydys.moneywalk.util.MatrixUtils;
 import com.ydys.moneywalk.util.TTAdManagerHolder;
 
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;

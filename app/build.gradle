@@ -111,4 +111,5 @@ dependencies {
     implementation files('libs/umeng-share-wechat-simplify-6.9.6.jar')
     implementation files('libs/umeng-sharetool-6.9.6.jar')
     implementation(name: 'open_ad_sdk', ext: 'aar')
+    implementation(name: 'ycgamesdk', ext: 'aar')
 }

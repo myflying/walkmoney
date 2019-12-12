@@ -1,12 +1,10 @@
 package com.ydys.moneywalk.ui.adapter;
 
 import android.content.Context;
-import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ydys.moneywalk.R;
-import com.ydys.moneywalk.bean.CashMoneyInfo;
 import com.ydys.moneywalk.bean.CashMoneyItem;
 
 import java.util.List;

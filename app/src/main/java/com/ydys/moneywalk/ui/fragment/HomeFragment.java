@@ -81,7 +81,6 @@ import com.ydys.moneywalk.ui.activity.MakeMoneyActivity;
 import com.ydys.moneywalk.ui.activity.PhoneLoginActivity;
 import com.ydys.moneywalk.ui.custom.DislikeDialog;
 import com.ydys.moneywalk.ui.custom.ExceedDialog;
-import com.ydys.moneywalk.ui.custom.GlideImageLoader;
 import com.ydys.moneywalk.ui.custom.LoginDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveDoubleGoldDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveGoldDialog;
@@ -92,8 +91,6 @@ import com.ydys.moneywalk.ui.custom.step.UpdateUiCallBack;
 import com.ydys.moneywalk.util.MatrixUtils;
 import com.ydys.moneywalk.util.RandomUtils;
 import com.ydys.moneywalk.util.TTAdManagerHolder;
-import com.youth.banner.Banner;
-import com.youth.banner.listener.OnBannerListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

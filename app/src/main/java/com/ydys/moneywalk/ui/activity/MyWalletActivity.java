@@ -7,22 +7,15 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.annotations.SerializedName;
 import com.jaeger.library.StatusBarUtil;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
-import com.ydys.moneywalk.bean.GoldDayInfo;
-import com.ydys.moneywalk.bean.GoldDetailInfo;
 import com.ydys.moneywalk.bean.WalletInfoRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.MyWalletInfoPresenterImp;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.ui.adapter.GoldDayAdapter;
-import com.ydys.moneywalk.ui.custom.ActRuleDialog;
 import com.ydys.moneywalk.view.MyWalletInfoView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;

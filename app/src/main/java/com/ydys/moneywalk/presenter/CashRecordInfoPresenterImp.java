@@ -4,11 +4,8 @@ import android.content.Context;
 
 import com.ydys.moneywalk.base.BasePresenterImp;
 import com.ydys.moneywalk.bean.CashRecordInfoRet;
-import com.ydys.moneywalk.bean.FillInCodeInfoRet;
 import com.ydys.moneywalk.model.CashRecordInfoModelImp;
-import com.ydys.moneywalk.model.FillInCodeInfoModelImp;
 import com.ydys.moneywalk.view.CashRecordInfoView;
-import com.ydys.moneywalk.view.FillInCodeView;
 
 /**
  * Created by admin on 2017/4/7.

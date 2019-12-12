@@ -7,11 +7,9 @@ import androidx.core.content.ContextCompat;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ydys.moneywalk.R;
-import com.ydys.moneywalk.bean.CashMoneyInfo;
 import com.ydys.moneywalk.bean.CashRecordInfo;
 import com.ydys.moneywalk.util.MatrixUtils;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 

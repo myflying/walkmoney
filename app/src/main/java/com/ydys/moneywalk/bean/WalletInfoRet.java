@@ -1,7 +1,5 @@
 package com.ydys.moneywalk.bean;
 
-import java.util.List;
-
 /**
  * Created by myflying on 2018/11/16.
  */

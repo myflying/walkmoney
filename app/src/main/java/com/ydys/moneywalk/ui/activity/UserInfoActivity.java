@@ -29,7 +29,6 @@ import com.ydys.moneywalk.bean.UserInfoRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
-import com.ydys.moneywalk.ui.custom.GlideCircleTransformWithBorder;
 import com.ydys.moneywalk.view.UserInfoView;
 
 import java.util.Map;

@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.ydys.moneywalk.api.CashInitInfoService;
 import com.ydys.moneywalk.api.CashMoneyService;
 import com.ydys.moneywalk.base.BaseModel;
 import com.ydys.moneywalk.base.IBaseRequestCallBack;
-import com.ydys.moneywalk.bean.CashInitInfoRet;
 import com.ydys.moneywalk.bean.CashMoneyRet;
 
 import okhttp3.MediaType;

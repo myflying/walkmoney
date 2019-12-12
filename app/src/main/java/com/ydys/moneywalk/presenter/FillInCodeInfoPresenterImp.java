@@ -3,11 +3,8 @@ package com.ydys.moneywalk.presenter;
 import android.content.Context;
 
 import com.ydys.moneywalk.base.BasePresenterImp;
-import com.ydys.moneywalk.base.IBaseView;
 import com.ydys.moneywalk.bean.FillInCodeInfoRet;
-import com.ydys.moneywalk.bean.SendMsgInfoRet;
 import com.ydys.moneywalk.model.FillInCodeInfoModelImp;
-import com.ydys.moneywalk.model.SendMsgInfoModelImp;
 import com.ydys.moneywalk.view.FillInCodeView;
 
 /**

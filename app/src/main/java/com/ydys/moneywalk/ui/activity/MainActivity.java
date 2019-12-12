@@ -6,24 +6,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
@@ -40,15 +35,15 @@ import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.presenter.UserInfoPresenterImp;
 import com.ydys.moneywalk.ui.adapter.MyFragmentAdapter;
 import com.ydys.moneywalk.ui.custom.HongBaoDialog;
+import com.ydys.moneywalk.ui.custom.NoSlidingViewPager;
 import com.ydys.moneywalk.ui.custom.PermissionDialog;
 import com.ydys.moneywalk.ui.custom.PrivacyDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveDoubleGoldDialog;
 import com.ydys.moneywalk.ui.custom.ReceiveGoldDialog;
+import com.ydys.moneywalk.ui.fragment.GameFragment;
 import com.ydys.moneywalk.ui.fragment.HomeFragment;
 import com.ydys.moneywalk.ui.fragment.MakeMoneyFragment;
 import com.ydys.moneywalk.ui.fragment.MyFragment;
-import com.ydys.moneywalk.ui.fragment.TestFragment;
-import com.ydys.moneywalk.view.UserInfoView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -70,11 +65,11 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
     TabLayout tabLayout;
 
     @BindView(R.id.viewpager)
-    ViewPager viewPager;
+    NoSlidingViewPager viewPager;
 
     private long clickTime = 0;
 
-    private final int[] TITLES = new int[]{R.string.tab_home_txt, R.string.tab_money_txt, R.string.tab_my_txt};
+    private final int[] TITLES = new int[]{R.string.tab_game_txt, R.string.tab_money_txt, R.string.tab_my_txt};
 
     private final int[] IMAGES = new int[]{R.drawable.tab_home, R.drawable.tab_money, R.drawable.tab_my};
 
@@ -217,7 +212,7 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
 
     @Override
     protected void initViews() {
-        mFragmentList.add(new HomeFragment());
+        mFragmentList.add(new GameFragment());
         mFragmentList.add(new MakeMoneyFragment());
         mFragmentList.add(new MyFragment());
 

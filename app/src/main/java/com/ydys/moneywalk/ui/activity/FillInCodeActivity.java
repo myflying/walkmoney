@@ -8,7 +8,6 @@ import android.widget.EditText;
 import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.StringUtils;
-import com.blankj.utilcode.util.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;

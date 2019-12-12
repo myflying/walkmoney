@@ -6,12 +6,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ydys.moneywalk.R;
-
-import permissions.dispatcher.PermissionRequest;
 
 /**
  * 授权管理

@@ -4,11 +4,8 @@ import android.content.Context;
 
 import com.ydys.moneywalk.base.BasePresenterImp;
 import com.ydys.moneywalk.base.IBaseView;
-import com.ydys.moneywalk.bean.BodyInfoRet;
 import com.ydys.moneywalk.bean.CashInitInfoRet;
-import com.ydys.moneywalk.model.BodyInfoModelImp;
 import com.ydys.moneywalk.model.CashInitInfoModelImp;
-import com.ydys.moneywalk.view.BodyInfoView;
 
 /**
  * Created by admin on 2017/4/7.

@@ -1,6 +1,5 @@
 package com.ydys.moneywalk.api;
 
-import com.ydys.moneywalk.bean.CashInitInfoRet;
 import com.ydys.moneywalk.bean.CashMoneyRet;
 
 import okhttp3.RequestBody;

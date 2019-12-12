@@ -2,13 +2,9 @@ package com.ydys.moneywalk.ui.adapter;
 
 import android.content.Context;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ydys.moneywalk.R;
-import com.ydys.moneywalk.bean.CashMoneyInfo;
 import com.ydys.moneywalk.bean.GoldDetailInfo;
 
 import java.util.List;

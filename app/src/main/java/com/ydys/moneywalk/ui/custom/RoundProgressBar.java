@@ -13,7 +13,6 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.internal.view.SupportMenu;
 
 import com.orhanobut.logger.Logger;
 import com.ydys.moneywalk.R;

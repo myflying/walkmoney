@@ -12,8 +12,6 @@ import com.ydys.moneywalk.bean.CashRecordInfo;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.util.MatrixUtils;
 
-import java.text.DecimalFormat;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 

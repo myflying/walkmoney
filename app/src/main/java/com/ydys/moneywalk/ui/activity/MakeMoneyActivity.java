@@ -3,7 +3,6 @@ package com.ydys.moneywalk.ui.activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
@@ -18,7 +17,6 @@ import com.ydys.moneywalk.App;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.Presenter;
-import com.ydys.moneywalk.ui.custom.ActRuleDialog;
 
 import java.io.File;
 

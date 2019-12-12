@@ -9,8 +9,6 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSON;
-import com.blankj.utilcode.util.SPUtils;
-import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.jaeger.library.StatusBarUtil;
@@ -30,7 +28,6 @@ import com.ydys.moneywalk.view.BodyInfoView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.ydys.moneywalk.api.UserStepInfoService;
 import com.ydys.moneywalk.base.BaseModel;
 import com.ydys.moneywalk.base.IBaseRequestCallBack;
-import com.ydys.moneywalk.bean.ResultInfo;
 import com.ydys.moneywalk.bean.UserStepInfo;
 import com.ydys.moneywalk.bean.UserStepInfoRet;
 

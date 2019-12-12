@@ -1,7 +1,6 @@
 package com.ydys.moneywalk.ui.activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
@@ -9,14 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.SizeUtils;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaeger.library.StatusBarUtil;
 import com.ydys.moneywalk.R;
 import com.ydys.moneywalk.bean.QuestionCategoryRet;
 import com.ydys.moneywalk.common.Constants;
 import com.ydys.moneywalk.presenter.Presenter;
 import com.ydys.moneywalk.presenter.QuestionInfoPresenterImp;
-import com.ydys.moneywalk.ui.adapter.QuestionAdapter;
 import com.ydys.moneywalk.ui.adapter.QuestionCategoryAdapter;
 import com.ydys.moneywalk.ui.custom.NormalDecoration;
 import com.ydys.moneywalk.view.QuestionInfoView;

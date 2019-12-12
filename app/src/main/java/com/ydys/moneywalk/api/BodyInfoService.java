@@ -1,7 +1,6 @@
 package com.ydys.moneywalk.api;
 
 import com.ydys.moneywalk.bean.BodyInfoRet;
-import com.ydys.moneywalk.bean.SignInfoRet;
 
 import okhttp3.RequestBody;
 import retrofit2.http.Body;

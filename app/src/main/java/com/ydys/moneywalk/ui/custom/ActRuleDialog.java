@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ydys.moneywalk.App;

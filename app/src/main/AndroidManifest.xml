@@ -57,7 +57,7 @@
             android:required="false" />
 
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name="com.ydys.moneywalk.ui.activity.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -66,28 +66,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.TestActivity" />
-        <activity android:name=".ui.activity.LoginActivity" />
-        <activity android:name=".ui.activity.PhoneLoginActivity" />
-        <activity android:name=".ui.activity.BodyDataActivity" />
-        <activity android:name=".ui.activity.BMIDataActivity" />
-        <activity android:name=".ui.activity.SettingActivity" />
-        <activity android:name=".ui.activity.UserInfoActivity" />
-        <activity android:name=".ui.activity.AboutActivity" />
-        <activity android:name=".ui.activity.CashActivity" />
-        <activity android:name=".ui.activity.BindPhoneActivity" />
-        <activity android:name=".ui.activity.CashRecordActivity" />
-        <activity android:name=".ui.activity.CashDetailActivity" />
-        <activity android:name=".ui.activity.MyWalletActivity" />
-        <activity android:name=".ui.activity.InviteFriendActivity" />
-        <activity android:name=".ui.activity.MakeMoneyActivity" />
-        <activity android:name=".ui.activity.FillInCodeActivity" />
-        <activity android:name=".ui.activity.PrivacyActivity" />
-        <activity android:name=".ui.activity.QuestionActivity" />
-        <activity android:name=".ui.activity.ValidatePhoneActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.MainActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.TestActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.LoginActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.PhoneLoginActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.BodyDataActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.BMIDataActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.SettingActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.UserInfoActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.AboutActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.CashActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.BindPhoneActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.CashRecordActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.CashDetailActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.MyWalletActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.InviteFriendActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.MakeMoneyActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.FillInCodeActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.PrivacyActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.QuestionActivity" />
+        <activity android:name="com.ydys.moneywalk.ui.activity.ValidatePhoneActivity" />
+        <activity android:name=".ui.activity.TaskActivity"/>
         <activity
-            android:name=".wxapi.WXEntryActivity"
+            android:name="com.ydys.moneywalk.ui.activity.GameActivity"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name="com.ydys.moneywalk.wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
@@ -123,7 +127,7 @@
             android:exported="false" />
 
         <service
-            android:name=".ui.custom.step.BindService"
+            android:name="com.ydys.moneywalk.ui.custom.step.BindService"
             android:enabled="true"
             android:exported="true" />
     </application>

@@ -1,6 +1,5 @@
 package com.ydys.moneywalk.api;
 
-import com.ydys.moneywalk.bean.SignInfoRet;
 import com.ydys.moneywalk.bean.WalletInfoRet;
 
 import okhttp3.RequestBody;

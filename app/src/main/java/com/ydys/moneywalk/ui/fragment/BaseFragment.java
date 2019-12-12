@@ -1,6 +1,5 @@
 package com.ydys.moneywalk.ui.fragment;
 
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
