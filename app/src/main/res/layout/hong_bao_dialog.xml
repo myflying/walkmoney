@@ -14,7 +14,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="453dp"
         android:layout_gravity="center">
 
         <ImageView
@@ -32,50 +32,49 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
+            <LinearLayout
+                android:layout_width="257dp"
+                android:layout_height="48dp"
                 android:layout_gravity="top"
-                android:visibility="invisible">
+                android:gravity="right">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp"
-                    android:padding="12dp"
-                    android:src="@mipmap/close_hb" />
-            </RelativeLayout>
+                    android:id="@+id/iv_close"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="24dp"
+                    android:layout_marginTop="12dp"
+                    android:src="@mipmap/close_hb"
+                    android:visibility="visible" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_weight="1"
+                android:gravity="top|center"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:src="@drawable/logo" />
-
                 <TextView
+                    android:id="@+id/tv_title_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="走路宝"
-                    android:textColor="@color/hongbao_color"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="22dp"
+                    android:layout_marginTop="26dp"
                     android:layout_marginBottom="22dp"
                     android:text="@string/send_hongbao_txt"
                     android:textColor="@color/hongbao_color"
                     android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/tv_sub_title_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:text="@string/only_new_user_txt"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/iv_open_hb"
@@ -91,8 +90,8 @@
             android:layout_height="350dp"
             android:layout_gravity="center"
             android:gravity="top|center"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -132,10 +131,10 @@
                 android:id="@+id/btn_start_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@mipmap/start_btn"
-                android:text="开启走路宝之旅"
-                android:paddingBottom="4dp"
                 android:layout_marginTop="66dp"
+                android:background="@mipmap/start_btn"
+                android:paddingBottom="4dp"
+                android:text="开启游戏之旅"
                 android:textColor="@color/start_btn_color"
                 android:textSize="16sp" />
 

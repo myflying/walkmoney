@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="166dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/my_info_top_bg" />
+            android:src="@mipmap/my_wallet_top_bg" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +60,8 @@
                     android:layout_marginTop="6dp"
                     android:background="@drawable/my_receive_gold_bg"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -132,15 +133,13 @@
 
                     <Button
                         android:id="@+id/btn_cash_money"
-                        android:layout_width="66dp"
+                        android:layout_width="68dp"
                         android:layout_height="29dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="12dp"
-                        android:background="@mipmap/wallet_cash_btn"
-                        android:text="提现"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"/>
+                        android:background="@mipmap/my_wallet_cash_btn"
+                        android:textSize="12sp" />
                 </RelativeLayout>
 
                 <LinearLayout

@@ -9,7 +9,7 @@
     <string name="share_friend_txt">每邀请一位新好友，获得</string>
     <string name="share_friend_unit">金币</string>
 
-    <string name="privacy_title_txt">欢迎使用走路宝！走路宝非常重视您的隐私和个人信息保护，特在此向您说明走路宝软件的用户协议和隐私政策。在您使用走路宝前，请认真阅读并充分理解相关条款。</string>
+    <string name="privacy_title_txt">欢迎使用2048弹弹球！2048弹弹球非常重视您的隐私和个人信息保护，特在此向您说明2048弹弹球软件的用户协议和隐私政策。在您使用2048弹弹球前，请认真阅读并充分理解相关条款。</string>
     <string name="security_txt">我们会严格按照《网络安全法》、《信息网络传播保护条例》等保护您的个人信息。</string>
     <string name="clause_txt">如果未经您的授权，我们不会使用您的个人信息用于您未授权的其他途径或目的。</string>
     <string name="privacy_hint_txt">您点击“同意”，即表示您已阅读并同意《服务协议》及《隐私政策》</string>
@@ -20,16 +20,17 @@
 
     <string name="invite_friend_txt">邀请好友</string>
     <string name="make_money_txt">赚钱攻略</string>
-    <string name="send_hongbao_txt">给你发了一个新人红包</string>
+    <string name="send_hongbao_txt">恭喜您获得新人红包</string>
+    <string name="only_new_user_txt">仅限新注册用户领取</string>
     <string name="your_invite_code_txt">您的邀请码</string>
     <string name="copy_txt">点击复制</string>
 
     <string name="reg_step1">点击按钮\n【微信邀请】</string>
-    <string name="reg_step2">下载走路宝\n填写邀请码</string>
+    <string name="reg_step2">下载2048弹弹球\n填写邀请码</string>
     <string name="reg_step3">获得奖励\n10000金币</string>
     <string name="share_wx_qun">分享到微信群,成功率</string>
     <string name="share_tishen">提升300%</string>
-    <string name="copyright_txt">最终解释权归走路宝官方所有</string>
+    <string name="copyright_txt">最终解释权归2048弹弹球官方所有</string>
     <string name="exceed_txt">步数兑换超过限额</string>
 
     <string name="exceed_see_video_txt">当天累计兑换超过2000步，需要看视频才能继续兑换</string>
@@ -52,7 +53,7 @@
     <string name="button_allow">开启</string>
     <string name="button_deny">拒绝</string>
 
-    <string name="permission_detail_txt">因读取步数信息和金币兑换、提现要求，需要你提供以下权限：设备信息，储存信息。</string>
+    <string name="permission_detail_txt">2048弹弹球因分享和提现要求，需要您提供以下权限：设备信息，储存信息，位置信息权限。</string>
 
     <string name="version_txt">1.修复已知的bug。\n2.优化部分功能体验。</string>
     <string name="version_hint_txt">版本正在更新，请稍后...</string>

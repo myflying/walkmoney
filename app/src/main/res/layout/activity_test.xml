@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
 
-            <com.ydys.moneywalk.ui.custom.StepNumProgressView
+            <com.ydys.elsbballs.ui.custom.StepNumProgressView
                 android:id="@+id/temp_view"
                 android:layout_width="256dp"
                 android:layout_height="256dp" />

@@ -144,10 +144,9 @@
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="top|center"
-                                android:layout_marginTop="55dp"
-                                android:src="@drawable/walk_gif" />
+                                android:layout_marginTop="55dp" />
 
-                            <com.ydys.moneywalk.ui.custom.StepNumProgressView
+                            <com.ydys.elsbballs.ui.custom.StepNumProgressView
                                 android:id="@+id/temp_view"
                                 android:layout_width="230dp"
                                 android:layout_height="230dp" />

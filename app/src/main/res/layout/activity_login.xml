@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="让走路更有趣"
+                android:text="让游戏更有趣"
                 android:textSize="14sp" />
         </LinearLayout>
 

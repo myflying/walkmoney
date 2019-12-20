@@ -184,7 +184,7 @@
 
                 <FrameLayout
                     android:layout_width="313dp"
-                    android:layout_height="156dp"
+                    android:layout_height="212dp"
                     android:layout_gravity="center|bottom"
                     android:layout_marginTop="4dp">
 
@@ -193,7 +193,7 @@
                         android:layout_height="match_parent"
                         android:src="@drawable/banner_bg_gif" />
 
-                    <com.ydys.moneywalk.ui.custom.RoundRelativeLayout
+                    <com.ydys.elsbballs.ui.custom.RoundRelativeLayout
                         android:id="@+id/express_container"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

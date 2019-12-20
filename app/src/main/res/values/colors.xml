@@ -96,4 +96,9 @@
     <color name="validate_normal">#f9c19b</color>
     <color name="validate_focus">#ff7213</color>
     <color name="progress_end">#fa760f</color>
+
+    <color name="user_game_gold_num_color">#1037af</color>
+    <color name="user_gold_top_color">#f6e9bd</color>
+
+    <color name="my_game_gold_color">#daeefa</color>
 </resources>
