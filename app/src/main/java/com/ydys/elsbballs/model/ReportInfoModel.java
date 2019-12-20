@@ -9,4 +9,6 @@ import com.ydys.elsbballs.base.IBaseRequestCallBack;
 
 public interface ReportInfoModel<T> {
     void startPlayGame(String userId, IBaseRequestCallBack<T> iBaseRequestCallBack);
+    void startSeeVideo(String userId, IBaseRequestCallBack<T> iBaseRequestCallBack);
+
 }

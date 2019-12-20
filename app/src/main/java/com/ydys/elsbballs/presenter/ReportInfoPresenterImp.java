@@ -26,4 +26,9 @@ public class ReportInfoPresenterImp extends BasePresenterImp<IBaseView, ReportIn
     public void startPlayGame(String userId) {
         reportInfoModelImp.startPlayGame(userId, this);
     }
+
+    @Override
+    public void startSeeVideo(String userId) {
+        reportInfoModelImp.startSeeVideo(userId, this);
+    }
 }

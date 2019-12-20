@@ -93,6 +93,7 @@ import com.ydys.elsbballs.presenter.UserInfoPresenterImp;
 import com.ydys.elsbballs.ui.custom.GameRuleDialog;
 import com.ydys.elsbballs.ui.custom.GoldWireLayout;
 import com.ydys.elsbballs.ui.custom.HongBaoDialog;
+import com.ydys.elsbballs.ui.custom.LoadDialog;
 import com.ydys.elsbballs.ui.custom.LoginDialog;
 import com.ydys.elsbballs.ui.custom.PermissionDialog;
 import com.ydys.elsbballs.ui.custom.ReceiveDoubleGoldDialog;
@@ -273,6 +274,8 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     public int FLOAT_SHOW_NUM = 10;
 
     private boolean isReloadVideo;
+
+    private LoadDialog loadDialog;
 
     public Handler mHandler = new Handler() {
         @Override
@@ -496,10 +499,12 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
     @Override
     protected void initViews() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("正在登录");
         mShareAPI = UMShareAPI.get(this);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("正在登录");
+
+        loadDialog = new LoadDialog(this, R.style.common_dialog);
         gameRuleDialog = new GameRuleDialog(this, R.style.common_dialog);
         gameRuleDialog.setGameRuleListener(this);
 
@@ -591,7 +596,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        hongBaoDialog.autoOpenHongBao(App.initInfo.getNewTaskConfig().getGold());
+                        hongBaoDialog.autoOpenHongBao(App.initInfo != null ? App.initInfo.getNewTaskConfig().getGold() : 0);
                     }
                 }, 1500);
             }
@@ -905,8 +910,12 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             mGameVideoAd.showRewardVideoAd(this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "game_video_ad");
             //mttRewardVideoAd = null;
         } else {
+            if (loadDialog != null && !loadDialog.isShowing()) {
+                loadDialog.show();
+            }
             Logger.i("请先加载广告");
             mGameVideoAd = null;
+            isReloadVideo = true;
             loadGameVideoAd(Constants.GAME_VIDEO_CODE_ID, TTAdConstant.VERTICAL);
         }
     }
@@ -918,6 +927,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             mttRewardVideoAd.showRewardVideoAd(this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");
             //mttRewardVideoAd = null;
         } else {
+            if (loadDialog != null && !loadDialog.isShowing()) {
+                loadDialog.show();
+            }
             Logger.i("请先加载广告");
             mttRewardVideoAd = null;
             isReloadVideo = true;
@@ -1147,6 +1159,10 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             @Override
             public void onError(int code, String message) {
                 Logger.i("code" + code + "---" + message);
+                if (loadDialog != null && loadDialog.isShowing()) {
+                    loadDialog.dismiss();
+                }
+                isReloadVideo = false;
             }
 
             //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
@@ -1163,6 +1179,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
                 //如果是重新加载的广告，则直接播放
                 if (isReloadVideo) {
+                    if (loadDialog != null && loadDialog.isShowing()) {
+                        loadDialog.dismiss();
+                    }
                     isReloadVideo = false;
                     mttRewardVideoAd.showRewardVideoAd(GameActivity.this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");
                 }
@@ -1297,6 +1316,10 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             @Override
             public void onError(int code, String message) {
                 Logger.i("game_rewardVideoAd err code" + code + "---" + message);
+                if (loadDialog != null && loadDialog.isShowing()) {
+                    loadDialog.dismiss();
+                }
+                isReloadVideo = false;
             }
 
             //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
@@ -1310,6 +1333,15 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             public void onRewardVideoAdLoad(TTRewardVideoAd ad) {
                 Logger.i("game_rewardVideoAd loaded");
                 mGameVideoAd = ad;
+
+                //如果是重新加载的广告，则直接播放
+                if (isReloadVideo) {
+                    if (loadDialog != null && loadDialog.isShowing()) {
+                        loadDialog.dismiss();
+                    }
+                    isReloadVideo = false;
+                    mGameVideoAd.showRewardVideoAd(GameActivity.this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");
+                }
 
                 mGameVideoAd.setRewardAdInteractionListener(new TTRewardVideoAd.RewardAdInteractionListener() {
 
@@ -1740,7 +1772,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             mttRewardVideoAd.showRewardVideoAd(this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");
             //mttRewardVideoAd = null;
         } else {
+            if (loadDialog != null && !loadDialog.isShowing()) {
+                loadDialog.show();
+            }
             Logger.i("请先加载广告");
+            mttRewardVideoAd = null;
+            isReloadVideo = true;
+            loadVideoAd(Constants.VIDEO_CODE_ID, TTAdConstant.VERTICAL);
         }
     }
 
@@ -1759,7 +1797,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     public void openHongBao() {
         if (clickIndex == 4) {
             if (hongBaoDialog != null && !hongBaoDialog.isShowing()) {
-                hongBaoDialog.autoOpenHongBao(App.initInfo.getNewTaskConfig().getGold());
+                hongBaoDialog.autoOpenHongBao(App.initInfo != null ? App.initInfo.getNewTaskConfig().getGold() : 0);
             }
         }
         if (clickIndex == 5) {
@@ -1971,7 +2009,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 mBannerTTAd.setSlideIntervalTime(30 * 1000);
                 bindBannerAdListener(mBannerTTAd);
                 startBannerTime = System.currentTimeMillis();
-                mBannerTTAd.render();
+                if (mBannerTTAd != null) {
+                    mBannerTTAd.render();
+                }
             }
         });
     }

@@ -17,4 +17,7 @@ public interface ReportInfoService {
     @POST("v1.Home/startPlay")
     Observable<ReportInfoRet> startPlayGame(@Body RequestBody requestBody);
 
+
+    @POST("v1.Task/videoStart")
+    Observable<ReportInfoRet> startSeeVideo(@Body RequestBody requestBody);
 }

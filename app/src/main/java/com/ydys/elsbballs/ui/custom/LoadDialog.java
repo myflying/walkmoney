@@ -2,6 +2,7 @@ package com.ydys.elsbballs.ui.custom;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import com.ydys.elsbballs.R;
 
-
+/**
+ * 加载中
+ */
 public class LoadDialog extends Dialog implements View.OnClickListener {
 
     private Context mContext;
@@ -40,15 +43,9 @@ public class LoadDialog extends Dialog implements View.OnClickListener {
 
     private void initView() {
         mLoadingIv = findViewById(R.id.iv_loading);
-        Animation operatingAnim = AnimationUtils.loadAnimation(mContext, R.anim.rotate_gold_anim);
-        operatingAnim.setInterpolator(new LinearInterpolator()); // 设置插入器);
-
-        if (operatingAnim != null) {
-            mLoadingIv.startAnimation(operatingAnim);
-        } else {
-            mLoadingIv.setAnimation(operatingAnim);
-            mLoadingIv.startAnimation(operatingAnim);
-        }
+        AnimationDrawable animationDrawable;
+        animationDrawable = (AnimationDrawable) mLoadingIv.getBackground();
+        animationDrawable.start();
     }
 
     @Override

@@ -48,6 +48,7 @@ import com.ydys.elsbballs.bean.TaskInfoWrapperRet;
 import com.ydys.elsbballs.bean.UserInfoRet;
 import com.ydys.elsbballs.common.Constants;
 import com.ydys.elsbballs.presenter.Presenter;
+import com.ydys.elsbballs.presenter.ReportInfoPresenterImp;
 import com.ydys.elsbballs.presenter.SignInfoPresenterImp;
 import com.ydys.elsbballs.presenter.TakeGoldInfoPresenterImp;
 import com.ydys.elsbballs.presenter.TaskInfoPresenterImp;
@@ -121,6 +122,8 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
     private TakeGoldInfoPresenterImp takeGoldInfoPresenterImp;
 
     private SignInfoPresenterImp signInfoPresenterImp;
+
+    private ReportInfoPresenterImp reportInfoPresenterImp;
 
     private SignTodayDialog signTodayDialog;
 
@@ -216,6 +219,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
         userInfoPresenterImp = new UserInfoPresenterImp(this, this);
         takeGoldInfoPresenterImp = new TakeGoldInfoPresenterImp(this, this);
         signInfoPresenterImp = new SignInfoPresenterImp(this, this);
+        reportInfoPresenterImp = new ReportInfoPresenterImp(this, this);
 
         signDayAdapter = new SignDayAdapter(this, null);
         mSignDayListView.setLayoutManager(new GridLayoutManager(this, 7));
@@ -248,7 +252,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                 TaskInfo taskInfo = taskInfoAdapter.getData().get(position);
                 if ((view.getId() == R.id.btn_get_now || view.getId() == R.id.get_now_gif) && taskInfo.getState() < 3) {
 
-                    //联系点击太快，只接受一次事件
+                    //连续点击太快，只接受一次事件
                     if (!AppContextUtil.isNotFastClick()) {
                         return;
                     }
@@ -258,6 +262,9 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                         adTaskInfo = taskInfo;
 
                         removeAndClose();
+                        //点击"去完成"观看时，增加统计
+                        reportInfoPresenterImp.startSeeVideo(App.mUserInfo != null ? App.mUserInfo.getId() : "");
+
                         if (mttRewardVideoAd != null) {
                             //step6:在获取到广告后展示
                             mttRewardVideoAd.showRewardVideoAd(TaskActivity.this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");

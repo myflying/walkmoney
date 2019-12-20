@@ -6,4 +6,6 @@ package com.ydys.elsbballs.presenter;
 
 public interface ReportInfoPresenter {
     void startPlayGame(String userId);
+
+    void startSeeVideo(String userId);
 }
