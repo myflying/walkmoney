@@ -71,7 +71,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         // for bug ---> java.lang.IllegalStateException: Activity has been destroyed
-        try {
+        /*try {
             Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
             childFragmentManager.setAccessible(true);
             childFragmentManager.set(this, null);
@@ -79,7 +79,7 @@ public abstract class BaseFragment extends Fragment {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     @Override

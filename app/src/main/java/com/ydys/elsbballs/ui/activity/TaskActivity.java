@@ -417,7 +417,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
 
     public void makeMoneySelect() {
         taskType = "";
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1", App.newStepNum);
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId,App.appName);
         //taskInfoPresenterImp.taskList(App.mUserInfo != null ? App.mUserInfo.getId() : "", isLogin ? 1 : 0);
     }
 

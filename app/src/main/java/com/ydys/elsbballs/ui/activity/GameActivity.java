@@ -438,7 +438,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 EventUtils.setRegister("imei_code", true);
 
                 Logger.i("手机串号注册接口--->" + PhoneUtils.getIMEI() + "--->" + App.agentId);
-                userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1", 0);
+                userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId, App.appName);
             }
         }, 10);
     }
@@ -980,12 +980,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
      */
     public void gamePass(int type, String taskId, String gold, int state) {
         try {
+            clickIndex = 3;
             dialogType = 2;
             TakeGoldInfo takeGoldInfo = new TakeGoldInfo();
             takeGoldInfo.setTaskId(taskId);
             takeGoldInfo.setUserId(App.mUserInfo != null ? App.mUserInfo.getId() : "");
             takeGoldInfo.setGold(Integer.parseInt(gold));
-            takeGoldInfo.setIsDouble(state);
+            takeGoldInfo.setIsPlay(state);
             takeGoldInfoPresenterImp.takeStepGold(takeGoldInfo);
 
         } catch (NumberFormatException e) {
@@ -1251,7 +1252,11 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                             }
 
                             isDouble = 1;
-                            takeGoldNum(3, "1", tempResultGold * 2 + "", isDouble);
+                            if (dialogType == 1) {
+                                takeGoldNum(3, "1", tempResultGold * 2 + "", isDouble);
+                            } else {
+                                gamePass(3, "4", oneCurrentGoldNum + "", isDouble);
+                            }
                         }
                     }
 
@@ -1583,7 +1588,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1", 0);
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId, App.appName);
     }
 
     @OnClick(R.id.iv_task_icon)

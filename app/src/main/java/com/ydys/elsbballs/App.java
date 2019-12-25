@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.orhanobut.logger.Logger;
@@ -52,6 +53,10 @@ public class App extends Application {
 
     public static String agentId = "1";
 
+    public static String softId = "1";
+
+    public static String appName = "2048弹弹球";
+
     public static InitInfo initInfo;
 
     public static boolean isLowDevice = false;
@@ -86,7 +91,20 @@ public class App extends Application {
             e.printStackTrace();
         }
 
-        Logger.i("read channel--->" + App.agentId);
+        //获取站点信息
+        String siteInfo = AppContextUtil.getSiteInfo(this);
+        try {
+            if (!StringUtils.isEmpty(siteInfo)) {
+                JSONObject jsonObject = JSON.parseObject(siteInfo);
+                App.softId = jsonObject.getString("soft_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        App.appName = AppUtils.getAppName();
+
+        Logger.i("read agentId--->" + App.agentId + "---soft_id--->" + App.softId + "---app_name--->" + App.appName);
 
         UMConfigure.init(this, "5df986b84ca357aeac00041a", App.agentId, UMConfigure.DEVICE_TYPE_PHONE, "");
         // 选用LEGACY_AUTO页面采集模式

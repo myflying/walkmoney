@@ -34,15 +34,15 @@ public class UserInfoModelImp extends BaseModel implements UserInfoModel<UserInf
     }
 
     @Override
-    public void login(String imei, String type, String value, String code,String nickname,String face, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
+    public void login(String imei, String type, String value, String code, String nickname, String face, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
             params.put("imei", imei);
-            params.put("type",type);
-            params.put("value",value);
-            params.put("code",code);
-            params.put("nickname",nickname);
-            params.put("face",face);
+            params.put("type", type);
+            params.put("value", value);
+            params.put("code", code);
+            params.put("nickname", nickname);
+            params.put("face", face);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -80,13 +80,13 @@ public class UserInfoModelImp extends BaseModel implements UserInfoModel<UserInf
     }
 
     @Override
-    public void imeiLogin(String imei, String agentId, String siteId, int stepNum,IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
+    public void imeiLogin(String imei, String agentId, String softId, String softName, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
             params.put("imei", imei);
-            params.put("agent_id",agentId);
-            params.put("site_id",siteId);
-            params.put("step_num",stepNum + "");
+            params.put("agent_id", agentId);
+            params.put("soft_id", softId);
+            params.put("soft_name", softName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -124,12 +124,12 @@ public class UserInfoModelImp extends BaseModel implements UserInfoModel<UserInf
     }
 
     @Override
-    public void validatePhone(String imei, String mobile,String code, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
+    public void validatePhone(String imei, String mobile, String code, IBaseRequestCallBack<UserInfoRet> iBaseRequestCallBack) {
         JSONObject params = new JSONObject();
         try {
             params.put("imei", imei);
-            params.put("mobile",mobile);
-            params.put("code",code);
+            params.put("mobile", mobile);
+            params.put("code", code);
         } catch (JSONException e) {
             e.printStackTrace();
         }

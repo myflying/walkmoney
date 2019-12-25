@@ -381,7 +381,7 @@ public class MakeMoneyFragment extends BaseFragment implements IBaseView, Receiv
     public void makeMoneySelect() {
         setTopViewBgColor();
         taskType = "";
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1",App.newStepNum);
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId,App.appName);
 
         if (App.mUserInfo == null || (!App.isLogin && App.mUserInfo != null && App.mUserInfo.getIsBind() == 1)) {
             isLogin = false;

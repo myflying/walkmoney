@@ -302,7 +302,7 @@ public class MainActivity extends BaseActivity implements IBaseView, PrivacyDial
 
     public void readPhoneTask() {
         Logger.i("readPhoneTask--->" + PhoneUtils.getIMEI());
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1",0);
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId,App.appName);
     }
 
     private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {

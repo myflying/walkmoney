@@ -157,7 +157,7 @@ public class MyFragment extends BaseFragment implements UserInfoView {
         isRequestInfo = true;
         if (isRequestInfo) {
             Logger.i("myfragment onresume--->");
-            userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1",0);
+            userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId,App.appName);
         }
         loadExpressAd(Constants.MY_BANNER_CODE_ID);
     }
@@ -165,7 +165,7 @@ public class MyFragment extends BaseFragment implements UserInfoView {
     public void loadUserInfo() {
         if (!isRequestInfo) {
             Logger.i("myfragment load user info--->");
-            userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, "1",0);
+            userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId,App.appName);
         }
         mLayoutFillIn.setVisibility(SPUtils.getInstance().getBoolean(Constants.INVITE_WRITE_CODE) ? View.GONE : View.VISIBLE);
     }

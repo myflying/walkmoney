@@ -7,7 +7,7 @@ package com.ydys.elsbballs.presenter;
 public interface UserInfoPresenter {
     void login(String imei, String type, String value, String code,String nickname,String face);
 
-    void imeiLogin(String imei, String agentId, String siteId,int stepNum);
+    void imeiLogin(String imei, String agentId, String softId, String softName);
 
     void validatePhone(String imei, String mobile,String code);
 }
