@@ -155,7 +155,7 @@ public class UserInfo {
         private int useWeightConfig;//
         @SerializedName("new_user_gold")
         private int newUserGold;//是否已经领取新人红包 1已经领取 0未领取
-
+        private double money;
         public String getId() {
             return id;
         }
@@ -202,6 +202,14 @@ public class UserInfo {
 
         public void setNewUserGold(int newUserGold) {
             this.newUserGold = newUserGold;
+        }
+
+        public double getMoney() {
+            return money;
+        }
+
+        public void setMoney(double money) {
+            this.money = money;
         }
     }
 

@@ -55,7 +55,8 @@
     <color name="privacy_text_color">#ff7213</color>
     <color name="act_rule_color">#fff2e7</color>
 
-    <color name="hongbao_color">#fbdeaf</color>
+    <color name="hongbao_color">#f8ecb7</color>
+    <color name="hongbao1_color">#f7ecb7</color>
 
     <color name="act_rule_bg_color">#d47712</color>
     <color name="receive_bg_color">#474855</color>
@@ -64,9 +65,9 @@
 
     <color name="gold_txt_color">#8a5100</color>
 
-    <color name="win_txt_color">#c98c44</color>
+    <color name="win_txt_color">#f15f4d</color>
 
-    <color name="win_gold_num_color">#ed462f</color>
+    <color name="win_gold_num_color">#efa547</color>
 
     <color name="my_gold_txt_color">#fbdad0</color>
 
@@ -101,4 +102,8 @@
     <color name="user_gold_top_color">#f6e9bd</color>
 
     <color name="my_game_gold_color">#daeefa</color>
+
+    <color name="max_money">#c47c01</color>
+
+    <color name="login_money_color">#f4de83</color>
 </resources>

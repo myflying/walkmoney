@@ -22,6 +22,8 @@ public class TakeGoldInfo {
     @SerializedName("get_gold")
     private int takeGold;
 
+    private int isDirect;
+
     public String getUserId() {
         return userId;
     }
@@ -100,5 +102,13 @@ public class TakeGoldInfo {
 
     public void setTakeGold(int takeGold) {
         this.takeGold = takeGold;
+    }
+
+    public int getIsDirect() {
+        return isDirect;
+    }
+
+    public void setIsDirect(int isDirect) {
+        this.isDirect = isDirect;
     }
 }

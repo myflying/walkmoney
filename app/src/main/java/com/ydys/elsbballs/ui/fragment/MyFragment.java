@@ -159,7 +159,7 @@ public class MyFragment extends BaseFragment implements UserInfoView {
             Logger.i("myfragment onresume--->");
             userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId,App.appName);
         }
-        loadExpressAd(Constants.MY_BANNER_CODE_ID);
+        //loadExpressAd(Constants.MY_BANNER_CODE_ID);
     }
 
     public void loadUserInfo() {

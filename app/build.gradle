@@ -7,8 +7,8 @@ android {
         applicationId "com.ydys.elsbballs"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.2"
+        versionCode 4
+        versionName "1.0.3"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a"
@@ -117,7 +117,8 @@ dependencies {
     implementation files('libs/umeng-share-wechat-simplify-6.9.6.jar')
     implementation files('libs/umeng-sharetool-6.9.6.jar')
     implementation(name: 'open_ad_sdk', ext: 'aar')
-    implementation(name: 'ycgamesdk9', ext: 'aar')
+    implementation(name: 'ycgamesdk10', ext: 'aar')
     implementation(name: 'applog-release', ext: 'aar')
     implementation 'com.robinhood.ticker:ticker:2.0.2'
+    implementation 'com.github.huburt-Hu:NewbieGuide:v2.4.0'
 }

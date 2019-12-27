@@ -4,17 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/transparent">
 
-    <ImageView
-        android:id="@+id/iv_hong_bao_gold_bg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:scaleType="centerInside"
-        android:src="@drawable/hong_bao_gold_bg" />
-
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="453dp"
+        android:layout_width="307dp"
+        android:layout_height="406dp"
         android:layout_gravity="center">
 
         <ImageView
@@ -23,71 +15,150 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            android:src="@mipmap/hong_bao_bg" />
+            android:src="@mipmap/new_per_hb_bg" />
 
         <LinearLayout
             android:id="@+id/layout_open_info"
-            android:layout_width="257dp"
-            android:layout_height="350dp"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="257dp"
-                android:layout_height="48dp"
-                android:layout_gravity="top"
-                android:gravity="right">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp">
 
                 <ImageView
                     android:id="@+id/iv_close"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center|right"
-                    android:layout_marginRight="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="4dp"
                     android:src="@mipmap/close_hb"
-                    android:visibility="visible" />
-            </LinearLayout>
+                    android:visibility="gone" />
+            </RelativeLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="top|center"
-                android:orientation="vertical">
+                android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/tv_title_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="26dp"
-                    android:layout_marginBottom="22dp"
-                    android:text="@string/send_hongbao_txt"
-                    android:textColor="@color/hongbao_color"
-                    android:textSize="22sp" />
+                <!--新人红包-->
+                <LinearLayout
+                    android:id="@+id/layout_new_person"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top|center"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_sub_title_txt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="40dp"
-                    android:text="@string/only_new_user_txt"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/tv_title_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:text="@string/send_hongbao_txt"
+                        android:textColor="@color/hongbao_color"
+                        android:textSize="26sp" />
 
-                <ImageView
-                    android:id="@+id/iv_open_hb"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/open_hong_bao" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_sub_title_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/only_new_user_txt"
+                        android:textColor="@color/hongbao1_color"
+                        android:textSize="17sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_open_hb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="70dp"
+                        android:background="@mipmap/open_hb_01" />
+                </LinearLayout>
+                <!--登陆红包-->
+                <LinearLayout
+                    android:id="@+id/layout_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top|center"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/login_title"
+                        android:textColor="@color/hongbao_color"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/login_sub_title"
+                        android:textColor="@color/hongbao_color"
+                        android:textSize="26sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_login_money"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:text="20"
+                            android:textColor="@color/login_money_color"
+                            android:textSize="48sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:gravity="left|center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="40dp"
+                                android:layout_height="18dp"
+                                android:background="@mipmap/max_login_money"
+                                android:gravity="center"
+                                android:text="最高"
+                                android:textColor="@color/max_money"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="元"
+                                android:textColor="@color/login_money_color"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/iv_login_video"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="34dp"
+                        android:background="@mipmap/login_video_open" />
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_win_gold"
-            android:layout_width="257dp"
-            android:layout_height="350dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="top|center"
             android:orientation="vertical"
@@ -96,8 +167,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
-                android:text="恭喜获得"
+                android:layout_marginTop="95dp"
+                android:text="恭喜您获得"
                 android:textColor="@color/win_txt_color"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -105,14 +176,14 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="24dp"
                 android:gravity="center|bottom">
 
                 <TextView
                     android:id="@+id/tv_new_gold_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3000"
+                    android:text="4.26"
                     android:textColor="@color/win_gold_num_color"
                     android:textSize="48sp"
                     android:textStyle="bold" />
@@ -120,24 +191,38 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginLeft="6dp"
                     android:layout_marginBottom="4dp"
-                    android:text="金币"
+                    android:text="元"
                     android:textColor="@color/win_gold_num_color"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
+            <ImageView
                 android:id="@+id/btn_start_step"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="66dp"
+                android:layout_marginTop="72dp"
                 android:background="@mipmap/start_btn"
-                android:paddingBottom="4dp"
-                android:text="开启游戏之旅"
                 android:textColor="@color/start_btn_color"
                 android:textSize="16sp" />
-
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="- 当天可提现 -"
+                android:textColor="@color/hongbao1_color"
+                android:textSize="17sp" />
+        </LinearLayout>
+
     </FrameLayout>
 </FrameLayout>

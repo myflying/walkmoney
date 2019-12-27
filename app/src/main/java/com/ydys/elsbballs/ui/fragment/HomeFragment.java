@@ -439,7 +439,7 @@ public class HomeFragment extends BaseFragment implements IBaseView, SwipeRefres
         RequestOptions options = new RequestOptions();
         options.override(ScreenUtils.getScreenWidth() - SizeUtils.dp2px(24), SizeUtils.dp2px(116));
         options.transform(new RoundedCornersTransformation(SizeUtils.dp2px(10), 0));
-        Glide.with(getActivity()).load(R.mipmap.bt).apply(options).into(mBannerIv);
+        //Glide.with(getActivity()).load(R.mipmap.bt).apply(options).into(mBannerIv);
 
         //PermissionUtils.launchAppDetailsSettings();
     }

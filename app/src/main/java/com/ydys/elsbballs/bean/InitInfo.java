@@ -2,13 +2,12 @@ package com.ydys.elsbballs.bean;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class InitInfo {
 
     @SerializedName("app_config")
     private AppConfig appConfig;
-
-    @SerializedName("new_task_config")
-    private NewTaskConfig newTaskConfig;
 
     @SerializedName("user_data")
     private UserStepData userStepData;
@@ -18,6 +17,9 @@ public class InitInfo {
 
     @SerializedName("stage_task_finish")
     private int stageTaskFinish; //步数阶段任务是否完成 1是 0否
+
+    @SerializedName("ad_list")
+    private List<AdInfo> adList;
 
     public int getStageTaskFinish() {
         return stageTaskFinish;
@@ -35,14 +37,6 @@ public class InitInfo {
         this.appConfig = appConfig;
     }
 
-    public NewTaskConfig getNewTaskConfig() {
-        return newTaskConfig;
-    }
-
-    public void setNewTaskConfig(NewTaskConfig newTaskConfig) {
-        this.newTaskConfig = newTaskConfig;
-    }
-
     public UserStepData getUserStepData() {
         return userStepData;
     }
@@ -57,6 +51,14 @@ public class InitInfo {
 
     public void setInviteConfig(InviteConfig inviteConfig) {
         this.inviteConfig = inviteConfig;
+    }
+
+    public List<AdInfo> getAdList() {
+        return adList;
+    }
+
+    public void setAdList(List<AdInfo> adList) {
+        this.adList = adList;
     }
 
     public class AppConfig {
@@ -222,6 +224,36 @@ public class InitInfo {
 
         public void setIsDel(int isDel) {
             this.isDel = isDel;
+        }
+    }
+
+    public class AdInfo {
+        private int id;//广告id
+        private String position;//广告位置 home_bottom_banner(首页横幅)，game_start_screen(游戏开屏)，gold_settle_pop(金币结算)，game_revive_video(游戏复活)，gold_double_video(金币翻倍)，
+        private String code;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+
+        public void setPosition(String position) {
+            this.position = position;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
         }
     }
 

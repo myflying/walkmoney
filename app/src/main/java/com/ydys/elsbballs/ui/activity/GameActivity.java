@@ -1,10 +1,6 @@
 package com.ydys.elsbballs.ui.activity;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,7 +17,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -35,8 +31,13 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.app.hubert.guide.NewbieGuide;
+import com.app.hubert.guide.core.Controller;
+import com.app.hubert.guide.listener.OnGuideChangedListener;
+import com.app.hubert.guide.listener.OnLayoutInflatedListener;
+import com.app.hubert.guide.model.GuidePage;
+import com.app.hubert.guide.model.HighLight;
 import com.blankj.utilcode.constant.TimeConstants;
-import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
@@ -77,8 +78,8 @@ import com.ydys.elsbballs.base.IBaseView;
 import com.ydys.elsbballs.bean.GameTimeInfoRet;
 import com.ydys.elsbballs.bean.HomeDataInfo;
 import com.ydys.elsbballs.bean.HomeDateInfoRet;
+import com.ydys.elsbballs.bean.InitInfo;
 import com.ydys.elsbballs.bean.InitInfoRet;
-import com.ydys.elsbballs.bean.MessageEvent;
 import com.ydys.elsbballs.bean.TakeGoldInfo;
 import com.ydys.elsbballs.bean.TakeGoldInfoRet;
 import com.ydys.elsbballs.bean.UserInfoRet;
@@ -86,10 +87,13 @@ import com.ydys.elsbballs.common.Constants;
 import com.ydys.elsbballs.presenter.GameTimeInfoPresenterImp;
 import com.ydys.elsbballs.presenter.HomeDataInfoPresenterImp;
 import com.ydys.elsbballs.presenter.InitInfoPresenterImp;
+import com.ydys.elsbballs.presenter.LogInfoPresenterImp;
+import com.ydys.elsbballs.presenter.NewUserMoneyPresenterImp;
 import com.ydys.elsbballs.presenter.Presenter;
 import com.ydys.elsbballs.presenter.ReportInfoPresenterImp;
 import com.ydys.elsbballs.presenter.TakeGoldInfoPresenterImp;
 import com.ydys.elsbballs.presenter.UserInfoPresenterImp;
+import com.ydys.elsbballs.ui.custom.CustomRotateAnim;
 import com.ydys.elsbballs.ui.custom.GameRuleDialog;
 import com.ydys.elsbballs.ui.custom.GoldWireLayout;
 import com.ydys.elsbballs.ui.custom.HongBaoDialog;
@@ -106,7 +110,6 @@ import com.ydys.elsbballs.util.WeakHandler;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -132,6 +135,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
     public static int BUBBLE_END = 2000;
 
+    @BindView(R.id.layout_content)
+    FrameLayout mContentLayout;
+
     @BindView(R.id.layout_tool_nav)
     FrameLayout mTopToolLayout;
 
@@ -144,11 +150,20 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     @BindView(R.id.banner_express_container)
     FrameLayout mBannerExpressContainer;
 
-    @BindView(R.id.tv_game_gold_one)
-    TextView mGameGoldOneTv;
+    @BindView(R.id.layout_one_gold)
+    FrameLayout oneGoldLayout;
 
-    @BindView(R.id.tv_game_gold_two)
-    TextView mGameGoldTwoTv;
+    @BindView(R.id.iv_one_gold)
+    ImageView mOneGoldIv;
+
+    @BindView(R.id.layout_two_gold)
+    FrameLayout twoGoldLayout;
+
+    @BindView(R.id.iv_two_gold)
+    ImageView mTwoGoldIv;
+
+//    @BindView(R.id.tv_game_gold_two)
+//    TextView mGameGoldTwoTv;
 
     @BindView(R.id.tv_game_gold_three)
     TextView mGameGoldThreeTv;
@@ -213,9 +228,11 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
     private ReportInfoPresenterImp reportInfoPresenterImp;
 
-    private int exChange = 100;
+    private NewUserMoneyPresenterImp newUserMoneyPresenterImp;
 
-    private TextView[] goldTxs;
+    private LogInfoPresenterImp logInfoPresenterImp;
+
+    private int exChange = 100;
 
     PermissionDialog permissionDialog;
 
@@ -277,13 +294,31 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
     private LoadDialog loadDialog;
 
+    private String spaCodeId;
+
+    private String homeBannerCodeId;
+
+    private String windowCodeId;
+
+    private String windowVideoCodeId;
+
+    private String restartVideoCodeId;
+
+    private boolean spaIsShow;
+
+    private boolean spaIsClick;
+
+    private boolean spaIsDowned;
+
+    private boolean spaIsInstall;
+
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
                     //游戏底部banner
-                    loadBannerExpressAd(Constants.GAME_BANNER_ID);
+                    loadBannerExpressAd(homeBannerCodeId);
 
                     mUserGoldNumTv.setCharacterLists(TickerUtils.provideNumberList());
                     mUserGoldNumTv.setText("0");
@@ -427,10 +462,10 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 .setAid(173542)
                 .createTeaConfig());
 
-        loadExpressAd(Constants.BANNER_CODE_ID);
-        loadVideoAd(Constants.VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+        loadExpressAd(windowCodeId);
+        loadVideoAd(windowVideoCodeId, TTAdConstant.VERTICAL);
 
-        loadGameVideoAd(Constants.GAME_VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+        loadGameVideoAd(restartVideoCodeId, TTAdConstant.VERTICAL);
 
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -441,13 +476,47 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId, App.appName);
             }
         }, 10);
+
+        //showGuideView();
+    }
+
+    public void showGuideView() {
+//        NewbieGuide.with(this)
+//                .setLabel("guide1")
+//                .alwaysShow(true)//总是显示，调试时可以打开
+//                .addGuidePage(GuidePage.newInstance().setLayoutRes(R.layout.guide_view_one))
+//                .setOnGuideChangedListener(new OnGuideChangedListener() {
+//                    @Override
+//                    public void onShowed(Controller controller) {
+//                        Toast.makeText(GameActivity.this, "引导层显示", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onRemoved(Controller controller) {
+//                        Toast.makeText(GameActivity.this, "引导层消失", Toast.LENGTH_SHORT).show();
+//                    }
+//                })
+//                .show();
+
+        NewbieGuide.with(this)
+                .addGuidePage(//添加一页引导页
+                        GuidePage.newInstance()//创建一个实例
+                                .setLayoutRes(R.layout.guide_view_one)//设置引导页布局
+                                .setEverywhereCancelable(true)
+                )
+                .addGuidePage(//添加一页引导页
+                        GuidePage.newInstance()//创建一个实例
+                                .setLayoutRes(R.layout.guide_view_two)//设置引导页布局
+                                .setEverywhereCancelable(true)
+                ).show();
+
     }
 
     @Override
     protected void initVars() {
         NetworkUtils.registerNetworkStatusChangedListener(this);
 
-        List<Animator> animators = new ArrayList<>();
+        /*List<Animator> animators = new ArrayList<>();
         ObjectAnimator translationYAnim1 = ObjectAnimator.ofFloat(mGameGoldOneTv, "translationY", -12.0f, 12.0f, -12.0f);
         translationYAnim1.setDuration(2500);
         translationYAnim1.setRepeatCount(ValueAnimator.INFINITE);
@@ -475,8 +544,29 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         AnimatorSet btnSexAnimatorSet = new AnimatorSet();
         btnSexAnimatorSet.playTogether(animators);
         btnSexAnimatorSet.setStartDelay(100);
-        btnSexAnimatorSet.start();
+        btnSexAnimatorSet.start();*/
 
+        spaCodeId = SPUtils.getInstance().getString("spa_code_id", Constants.SPA_CODE_ID);
+        homeBannerCodeId = SPUtils.getInstance().getString("home_banner_code_id", Constants.HOME_BANNER_ID);
+        windowCodeId = SPUtils.getInstance().getString("window_code_id", Constants.BANNER_CODE_ID);
+        windowVideoCodeId = SPUtils.getInstance().getString("window_video_code_id", Constants.VIDEO_CODE_ID);
+        restartVideoCodeId = SPUtils.getInstance().getString("restart_video_code_id", Constants.GAME_VIDEO_CODE_ID);
+
+        showAnimation(mOneGoldIv);
+        showAnimation(mTwoGoldIv);
+    }
+
+    private void showAnimation(ImageView goldIv) {
+        // 获取自定义动画实例
+        CustomRotateAnim rotateAnim = CustomRotateAnim.getCustomRotateAnim();
+        // 一次动画执行1秒
+        rotateAnim.setDuration(1800);
+        // 设置为循环播放
+        rotateAnim.setRepeatCount(-1);
+        // 设置为匀速
+        rotateAnim.setInterpolator(new LinearInterpolator());
+        // 开始播放动画
+        goldIv.startAnimation(rotateAnim);
     }
 
     protected void hideBottomMenu() {
@@ -529,8 +619,6 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         //加载开屏广告
         loadSplashAd();
 
-        goldTxs = new TextView[]{mGameGoldOneTv, mGameGoldTwoTv, mGameGoldThreeTv};
-
         YcGameWebView ycGameWebView = new YcGameWebView(this);
         //7.0以下手机设置游戏固定高度
         if (Build.VERSION.SDK_INT < 24) {
@@ -549,7 +637,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 ycGameWebView.post(new Runnable() {
                     @Override
                     public void run() {
-                        ycGameWebView.loadUrl("http://localhost:12568/index.html");
+                        ycGameWebView.loadUrl("http://localhost:12568/web-mobile/index.html");
                     }
                 });
             }
@@ -591,14 +679,14 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             if (hongBaoDialog != null && !hongBaoDialog.isShowing()) {
                 hongBaoDialog.show();
                 clickIndex = 4;
-                hongBaoDialog.updateDialogInfo(1);
+                hongBaoDialog.updateDialogInfo(1, App.mUserInfo.getNewUserTaskConfig().getMoney() + "");
 
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        hongBaoDialog.autoOpenHongBao(App.initInfo != null ? App.initInfo.getNewTaskConfig().getGold() : 0);
-                    }
-                }, 1500);
+//                mHandler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        hongBaoDialog.autoOpenHongBao(App.initInfo != null ? App.initInfo.getNewTaskConfig().getGold() : 0);
+//                    }
+//                }, 1500);
             }
         }
 
@@ -608,7 +696,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 SPUtils.getInstance().put(todayDate + "_show_hongbao", true);
                 hongBaoDialog.show();
                 clickIndex = 5;
-                hongBaoDialog.updateDialogInfo(2);
+                hongBaoDialog.updateDialogInfo(2, "0.3");
             }
         }
     }
@@ -714,6 +802,8 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         homeDataInfoPresenterImp = new HomeDataInfoPresenterImp(this, this);
         gameTimeInfoPresenterImp = new GameTimeInfoPresenterImp(this, this);
         reportInfoPresenterImp = new ReportInfoPresenterImp(this, this);
+        newUserMoneyPresenterImp = new NewUserMoneyPresenterImp(this, this);
+        logInfoPresenterImp = new LogInfoPresenterImp(this, this);
 
         SPUtils.getInstance().put("one_gold_get_date", 0L);
         SPUtils.getInstance().put("two_gold_get_date", 0L);
@@ -779,7 +869,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         Logger.i("one间隔的时间--->" + diffSecond);
         Logger.i("one FLOAT_SHOW_NUM--->" + FLOAT_SHOW_NUM);
         if (diffSecond == 0 && FLOAT_SHOW_NUM > 0) {
-            mGameGoldOneTv.setVisibility(View.GONE);
+            oneGoldLayout.setVisibility(View.GONE);
             long tempDate = SPUtils.getInstance().getLong("one_gold_get_date");
             diffSecond = TimeUtils.getTimeSpanByNow(tempDate + ONE_COUNT_SPACE * 1000, TimeConstants.SEC);
             //翻倍看视频
@@ -793,11 +883,11 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 public void onFinish() {
                     long dateNow = TimeUtils.getNowMills();
                     SPUtils.getInstance().put("one_gold_get_date", dateNow);
-                    mGameGoldOneTv.setVisibility(View.VISIBLE);
+                    oneGoldLayout.setVisibility(View.VISIBLE);
                 }
             }.start();
         } else {
-            mGameGoldOneTv.setVisibility(View.GONE);
+            oneGoldLayout.setVisibility(View.GONE);
         }
     }
 
@@ -819,7 +909,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         Logger.i("two间隔的时间--->" + diffSecond);
         Logger.i("two FLOAT_SHOW_NUM--->" + FLOAT_SHOW_NUM);
         if (diffSecond == 0 && FLOAT_SHOW_NUM > 0) {
-            mGameGoldTwoTv.setVisibility(View.GONE);
+            twoGoldLayout.setVisibility(View.GONE);
             long tempDate = SPUtils.getInstance().getLong("two_gold_get_date");
             diffSecond = TimeUtils.getTimeSpanByNow(tempDate + TWO_COUNT_SPACE * 1000, TimeConstants.SEC);
             //翻倍看视频
@@ -833,11 +923,11 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 public void onFinish() {
                     long dateNow = TimeUtils.getNowMills();
                     SPUtils.getInstance().put("two_gold_get_date", dateNow);
-                    mGameGoldTwoTv.setVisibility(View.VISIBLE);
+                    twoGoldLayout.setVisibility(View.VISIBLE);
                 }
             }.start();
         } else {
-            mGameGoldTwoTv.setVisibility(View.GONE);
+            twoGoldLayout.setVisibility(View.GONE);
         }
     }
 
@@ -916,7 +1006,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             Logger.i("请先加载广告");
             mGameVideoAd = null;
             isReloadVideo = true;
-            loadGameVideoAd(Constants.GAME_VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+            loadGameVideoAd(restartVideoCodeId, TTAdConstant.VERTICAL);
         }
     }
 
@@ -933,11 +1023,11 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             Logger.i("请先加载广告");
             mttRewardVideoAd = null;
             isReloadVideo = true;
-            loadVideoAd(Constants.VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+            loadVideoAd(windowVideoCodeId, TTAdConstant.VERTICAL);
         }
     }
 
-    @OnClick(R.id.tv_game_gold_one)
+    @OnClick(R.id.layout_one_gold)
     void playOneVideo() {
         if (!NetworkUtils.isConnected()) {
             ToastUtils.showLong("网络未连接，请检查网络后重试");
@@ -945,13 +1035,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         }
         clickIndex = 0;
         ONE_COUNT_SPACE = COUNT_SPACE;
-        mGameGoldOneTv.setVisibility(View.GONE);
+        oneGoldLayout.setVisibility(View.GONE);
         oneCurrentGoldNum = RandomUtils.nextInt(BUBBLE_START, BUBBLE_END);
         isDouble = 0;
         takeGoldNum(3, "1", oneCurrentGoldNum + "", isDouble);
     }
 
-    @OnClick(R.id.tv_game_gold_two)
+    @OnClick(R.id.layout_two_gold)
     void playTwoVideo() {
         if (!NetworkUtils.isConnected()) {
             ToastUtils.showLong("网络未连接，请检查网络后重试");
@@ -959,10 +1049,11 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         }
         clickIndex = 1;
         TWO_COUNT_SPACE = COUNT_SPACE;
-        mGameGoldTwoTv.setVisibility(View.GONE);
+        twoGoldLayout.setVisibility(View.GONE);
         twoCurrentGoldNum = RandomUtils.nextInt(BUBBLE_START, BUBBLE_END);
-        isDouble = 0;
-        takeGoldNum(3, "1", twoCurrentGoldNum + "", isDouble);
+        isDouble = 1;
+        //takeGoldNum(3, "1", twoCurrentGoldNum + "", isDouble);
+        clickDoubleGold();
     }
 
     @OnClick(R.id.tv_game_gold_four)
@@ -1010,6 +1101,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
             if (type == 3) {
                 takeGoldInfo.setIsDouble(state);
+                if (clickIndex == 1) {
+                    takeGoldInfo.setIsDirect(1);
+                }
                 takeGoldInfoPresenterImp.takeLuckGold(takeGoldInfo);
             }
 
@@ -1099,6 +1193,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 adView = view;
                 //mExpressContainer.removeAllViews();
                 //mExpressContainer.addView(view);
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "show");
             }
         });
 
@@ -1109,6 +1204,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             @Override
             public void onIdle() {
                 Logger.i("点击开始下载");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "click");
             }
 
             @Override
@@ -1132,11 +1228,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             @Override
             public void onInstalled(String fileName, String appName) {
                 Logger.i("安装完成，点击图片打开");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "down");
             }
 
             @Override
             public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                 Logger.i("点击安装");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "install");
             }
         });
     }
@@ -1192,6 +1290,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     @Override
                     public void onAdShow() {
                         Logger.i("rewardVideoAd show");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "show");
                     }
 
                     @Override
@@ -1209,7 +1308,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     public void onVideoComplete() {
                         Logger.i("rewardVideoAd complete");
                         //缓存下一个视频
-                        loadVideoAd(Constants.VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+                        loadVideoAd(windowVideoCodeId, TTAdConstant.VERTICAL);
                     }
 
                     @Override
@@ -1268,7 +1367,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 mttRewardVideoAd.setDownloadListener(new TTAppDownloadListener() {
                     @Override
                     public void onIdle() {
+
                         mHasShowDownloadActive = false;
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "click");
                     }
 
                     @Override
@@ -1292,11 +1393,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     @Override
                     public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                         Logger.i("下载完成，点击下载区域重新下载");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "down");
                     }
 
                     @Override
                     public void onInstalled(String fileName, String appName) {
                         Logger.i("安装完成，点击下载区域打开");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "install");
                     }
                 });
             }
@@ -1353,6 +1456,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     @Override
                     public void onAdShow() {
                         Logger.i("game_rewardVideoAd show");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_revive_video", "show");
                     }
 
                     @Override
@@ -1370,7 +1474,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     public void onVideoComplete() {
                         Logger.i("game_rewardVideoAd complete");
                         //缓存下一个视频
-                        loadGameVideoAd(Constants.GAME_VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+                        loadGameVideoAd(restartVideoCodeId, TTAdConstant.VERTICAL);
                     }
 
                     @Override
@@ -1398,6 +1502,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     @Override
                     public void onIdle() {
                         mHasShowDownloadActive = false;
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_revive_video", "click");
                     }
 
                     @Override
@@ -1421,11 +1526,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     @Override
                     public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                         Logger.i("下载完成，点击下载区域重新下载");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_revive_video", "down");
                     }
 
                     @Override
                     public void onInstalled(String fileName, String appName) {
                         Logger.i("安装完成，点击下载区域打开");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_revive_video", "install");
                     }
                 });
             }
@@ -1459,22 +1566,26 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         SPUtils.getInstance().put(Constants.LOCAL_LOGIN, true);
                         App.isLogin = true;
                     }
-                    App.mUserInfo = ((UserInfoRet) tData).getData();
-                    mUserGoldNumTv.setCharacterLists(TickerUtils.provideNumberList());
 
-                    String totalGold = App.mUserInfo.getGold() + "";
-                    if (App.mUserInfo != null) {
-                        if (App.mUserInfo.getGold() > 100000) {
-                            double total = (double) App.mUserInfo.getGold();
-                            double last = total / 10000d;
-                            totalGold = (int) last + "";
-                            mGoldUnitTv.setVisibility(View.VISIBLE);
-                        } else {
-                            mGoldUnitTv.setVisibility(View.GONE);
+                    App.mUserInfo = ((UserInfoRet) tData).getData();
+                    //已经领取过新人红包后，
+                    if (App.mUserInfo != null && App.mUserInfo.getNewUserTaskConfig().getNewUserGold() == 1) {
+                        mUserGoldNumTv.setCharacterLists(TickerUtils.provideNumberList());
+
+                        String totalGold = App.mUserInfo.getGold() + "";
+                        if (App.mUserInfo != null) {
+                            if (App.mUserInfo.getGold() > 100000) {
+                                double total = (double) App.mUserInfo.getGold();
+                                double last = total / 10000d;
+                                totalGold = (int) last + "";
+                                mGoldUnitTv.setVisibility(View.VISIBLE);
+                            } else {
+                                mGoldUnitTv.setVisibility(View.GONE);
+                            }
                         }
+                        mUserGoldNumTv.setText(totalGold);
+                        mUserAmountNumTv.setText(App.mUserInfo != null ? MatrixUtils.getPrecisionMoney(App.mUserInfo.getAmount()) + "" : "");
                     }
-                    mUserGoldNumTv.setText(totalGold);
-                    mUserAmountNumTv.setText(App.mUserInfo != null ? MatrixUtils.getPrecisionMoney(App.mUserInfo.getAmount()) + "" : "");
 
                     if (isFirstLoad) {
                         isFirstLoad = false;
@@ -1490,6 +1601,28 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                             e.printStackTrace();
                         }
                         AppLogNewUtils.onEventV3("app_imei_register", jsonObject);
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (spaIsShow) {
+                                    spaIsShow = false;
+                                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_start_screen", "show");
+                                }
+                                if (spaIsClick) {
+                                    spaIsClick = false;
+                                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_start_screen", "click");
+                                }
+                                if (spaIsDowned) {
+                                    spaIsDowned = false;
+                                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_start_screen", "down");
+                                }
+                                if (spaIsInstall) {
+                                    spaIsInstall = false;
+                                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "game_start_screen", "install");
+                                }
+                            }
+                        }).start();
                     }
                 }
             }
@@ -1502,6 +1635,30 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     FLOAT_SHOW_NUM = App.initInfo.getUserStepData().getLuckRestNum();
                     App.userTodayStep = App.initInfo.getUserStepData().getStepNum();
                     Logger.i("user today step--->" + App.userTodayStep);
+
+                    //home_bottom_banner(首页横幅)，game_start_screen(游戏开屏)，gold_settle_pop(金币结算)，game_revive_video(游戏复活)，gold_double_video(金币翻倍)，
+                    if (((InitInfoRet) tData).getData().getAdList() != null && ((InitInfoRet) tData).getData().getAdList().size() > 0) {
+                        List<InitInfo.AdInfo> adList = ((InitInfoRet) tData).getData().getAdList();
+                        Logger.i("ad list--->" + JSON.toJSONString(adList));
+
+                        for (int i = 0; i < adList.size(); i++) {
+                            if (adList.get(i).getPosition().equals("game_start_screen")) {
+                                SPUtils.getInstance().put("spa_code_id", adList.get(i).getCode());
+                            }
+                            if (adList.get(i).getPosition().equals("home_bottom_banner")) {
+                                SPUtils.getInstance().put("home_banner_code_id", adList.get(i).getCode());
+                            }
+                            if (adList.get(i).getPosition().equals("gold_settle_pop")) {
+                                SPUtils.getInstance().put("window_code_id", adList.get(i).getCode());
+                            }
+                            if (adList.get(i).getPosition().equals("gold_double_video")) {
+                                SPUtils.getInstance().put("window_video_code_id", adList.get(i).getCode());
+                            }
+                            if (adList.get(i).getPosition().equals("game_revive_video")) {
+                                SPUtils.getInstance().put("restart_video_code_id", adList.get(i).getCode());
+                            }
+                        }
+                    }
                 }
 
                 //初始化首页数据
@@ -1547,9 +1704,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         }
 
                         //加载一次弹窗的广告
-                        loadExpressAd(Constants.BANNER_CODE_ID);
+                        loadExpressAd(windowCodeId);
                         //游戏底部banner
-                        loadBannerExpressAd(Constants.GAME_BANNER_ID);
+                        loadBannerExpressAd(homeBannerCodeId);
 
                         //结算金币上报数据
                         int upGold = takeGoldInfo.getTakeGold() / 100;
@@ -1783,7 +1940,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             Logger.i("请先加载广告");
             mttRewardVideoAd = null;
             isReloadVideo = true;
-            loadVideoAd(Constants.VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+            loadVideoAd(windowVideoCodeId, TTAdConstant.VERTICAL);
         }
     }
 
@@ -1799,10 +1956,10 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     }
 
     @Override
-    public void openHongBao() {
+    public void openHongBao(int type) {
         if (clickIndex == 4) {
             if (hongBaoDialog != null && !hongBaoDialog.isShowing()) {
-                hongBaoDialog.autoOpenHongBao(App.initInfo != null ? App.initInfo.getNewTaskConfig().getGold() : 0);
+                //hongBaoDialog.autoOpenHongBao(App.initInfo != null ? App.initInfo.getNewTaskConfig().getGold() : 0);
             }
         }
         if (clickIndex == 5) {
@@ -1813,7 +1970,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     @Override
     public void startMakeMoney() {
         hideBottomMenu();
-        mUserGoldNumTv.setCharacterLists(TickerUtils.provideNumberList());
+        /*mUserGoldNumTv.setCharacterLists(TickerUtils.provideNumberList());
 
         String totalGold = App.mUserInfo.getGold() + "";
         if (App.mUserInfo != null) {
@@ -1826,8 +1983,12 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 mGoldUnitTv.setVisibility(View.GONE);
             }
         }
-        mUserGoldNumTv.setText(totalGold);
+        mUserGoldNumTv.setText(totalGold);*/
+
+        //展现金币动效
+        startGoldTask();
         mUserAmountNumTv.setText(App.mUserInfo != null ? MatrixUtils.getPrecisionMoney(App.mUserInfo.getAmount()) + "" : "");
+        newUserMoneyPresenterImp.newUserMoney(App.mUserInfo != null ? App.mUserInfo.getId() : "");
     }
 
     @Override
@@ -1867,7 +2028,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     private void loadSplashAd() {
         //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId("887287436")
+                .setCodeId(spaCodeId)
                 .setSupportDeepLink(true)
                 .setImageAcceptedSize(1080, 1920)
                 .build();
@@ -1917,12 +2078,15 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     public void onAdClicked(View view, int type) {
                         Log.d(TAG, "onAdClicked");
                         Logger.i("开屏广告点击");
+                        spaIsClick = true;
                     }
 
                     @Override
                     public void onAdShow(View view, int type) {
                         Log.d(TAG, "onAdShow");
                         Logger.i("开屏广告展示");
+                        //logInfoPresenterImp.addLogInfo(App);
+                        spaIsShow = true;
                     }
 
                     @Override
@@ -1970,12 +2134,16 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
                         @Override
                         public void onDownloadFinished(long totalBytes, String fileName, String appName) {
-
+                            //ToastUtils.showLong("开屏广告下载完成");
+                            Logger.i("spa down finish--->");
+                            spaIsDowned = true;
                         }
 
                         @Override
                         public void onInstalled(String fileName, String appName) {
-
+                            //ToastUtils.showLong("开屏广告安装完成--->");
+                            Logger.i("spa install finish--->");
+                            spaIsInstall = true;
                         }
                     });
                 }
@@ -2050,6 +2218,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 Logger.i("渲染成功");
                 mBannerExpressContainer.removeAllViews();
                 mBannerExpressContainer.addView(view);
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "home_bottom_banner", "show");
             }
         });
 
@@ -2060,6 +2229,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             @Override
             public void onIdle() {
                 Logger.i("点击开始下载");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "home_bottom_banner", "click");
             }
 
             @Override
@@ -2083,11 +2253,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             @Override
             public void onInstalled(String fileName, String appName) {
                 Logger.i("安装完成，点击图片打开");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "home_bottom_banner", "down");
             }
 
             @Override
             public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                 Logger.i("点击安装");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "home_bottom_banner", "install");
             }
         });
     }

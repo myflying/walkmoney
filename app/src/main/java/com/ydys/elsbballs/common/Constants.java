@@ -15,17 +15,9 @@ public class Constants {
             "T8VRKsGS1Ky/VQB3htIL6Xr9C3XmW2Iej7wiQj3kDN0t4ufT4gp6zZ7LBwaOjhOS" +
             "FQIDAQAB";
 
-    public static final String BASE_URL = "http://tantanqiu.tn550.com/api/";
+    public static final String BASE_URL = "http://tantanqiu.wk2.com/api_v1/";
 
-    public static final String BASE_IMAGE_URL = "http://tantanqiu.tn550.com/";
-
-    public static final String LOCAL_GIF_URL = BASE_URL + "gifs/";
-
-    public static final String LOCAL_GIF_FUNS_URL = BASE_URL + "giffuns/";
-
-    public static final String LOCAL_PENDANT_URL = BASE_URL + "pendant/";
-
-    public static final String COOL_GIF_PATH = "/cool_gif";
+    public static final String BASE_IMAGE_URL = "http://tantanqiu.wk2.com/";
 
     public static final String USER_INFO = "login_user_info";
 
@@ -52,15 +44,16 @@ public class Constants {
     //填写邀请码任务是否完成
     public static final String INVITE_WRITE_CODE = "invite_write_done";
 
+    public static final String SPA_CODE_ID = "887287436";
+
+    //首页底部banner
+    public static final String HOME_BANNER_ID = "942161840";
+    //结算弹窗广告
     public static final String BANNER_CODE_ID = "941462886";
-
+    //结算看视频翻倍
     public static final String VIDEO_CODE_ID = "941463408";
-
+    //游戏复活
     public static final String GAME_VIDEO_CODE_ID = "941628400";
-
-    public static final String GAME_BANNER_ID = "942161840";
-
-    public static final String MY_BANNER_CODE_ID = "938698517";
 
     public static final String NEW_STEP_NUM = "new_step_num";
 

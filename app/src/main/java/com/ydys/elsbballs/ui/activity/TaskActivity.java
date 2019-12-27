@@ -47,6 +47,7 @@ import com.ydys.elsbballs.bean.TaskInfoWrapper;
 import com.ydys.elsbballs.bean.TaskInfoWrapperRet;
 import com.ydys.elsbballs.bean.UserInfoRet;
 import com.ydys.elsbballs.common.Constants;
+import com.ydys.elsbballs.presenter.LogInfoPresenterImp;
 import com.ydys.elsbballs.presenter.Presenter;
 import com.ydys.elsbballs.presenter.ReportInfoPresenterImp;
 import com.ydys.elsbballs.presenter.SignInfoPresenterImp;
@@ -125,6 +126,8 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
 
     private ReportInfoPresenterImp reportInfoPresenterImp;
 
+    private LogInfoPresenterImp logInfoPresenterImp;
+
     private SignTodayDialog signTodayDialog;
 
     private int currentDoubleDayIndex;
@@ -153,6 +156,10 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
 
     private boolean isCanShowSign;
 
+    private String windowCodeId;
+
+    private String windowVideoCodeId;
+
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -172,7 +179,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     signTaskInfo.setShowSignSuss(0);
                     signTodayDialog.updateTodayInfo(signTaskInfo.getContinueNum() + "", currentGold + "", signTaskInfo.getGold() + "", MatrixUtils.getPrecisionMoney(money), adView);
 
-                    loadExpressAd(Constants.BANNER_CODE_ID);
+                    loadExpressAd(windowCodeId);
 
                     break;
             }
@@ -212,14 +219,18 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-        loadExpressAd(Constants.BANNER_CODE_ID);
-        loadVideoAd(Constants.VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+        windowCodeId = SPUtils.getInstance().getString("window_code_id", Constants.BANNER_CODE_ID);
+        windowVideoCodeId = SPUtils.getInstance().getString("window_video_code_id", Constants.VIDEO_CODE_ID);
+
+        loadExpressAd(windowCodeId);
+        loadVideoAd(windowVideoCodeId, TTAdConstant.VERTICAL);
 
         taskInfoPresenterImp = new TaskInfoPresenterImp(this, this);
         userInfoPresenterImp = new UserInfoPresenterImp(this, this);
         takeGoldInfoPresenterImp = new TakeGoldInfoPresenterImp(this, this);
         signInfoPresenterImp = new SignInfoPresenterImp(this, this);
         reportInfoPresenterImp = new ReportInfoPresenterImp(this, this);
+        logInfoPresenterImp = new LogInfoPresenterImp(this, this);
 
         signDayAdapter = new SignDayAdapter(this, null);
         mSignDayListView.setLayoutManager(new GridLayoutManager(this, 7));
@@ -417,7 +428,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
 
     public void makeMoneySelect() {
         taskType = "";
-        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId,App.appName);
+        userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId, App.appName);
         //taskInfoPresenterImp.taskList(App.mUserInfo != null ? App.mUserInfo.getId() : "", isLogin ? 1 : 0);
     }
 
@@ -526,7 +537,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
 
                             receiveGoldDialog.show();
                             receiveGoldDialog.updateGoldInfo(tempGoldInfo.getTakeGold() + "", tempGoldInfo.getGold() + "", "≈" + MatrixUtils.getPrecisionMoney(tempGoldInfo.getAmount()) + "元", adView);
-                            loadExpressAd(Constants.BANNER_CODE_ID);
+                            loadExpressAd(windowCodeId);
                         }
                     }, 100);
 
@@ -575,7 +586,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
             money = (double) totalGold / (double) App.initInfo.getAppConfig().getExchangeRate();
         }
         receiveGoldDialog.updateGoldInfo(currentGold + "", totalGold + "", "≈" + MatrixUtils.getPrecisionMoney(money) + "元", adView);
-        loadExpressAd(Constants.BANNER_CODE_ID);
+        loadExpressAd(windowCodeId);
     }
 
     public void removeAndClose() {
@@ -787,6 +798,8 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     message.what = 2;
                     mHandler.sendMessage(message);
                 }
+
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "show");
             }
         });
         //dislike设置
@@ -798,6 +811,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
             @Override
             public void onIdle() {
                 Logger.i("点击开始下载");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "click");
             }
 
             @Override
@@ -821,11 +835,13 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
             @Override
             public void onInstalled(String fileName, String appName) {
                 Logger.i("安装完成，点击图片打开");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "down");
             }
 
             @Override
             public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                 Logger.i("点击安装");
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "install");
             }
         });
     }
@@ -909,6 +925,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     @Override
                     public void onAdShow() {
                         Logger.i("rewardVideoAd show");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "show");
                     }
 
                     @Override
@@ -926,7 +943,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     public void onVideoComplete() {
                         Logger.i("rewardVideoAd complete");
                         //缓存下一个视频
-                        loadVideoAd(Constants.VIDEO_CODE_ID, TTAdConstant.VERTICAL);
+                        loadVideoAd(windowVideoCodeId, TTAdConstant.VERTICAL);
                     }
 
                     @Override
@@ -960,6 +977,7 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     @Override
                     public void onIdle() {
                         mHasShowDownloadActive = false;
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "click");
                     }
 
                     @Override
@@ -983,11 +1001,13 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     @Override
                     public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                         Logger.i("下载完成，点击下载区域重新下载");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "down");
                     }
 
                     @Override
                     public void onInstalled(String fileName, String appName) {
                         Logger.i("安装完成，点击下载区域打开");
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "install");
                     }
                 });
             }

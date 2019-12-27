@@ -41,6 +41,7 @@ public class TakeGoldInfoModelImp extends BaseModel implements TakeGoldInfoModel
             params.put("task_id", takeGoldInfo.getTaskId());
             params.put("gold", takeGoldInfo.getGold() + "");
             params.put("is_double", takeGoldInfo.getIsDouble() + "");
+            params.put("is_direct", takeGoldInfo.getIsDirect() == 1 ? "1" : "");
         } catch (JSONException e) {
             e.printStackTrace();
         }

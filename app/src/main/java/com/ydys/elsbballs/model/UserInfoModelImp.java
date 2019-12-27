@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.blankj.utilcode.util.AppUtils;
 import com.ydys.elsbballs.api.UserInfoService;
 import com.ydys.elsbballs.base.BaseModel;
 import com.ydys.elsbballs.base.IBaseRequestCallBack;
@@ -87,6 +88,8 @@ public class UserInfoModelImp extends BaseModel implements UserInfoModel<UserInf
             params.put("agent_id", agentId);
             params.put("soft_id", softId);
             params.put("soft_name", softName);
+            params.put("app_id", "17");
+            params.put("version_num", AppUtils.getAppVersionName());
         } catch (JSONException e) {
             e.printStackTrace();
         }

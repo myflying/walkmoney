@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -26,8 +27,8 @@
                 android:layout_height="match_parent"
                 android:background="@color/user_gold_top_color"
                 android:gravity="center"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <FrameLayout
                     android:id="@+id/layout_gold_detail"
@@ -64,10 +65,10 @@
                             android:layout_marginLeft="2dp"
                             android:layout_marginBottom="1dp"
                             android:text="万"
-                            android:textStyle="bold"
-                            android:visibility="gone"
                             android:textColor="@color/user_game_gold_num_color"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -100,13 +101,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="2dp"
                             android:layout_gravity="bottom"
+                            android:layout_marginLeft="2dp"
                             android:layout_marginBottom="1dp"
                             android:text="元"
-                            android:textStyle="bold"
                             android:textColor="@color/user_game_gold_num_color"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -169,19 +170,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_game_gold_one"
+        <FrameLayout
+            android:id="@+id/layout_one_gold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="260dp"
-            android:background="@mipmap/home_gold_one"
-            android:gravity="center"
-            android:textColor="@color/get_gold_color"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginTop="260dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/bubble_bg" />
+
+            <ImageView
+                android:id="@+id/iv_one_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/bubble_hb_icon" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/tv_game_gold_three"
@@ -198,7 +207,30 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <TextView
+        <FrameLayout
+            android:id="@+id/layout_two_gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="260dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/bubble_bg" />
+
+            <ImageView
+                android:id="@+id/iv_two_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/bubble_video_icon" />
+        </FrameLayout>
+
+        <!--<TextView
             android:id="@+id/tv_game_gold_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -209,7 +241,7 @@
             android:gravity="center"
             android:textColor="@color/mk_gonglue_color"
             android:textSize="15sp"
-            android:visibility="gone" />
+            android:visibility="gone" />-->
 
         <TextView
             android:id="@+id/tv_game_gold_four"

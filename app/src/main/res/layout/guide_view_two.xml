@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_above="@+id/tv_bubble"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:layout_width="102dp"
+            android:layout_height="98dp"
+            android:layout_gravity="left|top"
+            android:src="@mipmap/hand_hb_bg" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="20dp"
+            android:src="@mipmap/hand_gif" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/iv_guide_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="点击气泡红包可领大量金币奖励"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/iv_guide_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="90dp"
+        android:src="@mipmap/hand_get_gold_txt" />
+</RelativeLayout>
