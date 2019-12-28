@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Point;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -39,7 +41,9 @@ import com.app.hubert.guide.listener.OnLayoutInflatedListener;
 import com.app.hubert.guide.model.GuidePage;
 import com.app.hubert.guide.model.HighLight;
 import com.blankj.utilcode.constant.TimeConstants;
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.PathUtils;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ScreenUtils;
@@ -55,6 +59,9 @@ import com.bytedance.sdk.openadsdk.TTAppDownloadListener;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd;
 import com.bytedance.sdk.openadsdk.TTSplashAd;
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.orhanobut.logger.Logger;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
@@ -84,6 +91,8 @@ import com.ydys.elsbballs.bean.InitInfoRet;
 import com.ydys.elsbballs.bean.TakeGoldInfo;
 import com.ydys.elsbballs.bean.TakeGoldInfoRet;
 import com.ydys.elsbballs.bean.UserInfoRet;
+import com.ydys.elsbballs.bean.VersionInfo;
+import com.ydys.elsbballs.bean.VersionInfoRet;
 import com.ydys.elsbballs.common.Constants;
 import com.ydys.elsbballs.presenter.GameTimeInfoPresenterImp;
 import com.ydys.elsbballs.presenter.HomeDataInfoPresenterImp;
@@ -94,6 +103,7 @@ import com.ydys.elsbballs.presenter.Presenter;
 import com.ydys.elsbballs.presenter.ReportInfoPresenterImp;
 import com.ydys.elsbballs.presenter.TakeGoldInfoPresenterImp;
 import com.ydys.elsbballs.presenter.UserInfoPresenterImp;
+import com.ydys.elsbballs.presenter.VersionInfoPresenterImp;
 import com.ydys.elsbballs.ui.custom.Constant;
 import com.ydys.elsbballs.ui.custom.CustomRotateAnim;
 import com.ydys.elsbballs.ui.custom.GameRuleDialog;
@@ -105,6 +115,7 @@ import com.ydys.elsbballs.ui.custom.MyTimeTask;
 import com.ydys.elsbballs.ui.custom.PermissionDialog;
 import com.ydys.elsbballs.ui.custom.ReceiveDoubleGoldDialog;
 import com.ydys.elsbballs.ui.custom.ReceiveGoldDialog;
+import com.ydys.elsbballs.ui.custom.VersionDialog;
 import com.ydys.elsbballs.util.MatrixUtils;
 import com.ydys.elsbballs.util.MediaHelper;
 import com.ydys.elsbballs.util.RandomUtils;
@@ -130,7 +141,7 @@ import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class GameActivity extends BaseActivity implements YCGameClickCallback, YcGameDataCallback, YcGamePlayTimeCallback, YcGameAdShowCallback, IBaseView, PermissionDialog.PermissionConfigListener, LoginDialog.LoginListener, ReceiveGoldDialog.GoldDialogListener, ReceiveDoubleGoldDialog.GoldDoubleDialogListener, HongBaoDialog.OpenHBListener, GameRuleDialog.GameRuleListener, NetworkUtils.OnNetworkStatusChangedListener, WeakHandler.IHandler {
+public class GameActivity extends BaseActivity implements YCGameClickCallback, YcGameDataCallback, YcGamePlayTimeCallback, YcGameAdShowCallback, IBaseView, PermissionDialog.PermissionConfigListener, LoginDialog.LoginListener, ReceiveGoldDialog.GoldDialogListener, ReceiveDoubleGoldDialog.GoldDoubleDialogListener, HongBaoDialog.OpenHBListener, GameRuleDialog.GameRuleListener, NetworkUtils.OnNetworkStatusChangedListener, WeakHandler.IHandler,VersionDialog.VersionListener {
 
     public static String TAG = "GameFragment";
 
@@ -327,6 +338,14 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
     private MyTimeTask adTimeTask;
 
+    private VersionInfoPresenterImp versionInfoPresenterImp;
+
+    VersionDialog versionDialog;
+
+    private VersionInfo versionInfo;
+
+    BaseDownloadTask downTask;
+
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -359,6 +378,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     break;
                 case 4:
                     loadBannerExpressAd(homeBannerCodeId);
+                    break;
+                case 5:
+                    int progress = (Integer) msg.obj;
+                    versionDialog.updateProgress(progress);
+                    break;
+                case 6:
+                    versionDialog.downFinish();
                     break;
                 default:
                     break;
@@ -602,6 +628,21 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         guideStep = SPUtils.getInstance().getInt(Constants.GUIDE_STEP, 0);
 
         showAnimation();
+
+        versionDialog = new VersionDialog(this, R.style.common_dialog);
+        versionDialog.setVersionListener(this);
+        versionDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int keyCode, KeyEvent keyEvent) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (versionInfo != null && versionInfo.getForceUpdate() == 1) {
+                        return true;//不执行父类点击事件
+                    }
+                    return false;
+                }
+                return false;
+            }
+        });
     }
 
     private void showAnimation() {
@@ -654,6 +695,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
     @Override
     protected void initViews() {
+        FileDownloader.setup(this);
         mShareAPI = UMShareAPI.get(this);
 
         progressDialog = new ProgressDialog(this);
@@ -717,6 +759,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     @Override
     protected void onResume() {
         super.onResume();
+        guideStep = SPUtils.getInstance().getInt(Constants.GUIDE_STEP, 0);
         Logger.i("onresume--->");
         //观看过视频，则引导用户去提现
         if (App.mUserInfo != null && App.mUserInfo.getNewUserTx() == 0) {
@@ -758,7 +801,6 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         if (App.mUserInfo != null) {
             if (App.mUserInfo.getLoginTaskConfig().getLoginTaskGold() == 0) {
                 if (hongBaoDialog != null && !hongBaoDialog.isShowing() && !SPUtils.getInstance().getBoolean(todayDate + "_show_hongbao", false)) {
-                    SPUtils.getInstance().put(todayDate + "_show_hongbao", true);
                     hongBaoDialog.show();
                     clickIndex = 5;
                     hongBaoDialog.updateDialogInfo(2, "0.3");
@@ -887,6 +929,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         reportInfoPresenterImp = new ReportInfoPresenterImp(this, this);
         newUserMoneyPresenterImp = new NewUserMoneyPresenterImp(this, this);
         logInfoPresenterImp = new LogInfoPresenterImp(this, this);
+        versionInfoPresenterImp = new VersionInfoPresenterImp(this, this);
 
         SPUtils.getInstance().put("one_gold_get_date", 0L);
         SPUtils.getInstance().put("two_gold_get_date", 0L);
@@ -981,7 +1024,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     if (oneGoldClicked) {
                         randomOneShowType = (int) (Math.random() * 2) + 1;
 
-                        Logger.i("randomOneShowType--->" + randomOneShowType);
+                        Logger.i("randomShowTypeOne--->" + randomOneShowType);
 
                         if (randomOneShowType - 1 == 0) {
                             mOneGoldIv.setImageResource(R.mipmap.bubble_hb_icon);
@@ -1034,6 +1077,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
                     if (twoGoldClicked) {
                         randomTwoShowType = (int) (Math.random() * 2) + 1;
+                        Logger.i("randomShowTypeTwo--->" + randomTwoShowType);
                         if (randomTwoShowType - 1 == 0) {
                             mTwoGoldIv.setImageResource(R.mipmap.bubble_hb_icon);
                         } else {
@@ -1165,9 +1209,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             dialogType = 1;
             takeGoldNum(3, "1", oneCurrentGoldNum + "", isDouble);
         } else {
-            clickIndex = 1;
+            clickIndex = 0;
             TWO_COUNT_SPACE = COUNT_SPACE;
-            twoGoldLayout.setVisibility(View.GONE);
+            oneGoldLayout.setVisibility(View.GONE);
             twoCurrentGoldNum = RandomUtils.nextInt(BUBBLE_START, BUBBLE_END);
             isDouble = 1;
             dialogType = 1;
@@ -1187,9 +1231,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         }
 
         if (randomTwoShowType == 1) {
-            clickIndex = 0;
+            clickIndex = 1;
             ONE_COUNT_SPACE = COUNT_SPACE;
-            oneGoldLayout.setVisibility(View.GONE);
+            twoGoldLayout.setVisibility(View.GONE);
             oneCurrentGoldNum = RandomUtils.nextInt(BUBBLE_START, BUBBLE_END);
             isDouble = 0;
             dialogType = 1;
@@ -1829,6 +1873,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
                 //初始化首页数据
                 homeDataInfoPresenterImp.initHomeData();
+                versionInfoPresenterImp.updateVersion(App.agentId);
             }
 
             if (tData instanceof HomeDateInfoRet && ((HomeDateInfoRet) tData).getData() != null) {
@@ -1900,6 +1945,29 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
             if (tData instanceof GameTimeInfoRet && ((GameTimeInfoRet) tData).getCode() == Constants.SUCCESS) {
                 Logger.i("up game time--->" + JSON.toJSONString(tData));
+            }
+
+            if (tData instanceof VersionInfoRet) {
+                if (((VersionInfoRet) tData).getCode() == Constants.SUCCESS) {
+                    if (((VersionInfoRet) tData).getData() != null) {
+                        versionInfo = ((VersionInfoRet) tData).getData();
+
+                        int currentCode = AppUtils.getAppVersionCode();
+                        if (versionInfo != null && versionInfo.getVersionCode() > currentCode) {
+                            if (versionDialog != null && !versionDialog.isShowing()) {
+                                versionDialog.setVersionName(versionInfo.getVersionNum());
+                                versionDialog.setVersionContent(versionInfo.getUpdateContent());
+                                versionDialog.setIsForceUpdate(versionInfo.getForceUpdate());
+                                versionDialog.show();
+                            }
+                        } else {
+                            //Toasty.normal(this, "已经是最新版本").show();
+                            //Logger.i("已经是最新版本--->" + currentCode);
+                        }
+                    }
+                } else {
+                    Logger.i("版本检测失败--->");
+                }
             }
         }
     }
@@ -2137,6 +2205,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
         }
         if (clickIndex == 5) {
+            SPUtils.getInstance().put(todayDate + "_show_hongbao", true);
             seeVideo();
         }
     }
@@ -2575,5 +2644,78 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         }
     }
 
+    @Override
+    public void versionUpdate() {
+        if (versionInfo != null && !StringUtils.isEmpty(versionInfo.getDownUrl())) {
+            downAppFile(versionInfo.getDownUrl());
+        }
+    }
 
+    @Override
+    public void cancelUpdate() {
+
+    }
+
+    public void downAppFile(String downUrl) {
+        Logger.i("down url --->" + downUrl);
+
+        final String filePath = PathUtils.getExternalAppFilesPath() + "/new_2048_game.apk";
+        Logger.i("down app path --->" + filePath);
+
+        downTask = FileDownloader.getImpl().create(downUrl)
+                .setPath(filePath)
+                .setListener(new FileDownloadListener() {
+                    @Override
+                    protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        //Toasty.normal(SettingActivity.this, "正在更新版本后...").show();
+                    }
+
+                    @Override
+                    protected void connected(BaseDownloadTask task, String etag, boolean isContinue, int soFarBytes, int totalBytes) {
+                    }
+
+                    @Override
+                    protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                        int progress = (int) ((soFarBytes * 1.0 / totalBytes) * 100);
+                        Logger.i("progress--->" + soFarBytes + "---" + totalBytes + "---" + progress);
+
+                        Message message = new Message();
+                        message.what = 5;
+                        message.obj = progress;
+                        mHandler.sendMessage(message);
+                    }
+
+                    @Override
+                    protected void blockComplete(BaseDownloadTask task) {
+                    }
+
+                    @Override
+                    protected void retry(final BaseDownloadTask task, final Throwable ex, final int retryingTimes, final int soFarBytes) {
+                    }
+
+                    @Override
+                    protected void completed(BaseDownloadTask task) {
+                        Toasty.normal(GameActivity.this, "下载完成").show();
+                        Message message = new Message();
+                        message.what = 6;
+                        mHandler.sendMessage(message);
+
+                        AppUtils.installApp(filePath);
+                    }
+
+                    @Override
+                    protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+                    }
+
+                    @Override
+                    protected void error(BaseDownloadTask task, Throwable e) {
+                    }
+
+                    @Override
+                    protected void warn(BaseDownloadTask task) {
+                    }
+                });
+
+        downTask.start();
+    }
 }

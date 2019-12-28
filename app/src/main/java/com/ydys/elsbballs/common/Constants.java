@@ -15,9 +15,9 @@ public class Constants {
             "T8VRKsGS1Ky/VQB3htIL6Xr9C3XmW2Iej7wiQj3kDN0t4ufT4gp6zZ7LBwaOjhOS" +
             "FQIDAQAB";
 
-    public static final String BASE_URL = "http://tantanqiu.wk2.com/api/";
+    public static final String BASE_URL = "http://tantanqiu.tn550.com/api/";
 
-    public static final String BASE_IMAGE_URL = "http://tantanqiu.wk2.com/";
+    public static final String BASE_IMAGE_URL = "http://tantanqiu.tn550.com/";
 
     public static final String USER_INFO = "login_user_info";
 

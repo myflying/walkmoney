@@ -38,6 +38,7 @@ public class VersionInfoModelImp extends BaseModel implements VersionInfoModel<V
         JSONObject params = new JSONObject();
         try {
             params.put("agent_id", channel);
+            params.put("app_id","17");
         } catch (JSONException e) {
             e.printStackTrace();
         }

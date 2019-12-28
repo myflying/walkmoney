@@ -26,7 +26,7 @@
     <string name="copy_txt">点击复制</string>
 
     <string name="login_title">恭喜您</string>
-    <string name="login_sub_title">获得一个登陆红包</string>
+    <string name="login_sub_title">获得一个登录红包</string>
 
     <string name="reg_step1">点击按钮\n【微信邀请】</string>
     <string name="reg_step2">下载2048弹弹球\n填写邀请码</string>
