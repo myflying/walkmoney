@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface MyWalletInfoService {
 
-    @POST("v1.user/myWallet")
+    @POST("v2.user/myWallet")
     Observable<WalletInfoRet> loadWalletInfo(@Body RequestBody requestBody);
 
 }

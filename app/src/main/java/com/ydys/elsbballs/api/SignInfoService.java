@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface SignInfoService {
 
-    @POST("v1.Task/doDoubleSign")
+    @POST("v2.Task/doDoubleSign")
     Observable<SignInfoRet> signDay(@Body RequestBody requestBody);
 
 }

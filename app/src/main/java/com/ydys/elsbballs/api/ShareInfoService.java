@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface ShareInfoService {
 
-    @POST("v1.Task/shareSuccess")
+    @POST("v2.Task/shareSuccess")
     Observable<ShareInfoRet> shareDone(@Body RequestBody requestBody);
 
 }

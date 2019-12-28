@@ -14,7 +14,7 @@ import rx.Observable;
 
 public interface LogInfoService {
 
-    @POST("v1.ad/addLog")
+    @POST("v2.ad/addLog")
     Observable<LogInfoRet> addLogInfo(@Body RequestBody requestBody);
 
 }

@@ -15,7 +15,7 @@ public class Constants {
             "T8VRKsGS1Ky/VQB3htIL6Xr9C3XmW2Iej7wiQj3kDN0t4ufT4gp6zZ7LBwaOjhOS" +
             "FQIDAQAB";
 
-    public static final String BASE_URL = "http://tantanqiu.wk2.com/api_v1/";
+    public static final String BASE_URL = "http://tantanqiu.wk2.com/api/";
 
     public static final String BASE_IMAGE_URL = "http://tantanqiu.wk2.com/";
 
@@ -58,4 +58,6 @@ public class Constants {
     public static final String NEW_STEP_NUM = "new_step_num";
 
     public static final String EVERY_DAY_START = "every_day_start";
+
+    public static final String GUIDE_STEP = "guide_step";
 }

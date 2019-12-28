@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface VersionInfoService {
 
-    @POST("v1.common/version")
+    @POST("v2.common/version")
     Observable<VersionInfoRet> versionUpdate(@Body RequestBody requestBody);
 
 }

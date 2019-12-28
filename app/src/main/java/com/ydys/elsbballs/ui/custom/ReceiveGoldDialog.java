@@ -141,6 +141,7 @@ public class ReceiveGoldDialog extends Dialog implements View.OnClickListener {
         mTotalGoldNumTv.setText(totalGold);
         mMoneyTv.setText(money);
         if (adView != null) {
+            mAdLayout.removeAllViews();
             mAdLayout.addView(adView);
         }
     }
@@ -153,6 +154,7 @@ public class ReceiveGoldDialog extends Dialog implements View.OnClickListener {
         mReceiveTitleTv.setText(type == 1 ? "恭喜获得" : "获得通关奖励");
         mGoldTitleIv.setImageResource(type == 1 ? R.mipmap.receive_top : R.mipmap.game_pass_bg);
         if (adView != null) {
+            mAdLayout.removeAllViews();
             mAdLayout.addView(adView);
         }
     }

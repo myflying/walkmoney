@@ -14,7 +14,7 @@ import rx.Observable;
 
 public interface NewUserMoneyService {
 
-    @POST("v1.Home/getNewUserGold")
+    @POST("v2.Home/getNewUserGold")
     Observable<NewUserMoneyRet> newUserMoney(@Body RequestBody requestBody);
 
 }

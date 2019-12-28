@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface UserStepInfoService {
 
-    @POST("v1.User/updActivityData")
+    @POST("v2.User/updActivityData")
     Observable<UserStepInfoRet> updateStepInfo(@Body RequestBody requestBody);
 
 }

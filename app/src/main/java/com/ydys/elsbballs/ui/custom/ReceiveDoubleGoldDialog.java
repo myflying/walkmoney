@@ -160,6 +160,7 @@ public class ReceiveDoubleGoldDialog extends Dialog implements View.OnClickListe
         mMoneyTv.setText(money);
 
         if (adView != null) {
+            mAdLayout.removeAllViews();
             mAdLayout.addView(adView);
         }
     }
@@ -174,6 +175,7 @@ public class ReceiveDoubleGoldDialog extends Dialog implements View.OnClickListe
         mMoneyTv.setText(money);
 
         if (adView != null) {
+            mAdLayout.removeAllViews();
             mAdLayout.addView(adView);
         }
     }

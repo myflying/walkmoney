@@ -14,10 +14,10 @@ import rx.Observable;
 
 public interface ReportInfoService {
 
-    @POST("v1.Home/startPlay")
+    @POST("v2.Home/startPlay")
     Observable<ReportInfoRet> startPlayGame(@Body RequestBody requestBody);
 
 
-    @POST("v1.Task/videoStart")
+    @POST("v2.Task/videoStart")
     Observable<ReportInfoRet> startSeeVideo(@Body RequestBody requestBody);
 }

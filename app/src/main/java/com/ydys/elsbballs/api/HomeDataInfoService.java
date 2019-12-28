@@ -13,6 +13,6 @@ import rx.Observable;
 
 public interface HomeDataInfoService {
 
-    @POST("v1.home/index")
+    @POST("v2.home/index")
     Observable<HomeDateInfoRet> initHomeData(@Body RequestBody requestBody);
 }

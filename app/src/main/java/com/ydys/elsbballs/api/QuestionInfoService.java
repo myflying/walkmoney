@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface QuestionInfoService {
 
-    @POST("v1.Common/question")
+    @POST("v2.Common/question")
     Observable<QuestionCategoryRet> loadQuestionList(@Body RequestBody requestBody);
 
 }

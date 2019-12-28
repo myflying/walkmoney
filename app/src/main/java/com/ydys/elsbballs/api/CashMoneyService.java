@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface CashMoneyService {
 
-    @POST("v1.cash_out/doCashOut")
+    @POST("v2.cash_out/doCashOut")
     Observable<CashMoneyRet> cashMoney(@Body RequestBody requestBody);
 
 }

@@ -13,15 +13,15 @@ import rx.Observable;
 
 public interface TakeGoldInfoService {
 
-    @POST("v1.Home/collectGoldLucky")
+    @POST("v2.Home/collectGoldLucky")
     Observable<TakeGoldInfoRet> takeLuckGold(@Body RequestBody requestBody);
 
-    @POST("v1.Home/collectGoldStepNum")
+    @POST("v2.Home/collectGoldStepNum")
     Observable<TakeGoldInfoRet> takeStepGold(@Body RequestBody requestBody);
 
-    @POST("v1.Home/collectGoldStage")
+    @POST("v2.Home/collectGoldStage")
     Observable<TakeGoldInfoRet> takeStageGold(@Body RequestBody requestBody);
 
-    @POST("v1.Task/receiveTaskGold")
+    @POST("v2.Task/receiveTaskGold")
     Observable<TakeGoldInfoRet> takeTaskGold(@Body RequestBody requestBody);
 }

@@ -14,6 +14,6 @@ import rx.Observable;
 
 public interface GameTimeInfoService {
 
-    @POST("v1.Task/timeSubmit")
+    @POST("v2.Task/timeSubmit")
     Observable<GameTimeInfoRet> upGameTime(@Body RequestBody requestBody);
 }

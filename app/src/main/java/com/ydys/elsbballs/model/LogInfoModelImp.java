@@ -43,6 +43,7 @@ public class LogInfoModelImp extends BaseModel implements LogInfoModel<LogInfoRe
             params.put("ad_code", adCode);
             params.put("position", pos);
             params.put("type", type);
+            params.put("app_id", "17");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -13,6 +13,6 @@ import rx.Observable;
 
 public interface InitInfoService {
 
-    @POST("v1.home/init")
+    @POST("v2.home/init")
     Observable<InitInfoRet> initInfo(@Body RequestBody requestBody);
 }

@@ -4,10 +4,11 @@
     android:layout_height="match_parent">
 
     <FrameLayout
+        android:id="@+id/layout_two_hand"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_above="@+id/tv_bubble"
-        android:layout_marginBottom="20dp">
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true">
 
         <ImageView
             android:layout_width="102dp"
@@ -27,9 +28,8 @@
         android:id="@+id/tv_bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/iv_guide_bottom"
+        android:layout_below="@+id/layout_two_hand"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
         android:text="点击气泡红包可领大量金币奖励"
         android:textColor="@color/white"
         android:textSize="18sp"
@@ -39,8 +39,8 @@
         android:id="@+id/iv_guide_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/tv_bubble"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="90dp"
+        android:layout_marginTop="20dp"
         android:src="@mipmap/hand_get_gold_txt" />
 </RelativeLayout>

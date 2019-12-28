@@ -13,10 +13,10 @@ import rx.Observable;
 
 public interface BodyInfoService {
 
-    @POST("v1.User/getBodyData")
+    @POST("v2.user/getBodyData")
     Observable<BodyInfoRet> getBodyInfo(@Body RequestBody requestBody);
 
-    @POST("v1.User/fillBodyData")
+    @POST("v2.user/fillBodyData")
     Observable<BodyInfoRet> updateBodyInfo(@Body RequestBody requestBody);
 
 }

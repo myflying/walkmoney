@@ -7,6 +7,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.app.hubert.guide.NewbieGuide;
+import com.app.hubert.guide.core.Controller;
+import com.app.hubert.guide.listener.OnGuideChangedListener;
+import com.app.hubert.guide.model.GuidePage;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.SizeUtils;
@@ -153,6 +158,30 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
             }
         });
 
+        if (SPUtils.getInstance().getInt(Constants.GUIDE_STEP, 0) < 4) {
+            showGuideFour();
+        }
+    }
+
+    //第4个页面引导
+    public void showGuideFour() {
+        NewbieGuide.with(this)
+                .setLabel("guide3")
+                .alwaysShow(true)//总是显示，调试时可以打开
+                .addGuidePage(GuidePage.newInstance().setLayoutRes(R.layout.guide_view_four, R.id.layout_cash_now, R.id.iv_guide_bottom).setEverywhereCancelable(false))
+                .setOnGuideChangedListener(new OnGuideChangedListener() {
+                    @Override
+                    public void onShowed(Controller controller) {
+                        //Toast.makeText(CashActivity.this, "引导层显示", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onRemoved(Controller controller) {
+                        //Toast.makeText(CashActivity.this, "引导层消失", Toast.LENGTH_SHORT).show();
+                        SPUtils.getInstance().put(Constants.GUIDE_STEP, 4);
+                    }
+                })
+                .show();
     }
 
     @Override

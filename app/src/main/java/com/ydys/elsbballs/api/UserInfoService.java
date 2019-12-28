@@ -14,18 +14,18 @@ import rx.Observable;
 
 public interface UserInfoService {
 
-    @POST("v1.User/bindOrLogin")
+    @POST("v2.User/bindOrLogin")
     Observable<UserInfoRet> login(@Body RequestBody requestBody);
 
 
-    @POST("v1.user/imeiLogin")
+    @POST("v2.user/imeiLogin")
     Observable<UserInfoRet> imeiLogin(@Body RequestBody requestBody);
 
 
-    @POST("v1.User/fillInCode")
+    @POST("v2.User/fillInCode")
     Observable<FillInCodeInfoRet> fillInCode(@Body RequestBody requestBody);
 
 
-    @POST("v1.cash_out/checkMobile")
+    @POST("v2.cash_out/checkMobile")
     Observable<UserInfoRet> validatePhone(@Body RequestBody requestBody);
 }

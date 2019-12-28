@@ -13,6 +13,6 @@ import rx.Observable;
 
 public interface TaskInfoService {
 
-    @POST("v1.Task/taskList")
+    @POST("v2.Task/taskList")
     Observable<TaskInfoWrapperRet> taskList(@Body RequestBody requestBody);
 }
