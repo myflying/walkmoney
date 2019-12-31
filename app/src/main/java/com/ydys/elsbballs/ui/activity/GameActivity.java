@@ -1048,6 +1048,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     } else {
                         mOneGoldIv.setImageResource(R.mipmap.bubble_hb_icon);
                     }
+                    Logger.i("one倒计时结束--->" + FLOAT_SHOW_NUM);
                     oneGoldLayout.setVisibility(FLOAT_SHOW_NUM > 0 ? View.VISIBLE : View.GONE);
                     FLOAT_SHOW_NUM--;
                 }
@@ -1874,6 +1875,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     App.initInfo = ((InitInfoRet) tData).getData();
                     //最大的可领取的悬浮红包的次数
                     FLOAT_SHOW_NUM = App.initInfo.getUserStepData().getLuckRestNum();
+                    Logger.i("初始化接口FLOAT_SHOW_NUM--->" + FLOAT_SHOW_NUM);
                     App.userTodayStep = App.initInfo.getUserStepData().getStepNum();
                     Logger.i("user today step--->" + App.userTodayStep);
 
@@ -1921,6 +1923,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         if (guideStep == 4) {
                             //获取剩下的可领取的次数
                             FLOAT_SHOW_NUM = takeGoldInfo.getLuckRestNum();
+                            Logger.i("领取后获得的剩余次数--->" + FLOAT_SHOW_NUM);
                         }
 
                         if (App.mUserInfo != null) {
@@ -2589,6 +2592,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         if (adTimeTask != null) {
             adTimeTask.stop();
         }
+
+        //销毁时停止服务
+        YcGameSDK.getInstance().stopServer();
     }
 
     @Override
