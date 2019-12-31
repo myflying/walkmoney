@@ -558,6 +558,8 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         clickIndex = 1;
                         isDouble = 1;
                         dialogType = 1;
+                        //引导页看视频时，可翻倍金币
+                        isSeeVideoDirect = true;
                         clickDoubleGold();
                     }
                 })
