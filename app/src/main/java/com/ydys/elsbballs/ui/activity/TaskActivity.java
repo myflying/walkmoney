@@ -798,8 +798,9 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     message.what = 2;
                     mHandler.sendMessage(message);
                 }
-
-                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "show");
+                if (App.mUserInfo.getClickInfo().getShow() == 1) {
+                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "show");
+                }
             }
         });
         //dislike设置
@@ -811,7 +812,9 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
             @Override
             public void onIdle() {
                 Logger.i("点击开始下载");
-                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "click");
+                if (App.mUserInfo.getClickInfo().getClick() == 1) {
+                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "click");
+                }
             }
 
             @Override
@@ -835,13 +838,17 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
             @Override
             public void onInstalled(String fileName, String appName) {
                 Logger.i("安装完成，点击图片打开");
-                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "down");
+                if (App.mUserInfo.getClickInfo().getDown() == 1) {
+                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "down");
+                }
             }
 
             @Override
             public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                 Logger.i("点击安装");
-                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "install");
+                if (App.mUserInfo.getClickInfo().getInstall() == 1) {
+                    logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_settle_pop", "install");
+                }
             }
         });
     }
@@ -925,7 +932,9 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     @Override
                     public void onAdShow() {
                         Logger.i("rewardVideoAd show");
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "show");
+                        if (App.mUserInfo.getClickInfo().getShow() == 1) {
+                            logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "show");
+                        }
                     }
 
                     @Override
@@ -977,7 +986,9 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     @Override
                     public void onIdle() {
                         mHasShowDownloadActive = false;
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "click");
+                        if (App.mUserInfo.getClickInfo().getClick() == 1) {
+                            logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "click");
+                        }
                     }
 
                     @Override
@@ -1001,13 +1012,17 @@ public class TaskActivity extends BaseActivity implements IBaseView, ReceiveGold
                     @Override
                     public void onDownloadFinished(long totalBytes, String fileName, String appName) {
                         Logger.i("下载完成，点击下载区域重新下载");
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "down");
+                        if (App.mUserInfo.getClickInfo().getDown() == 1) {
+                            logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "down");
+                        }
                     }
 
                     @Override
                     public void onInstalled(String fileName, String appName) {
                         Logger.i("安装完成，点击下载区域打开");
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "install");
+                        if (App.mUserInfo.getClickInfo().getInstall() == 1) {
+                            logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", "gold_double_video", "install");
+                        }
                     }
                 });
             }

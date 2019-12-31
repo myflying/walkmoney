@@ -33,6 +33,12 @@ public class UserInfo {
     @SerializedName("new_user_tx")
     private int newUserTx;//是否已使用新人专享提现 1是 0否
 
+    @SerializedName("is_report")
+    public boolean isReport;//是否上报数据
+
+    @SerializedName("ad_log_type")
+    public ClickInfo clickInfo;
+
     public String getId() {
         return id;
     }
@@ -125,6 +131,14 @@ public class UserInfo {
         return newUserTaskConfig;
     }
 
+    public ClickInfo getClickInfo() {
+        return clickInfo;
+    }
+
+    public void setClickInfo(ClickInfo clickInfo) {
+        this.clickInfo = clickInfo;
+    }
+
     public void setNewUserTaskConfig(NewUserTaskConfig newUserTaskConfig) {
         this.newUserTaskConfig = newUserTaskConfig;
     }
@@ -156,6 +170,7 @@ public class UserInfo {
         @SerializedName("new_user_gold")
         private int newUserGold;//是否已经领取新人红包 1已经领取 0未领取
         private double money;
+
         public String getId() {
             return id;
         }
@@ -273,5 +288,51 @@ public class UserInfo {
         }
     }
 
+    public class ClickInfo{
+        private int show;//
+        private int click;//
+        private int down;//
+        private int install;//
+
+        public int getShow() {
+            return show;
+        }
+
+        public void setShow(int show) {
+            this.show = show;
+        }
+
+        public int getClick() {
+            return click;
+        }
+
+        public void setClick(int click) {
+            this.click = click;
+        }
+
+        public int getDown() {
+            return down;
+        }
+
+        public void setDown(int down) {
+            this.down = down;
+        }
+
+        public int getInstall() {
+            return install;
+        }
+
+        public void setInstall(int install) {
+            this.install = install;
+        }
+    }
+
+    public boolean isReport() {
+        return isReport;
+    }
+
+    public void setReport(boolean report) {
+        isReport = report;
+    }
 }
 

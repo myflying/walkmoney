@@ -141,7 +141,7 @@ import permissions.dispatcher.PermissionRequest;
 import permissions.dispatcher.RuntimePermissions;
 
 @RuntimePermissions
-public class GameActivity extends BaseActivity implements YCGameClickCallback, YcGameDataCallback, YcGamePlayTimeCallback, YcGameAdShowCallback, IBaseView, PermissionDialog.PermissionConfigListener, LoginDialog.LoginListener, ReceiveGoldDialog.GoldDialogListener, ReceiveDoubleGoldDialog.GoldDoubleDialogListener, HongBaoDialog.OpenHBListener, GameRuleDialog.GameRuleListener, NetworkUtils.OnNetworkStatusChangedListener, WeakHandler.IHandler,VersionDialog.VersionListener {
+public class GameActivity extends BaseActivity implements YCGameClickCallback, YcGameDataCallback, YcGamePlayTimeCallback, YcGameAdShowCallback, IBaseView, PermissionDialog.PermissionConfigListener, LoginDialog.LoginListener, ReceiveGoldDialog.GoldDialogListener, ReceiveDoubleGoldDialog.GoldDoubleDialogListener, HongBaoDialog.OpenHBListener, GameRuleDialog.GameRuleListener, NetworkUtils.OnNetworkStatusChangedListener, WeakHandler.IHandler, VersionDialog.VersionListener {
 
     public static String TAG = "GameFragment";
 
@@ -346,6 +346,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
     BaseDownloadTask downTask;
 
+    //标识红包是否是直接查看视频
+    private boolean isSeeVideoDirect;
+
     public Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -385,6 +388,16 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     break;
                 case 6:
                     versionDialog.downFinish();
+                    break;
+                case 7:
+                    Logger.i("上报数据--->" + App.agentId);
+                    TeaAgent.init(TeaConfigBuilder.create(GameActivity.this)
+                            .setAppName("youdianyisi2048")
+                            .setChannel(App.agentId)
+                            .setAid(173542)
+                            .createTeaConfig());
+
+                    EventUtils.setRegister("imei_code", true);
                     break;
                 default:
                     break;
@@ -502,15 +515,14 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         }
     }
 
-
     public void readPhoneTask() {
         Logger.i("readPhoneTask--->" + PhoneUtils.getIMEI());
 
-        TeaAgent.init(TeaConfigBuilder.create(GameActivity.this)
-                .setAppName("youdianyisi2048")
-                .setChannel(App.agentId)
-                .setAid(173542)
-                .createTeaConfig());
+//        TeaAgent.init(TeaConfigBuilder.create(GameActivity.this)
+//                .setAppName("youdianyisi2048")
+//                .setChannel(App.agentId)
+//                .setAid(173542)
+//                .createTeaConfig());
 
         loadExpressAd(windowCodeId);
         loadVideoAd(windowVideoCodeId, TTAdConstant.VERTICAL);
@@ -519,7 +531,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                EventUtils.setRegister("imei_code", true);
+                //EventUtils.setRegister("imei_code", true);
 
                 Logger.i("手机串号注册接口--->" + PhoneUtils.getIMEI() + "--->" + App.agentId);
                 userInfoPresenterImp.imeiLogin(PhoneUtils.getIMEI(), App.agentId, App.softId, App.appName);
@@ -1034,7 +1046,8 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     } else {
                         mOneGoldIv.setImageResource(R.mipmap.bubble_hb_icon);
                     }
-                    oneGoldLayout.setVisibility(View.VISIBLE);
+                    oneGoldLayout.setVisibility(FLOAT_SHOW_NUM > 0 ? View.VISIBLE : View.GONE);
+                    FLOAT_SHOW_NUM--;
                 }
             }.start();
         } else {
@@ -1087,7 +1100,8 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         mTwoGoldIv.setImageResource(R.mipmap.bubble_video_icon);
                     }
 
-                    twoGoldLayout.setVisibility(View.VISIBLE);
+                    twoGoldLayout.setVisibility(FLOAT_SHOW_NUM > 0 ? View.VISIBLE : View.GONE);
+                    FLOAT_SHOW_NUM--;
                 }
             }.start();
         } else {
@@ -1209,6 +1223,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             dialogType = 1;
             takeGoldNum(3, "1", oneCurrentGoldNum + "", isDouble);
         } else {
+            isSeeVideoDirect = true;
             clickIndex = 0;
             TWO_COUNT_SPACE = COUNT_SPACE;
             oneGoldLayout.setVisibility(View.GONE);
@@ -1239,6 +1254,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             dialogType = 1;
             takeGoldNum(3, "1", oneCurrentGoldNum + "", isDouble);
         } else {
+            isSeeVideoDirect = true;
             clickIndex = 1;
             TWO_COUNT_SPACE = COUNT_SPACE;
             twoGoldLayout.setVisibility(View.GONE);
@@ -1295,8 +1311,11 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
 
             if (type == 3) {
                 takeGoldInfo.setIsDouble(state);
-                if (clickIndex == 1) {
+                if (isSeeVideoDirect) {
+                    isSeeVideoDirect = false;
                     takeGoldInfo.setIsDirect(1);
+                } else {
+                    takeGoldInfo.setIsDirect(0);
                 }
                 takeGoldInfoPresenterImp.takeLuckGold(takeGoldInfo);
             }
@@ -1474,15 +1493,6 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                 Logger.i("rewardVideoAd loaded");
                 mttRewardVideoAd = ad;
 
-                //如果是重新加载的广告，则直接播放
-                if (isReloadVideo) {
-                    if (loadDialog != null && loadDialog.isShowing()) {
-                        loadDialog.dismiss();
-                    }
-                    isReloadVideo = false;
-                    mttRewardVideoAd.showRewardVideoAd(GameActivity.this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");
-                }
-
                 mttRewardVideoAd.setRewardAdInteractionListener(new TTRewardVideoAd.RewardAdInteractionListener() {
 
                     @Override
@@ -1563,6 +1573,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         Logger.i("rewardVideoAd has onSkippedVideo");
                     }
                 });
+
                 mttRewardVideoAd.setDownloadListener(new TTAppDownloadListener() {
                     @Override
                     public void onIdle() {
@@ -1604,6 +1615,15 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         new AddLogInfoTask("gold_double_video", "install").execute();
                     }
                 });
+
+                //如果是重新加载的广告，则直接播放
+                if (isReloadVideo) {
+                    if (loadDialog != null && loadDialog.isShowing()) {
+                        loadDialog.dismiss();
+                    }
+                    isReloadVideo = false;
+                    mttRewardVideoAd.showRewardVideoAd(GameActivity.this, TTAdConstant.RitScenes.CUSTOMIZE_SCENES, "home_video_ad");
+                }
             }
         });
     }
@@ -1794,19 +1814,28 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     }
 
                     if (isFirstLoad) {
+
+                        if (App.mUserInfo != null && App.mUserInfo.isReport()) {
+                            Message message = new Message();
+                            message.what = 7;
+                            mHandler.sendMessage(message);
+                        } else {
+                            Logger.i("不上报数据--->" + App.agentId);
+                        }
+
                         isFirstLoad = false;
                         initInfoPresenterImp.initInfo(((UserInfoRet) tData).getData().getId());
                         //加载完成，判断是否显示红包
                         showHB();
 
                         //用户获取串号注册成功后，上报一次数据
-                        org.json.JSONObject jsonObject = new org.json.JSONObject();
-                        try {
-                            jsonObject.put("app_register", 2);
-                        } catch (org.json.JSONException e) {
-                            e.printStackTrace();
-                        }
-                        AppLogNewUtils.onEventV3("app_imei_register", jsonObject);
+//                        org.json.JSONObject jsonObject = new org.json.JSONObject();
+//                        try {
+//                            jsonObject.put("app_register", 2);
+//                        } catch (org.json.JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                        AppLogNewUtils.onEventV3("app_imei_register", jsonObject);
 
                         new Thread(new Runnable() {
                             @Override
@@ -1932,7 +1961,10 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         if (upGold > 100) {
                             upGold = 100;
                         }
-                        EventUtils.setPurchase(null, null, null, 1, null, null, true, upGold);
+
+                        if (App.mUserInfo != null && App.mUserInfo.isReport()) {
+                            EventUtils.setPurchase(null, null, null, 1, null, null, true, upGold);
+                        }
 
                     } else {
                         ToastUtils.showLong(((TakeGoldInfoRet) tData).getMsg());
@@ -2206,6 +2238,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         }
         if (clickIndex == 5) {
             SPUtils.getInstance().put(todayDate + "_show_hongbao", true);
+            if (hongBaoDialog != null && hongBaoDialog.isShowing()) {
+                hongBaoDialog.dismiss();
+            }
             seeVideo();
         }
     }
@@ -2596,7 +2631,25 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         // 此处通过计算从而模拟“加载进度”的情况
         @Override
         protected String doInBackground(String... params) {
-            logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+            try {
+                if (App.mUserInfo != null && App.mUserInfo.getClickInfo() != null) {
+
+                    if (App.mUserInfo.getClickInfo().getShow() == 1 && mType.equals("show")) {
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                    }
+                    if (App.mUserInfo.getClickInfo().getClick() == 1 && mType.equals("click")) {
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                    }
+                    if (App.mUserInfo.getClickInfo().getDown() == 1 && mType.equals("down")) {
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                    }
+                    if (App.mUserInfo.getClickInfo().getInstall() == 1 && mType.equals("install")) {
+                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
