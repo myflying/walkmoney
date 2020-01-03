@@ -1,5 +1,6 @@
 package com.ydys.elsbballs.bean;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -35,6 +36,9 @@ public class UserInfo {
 
     @SerializedName("is_report")
     public boolean isReport;//是否上报数据
+
+    @SerializedName("ad_log_post_type")
+    public String adLogPostType;
 
     @SerializedName("ad_log_type")
     public ClickInfo clickInfo;
@@ -129,6 +133,17 @@ public class UserInfo {
 
     public NewUserTaskConfig getNewUserTaskConfig() {
         return newUserTaskConfig;
+    }
+
+    public String getAdLogPostType() {
+        if (StringUtils.isEmpty(adLogPostType)) {
+            return "udp";
+        }
+        return adLogPostType;
+    }
+
+    public void setAdLogPostType(String adLogPostType) {
+        this.adLogPostType = adLogPostType;
     }
 
     public ClickInfo getClickInfo() {
@@ -288,7 +303,7 @@ public class UserInfo {
         }
     }
 
-    public class ClickInfo{
+    public class ClickInfo {
         private int show;//
         private int click;//
         private int down;//

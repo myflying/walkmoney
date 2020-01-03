@@ -45,7 +45,7 @@ public class Constants {
     public static final String INVITE_WRITE_CODE = "invite_write_done";
 
     //开屏codeID
-    /*public static final String SPA_CODE_ID = "887287436";
+    public static final String SPA_CODE_ID = "887287436";
     //首页底部banner
     public static final String HOME_BANNER_ID = "942161840";
     //结算弹窗广告
@@ -53,19 +53,33 @@ public class Constants {
     //结算看视频翻倍
     public static final String VIDEO_CODE_ID = "941463408";
     //游戏复活
-    public static final String GAME_VIDEO_CODE_ID = "941628400";*/
+    public static final String GAME_VIDEO_CODE_ID = "941628400";
 
     //快手--------
     //开屏codeID
-    public static final String SPA_CODE_ID = "887290505";
+    /*public static final String SPA_CODE_ID = "887290933";
     //首页底部banner
-    public static final String HOME_BANNER_ID = "943998832";
+    public static final String HOME_BANNER_ID = "944254963";
     //结算弹窗广告
-    public static final String BANNER_CODE_ID = "943998837";
+    public static final String BANNER_CODE_ID = "944254965";
     //结算看视频翻倍
-    public static final String VIDEO_CODE_ID = "943998839";
+    public static final String VIDEO_CODE_ID = "944254967";
     //游戏复活
-    public static final String GAME_VIDEO_CODE_ID = "943998843";
+    public static final String GAME_VIDEO_CODE_ID = "944254969";
+    //---------*/
+
+
+    //抖音--------
+    //开屏codeID
+    /*public static final String SPA_CODE_ID = "887290965";
+    //首页底部banner
+    public static final String HOME_BANNER_ID = "944255347";
+    //结算弹窗广告
+    public static final String BANNER_CODE_ID = "944255350";
+    //结算看视频翻倍
+    public static final String VIDEO_CODE_ID = "944255352";
+    //游戏复活
+    public static final String GAME_VIDEO_CODE_ID = "944255355";*/
     //---------
 
     public static final String NEW_STEP_NUM = "new_step_num";

@@ -26,7 +26,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
@@ -37,9 +36,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.app.hubert.guide.NewbieGuide;
 import com.app.hubert.guide.core.Controller;
 import com.app.hubert.guide.listener.OnGuideChangedListener;
-import com.app.hubert.guide.listener.OnLayoutInflatedListener;
 import com.app.hubert.guide.model.GuidePage;
-import com.app.hubert.guide.model.HighLight;
 import com.blankj.utilcode.constant.TimeConstants;
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.NetworkUtils;
@@ -67,7 +64,6 @@ import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 import com.ss.android.common.applog.TeaAgent;
 import com.ss.android.common.applog.TeaConfigBuilder;
-import com.ss.android.common.lib.AppLogNewUtils;
 import com.ss.android.common.lib.EventUtils;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -104,7 +100,6 @@ import com.ydys.elsbballs.presenter.ReportInfoPresenterImp;
 import com.ydys.elsbballs.presenter.TakeGoldInfoPresenterImp;
 import com.ydys.elsbballs.presenter.UserInfoPresenterImp;
 import com.ydys.elsbballs.presenter.VersionInfoPresenterImp;
-import com.ydys.elsbballs.ui.custom.Constant;
 import com.ydys.elsbballs.ui.custom.CustomRotateAnim;
 import com.ydys.elsbballs.ui.custom.GameRuleDialog;
 import com.ydys.elsbballs.ui.custom.GoldWireLayout;
@@ -116,6 +111,7 @@ import com.ydys.elsbballs.ui.custom.PermissionDialog;
 import com.ydys.elsbballs.ui.custom.ReceiveDoubleGoldDialog;
 import com.ydys.elsbballs.ui.custom.ReceiveGoldDialog;
 import com.ydys.elsbballs.ui.custom.VersionDialog;
+import com.ydys.elsbballs.util.LogSDK;
 import com.ydys.elsbballs.util.MatrixUtils;
 import com.ydys.elsbballs.util.MediaHelper;
 import com.ydys.elsbballs.util.RandomUtils;
@@ -662,7 +658,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     private void showAnimation() {
 
         if (mOneGoldIv.getAnimation() == null) {
-            Logger.i("红包111执行动画的次数--->");
+            Logger.i("红包1执行动画的次数--->");
             // 获取自定义动画实例
             CustomRotateAnim rotateAnim = CustomRotateAnim.getCustomRotateAnim();
             // 一次动画执行1秒
@@ -676,7 +672,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         }
 
         if (mTwoGoldIv.getAnimation() == null) {
-            Logger.i("红包222执行动画的次数--->");
+            Logger.i("红包2执行动画的次数--->");
             CustomRotateAnim rotateAnim1 = CustomRotateAnim.getCustomRotateAnim();
             // 一次动画执行1秒
             rotateAnim1.setDuration(1800);
@@ -1832,13 +1828,13 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         showHB();
 
                         //用户获取串号注册成功后，上报一次数据
-//                        org.json.JSONObject jsonObject = new org.json.JSONObject();
-//                        try {
-//                            jsonObject.put("app_register", 2);
-//                        } catch (org.json.JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                        AppLogNewUtils.onEventV3("app_imei_register", jsonObject);
+                        /*org.json.JSONObject jsonObject = new org.json.JSONObject();
+                        try {
+                            jsonObject.put("app_register", 2);
+                        } catch (org.json.JSONException e) {
+                            e.printStackTrace();
+                        }
+                        AppLogNewUtils.onEventV3("app_imei_register", jsonObject);*/
 
                         new Thread(new Runnable() {
                             @Override
@@ -2628,31 +2624,34 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
             this.mType = type;
         }
 
-        // 方法1：onPreExecute（）
-        // 作用：执行 线程任务前的操作
         @Override
         protected void onPreExecute() {
         }
 
-        // 方法2：doInBackground（）
-        // 作用：接收输入参数、执行任务中的耗时操作、返回 线程任务执行的结果
-        // 此处通过计算从而模拟“加载进度”的情况
+        public void upLoadDataByType() {
+            Logger.i("adLogPostType--->" + App.mUserInfo.getAdLogPostType());
+            if (App.mUserInfo.getAdLogPostType().equals("udp")) {
+                LogSDK.getInstance().send(App.mUserInfo.getId() + ",17," + mPos + "," + mType);
+            } else {
+                logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+            }
+        }
+
         @Override
         protected String doInBackground(String... params) {
             try {
                 if (App.mUserInfo != null && App.mUserInfo.getClickInfo() != null) {
-
                     if (App.mUserInfo.getClickInfo().getShow() == 1 && mType.equals("show")) {
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                        upLoadDataByType();
                     }
                     if (App.mUserInfo.getClickInfo().getClick() == 1 && mType.equals("click")) {
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                        upLoadDataByType();
                     }
                     if (App.mUserInfo.getClickInfo().getDown() == 1 && mType.equals("down")) {
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                        upLoadDataByType();
                     }
                     if (App.mUserInfo.getClickInfo().getInstall() == 1 && mType.equals("install")) {
-                        logInfoPresenterImp.addLogInfo(App.mUserInfo != null ? App.mUserInfo.getId() : "", "", "", mPos, mType);
+                        upLoadDataByType();
                     }
                 }
             } catch (Exception e) {

@@ -21,6 +21,7 @@ import com.ydys.elsbballs.bean.InitInfo;
 import com.ydys.elsbballs.bean.UserInfo;
 import com.ydys.elsbballs.common.Constants;
 import com.ydys.elsbballs.util.AppContextUtil;
+import com.ydys.elsbballs.util.LogSDK;
 import com.ydys.elsbballs.util.TTAdManagerHolder;
 
 /**
@@ -115,6 +116,8 @@ public class App extends Application {
         //穿山甲SDK初始化
         //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
         TTAdManagerHolder.init(this);
+
+        LogSDK.getInstance().init("39.108.171.61", 41234);
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
