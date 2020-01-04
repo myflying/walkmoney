@@ -60,11 +60,9 @@ import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
 import com.orhanobut.logger.Logger;
+import com.reyun.tracking.sdk.Tracking;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
-import com.ss.android.common.applog.TeaAgent;
-import com.ss.android.common.applog.TeaConfigBuilder;
-import com.ss.android.common.lib.EventUtils;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -387,13 +385,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     break;
                 case 7:
                     Logger.i("上报数据--->" + App.agentId);
-                    TeaAgent.init(TeaConfigBuilder.create(GameActivity.this)
-                            .setAppName("youdianyisi2048")
-                            .setChannel(App.agentId)
-                            .setAid(173542)
-                            .createTeaConfig());
 
-                    EventUtils.setRegister("imei_code", true);
                     break;
                 default:
                     break;
@@ -512,6 +504,9 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
     }
 
     public void readPhoneTask() {
+        //初始化
+        Tracking.initWithKeyAndChannelId(getApplication(),"8f898c239f7bc8efa218f3668687cf84","_default_");
+
         Logger.i("readPhoneTask--->" + PhoneUtils.getIMEI());
 
 //        TeaAgent.init(TeaConfigBuilder.create(GameActivity.this)
@@ -1813,7 +1808,10 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                     }
 
                     if (isFirstLoad) {
-
+                        //快手注册完成时
+                        Tracking.setRegisterWithAccountID(Tracking.getDeviceId());
+                        Tracking.setLoginSuccessBusiness(Tracking.getDeviceId());
+                        Logger.i("imei--->" + Tracking.getDeviceId() + "---android id--->" + PhoneUtils.getIMEI());
                         if (App.mUserInfo != null && App.mUserInfo.isReport()) {
                             Message message = new Message();
                             message.what = 7;
@@ -1964,9 +1962,10 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
                         }
 
                         if (App.mUserInfo != null && App.mUserInfo.isReport()) {
-                            EventUtils.setPurchase(null, null, null, 1, null, null, true, upGold);
+
                         }
 
+                        Tracking.setPayment((TimeUtils.getNowMills() + (long) RandomUtils.nextInt(10000, 20000)) + "", "weixinpay", "CNY", 10.00f);
                     } else {
                         ToastUtils.showLong(((TakeGoldInfoRet) tData).getMsg());
                     }
@@ -2588,7 +2587,7 @@ public class GameActivity extends BaseActivity implements YCGameClickCallback, Y
         if (adTimeTask != null) {
             adTimeTask.stop();
         }
-
+        Tracking.exitSdk();
         //销毁时停止服务
         YcGameSDK.getInstance().stopServer();
     }

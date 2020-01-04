@@ -15,6 +15,11 @@ android {
         }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    packagingOptions {
+        doNotStrip "*/armeabi-v7a/*.so"
+    }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -116,9 +121,12 @@ dependencies {
     implementation files('libs/umeng-share-core-6.9.6.jar')
     implementation files('libs/umeng-share-wechat-simplify-6.9.6.jar')
     implementation files('libs/umeng-sharetool-6.9.6.jar')
+    implementation files('libs/bcprov-jdk16-139.jar')
+    implementation files('libs/tracking1.5.3.jar')
+
     implementation(name: 'open_ad_sdk', ext: 'aar')
     implementation(name: 'ycgamesdk10', ext: 'aar')
-    implementation(name: 'applog-release', ext: 'aar')
+    implementation(name: 'miit_mdid_1.0.10', ext: 'aar')
     implementation 'com.robinhood.ticker:ticker:2.0.2'
     implementation 'com.github.huburt-Hu:NewbieGuide:v2.4.0'
 }

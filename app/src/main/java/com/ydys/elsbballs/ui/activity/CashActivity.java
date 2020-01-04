@@ -22,11 +22,13 @@ import com.app.hubert.guide.model.GuidePage;
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
+import com.reyun.tracking.sdk.Tracking;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -45,6 +47,7 @@ import com.ydys.elsbballs.presenter.Presenter;
 import com.ydys.elsbballs.presenter.UserInfoPresenterImp;
 import com.ydys.elsbballs.ui.adapter.CashMoneyAdapter;
 import com.ydys.elsbballs.ui.custom.CommonDialog;
+import com.ydys.elsbballs.util.RandomUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -309,6 +312,7 @@ public class CashActivity extends BaseActivity implements IBaseView, CommonDialo
                 Toasty.normal(CashActivity.this, ((CashMoneyRet) tData).getMsg()).show();
                 //提现成功，重新刷新页面
                 if (((CashMoneyRet) tData).getCode() == Constants.SUCCESS) {
+                    Tracking.setOrder((TimeUtils.getNowMills() + (long) RandomUtils.nextInt(10000, 20000)) + "", "CNY", 20.00f);
                     SPUtils.getInstance().put("is_show_cash_point", false);
                     //重置手机验证状态
                     SPUtils.getInstance().put(Constants.THIS_CASH_VALIDATE, false);

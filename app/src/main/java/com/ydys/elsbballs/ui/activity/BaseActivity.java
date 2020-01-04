@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.ss.android.common.applog.TeaAgent;
 import com.ydys.elsbballs.presenter.Presenter;
 
 import butterknife.ButterKnife;
@@ -41,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        TeaAgent.onResume(this);
+        //TeaAgent.onResume(this);
         //MobclickAgent.onResume(this);
         if (presenter == null && getPresenter() != null) {
             presenter = getPresenter();
@@ -51,7 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        TeaAgent.onPause(this);
+        //TeaAgent.onPause(this);
         //MobclickAgent.onPause(this);
     }
 
